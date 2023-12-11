@@ -219,6 +219,40 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             audioLocation.setVisible(true);
         }
 
+        final @Nullable ListPreference nightThemePreference = findPreference("nightTheme");
+        if (nightThemePreference != null) {
+            // Set the summary provider for night theme to update the summary when the preference changes
+            nightThemePreference.setSummaryProvider(preference -> {
+                final CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
+                return entry + " is used in system wide dark mode";
+            });
+
+            // Listen for changes to update the summary for night theme accordingly
+            nightThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                // Update the state of the Preference with the new value.
+                // The SummaryProvider will handle updating the summary.
+                this.updateTheme();
+                requireActivity().recreate();
+                return true;
+            });
+        }
+
+        final @Nullable ListPreference themePreference = findPreference("theme");
+        if (themePreference != null) {
+            // Set the summary provider for theme to update the summary when the preference changes
+            themePreference.setSummaryProvider(preference -> {
+                final CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
+                return entry + " theme is currently selected";
+            });
+
+            // Listen for changes to update the summary for theme accordingly
+            themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                // Update the state of the Preference with the new value.
+                // The SummaryProvider will handle updating the summary.
+                return true;
+            });
+        }
+
         setVisibility("api_key_help", LiveApiState.getInstance().get() != ApiState.OK);
         setVisibility("advanced_lesson_settings", GlobalSettings.getAdvancedEnabled());
         setVisibility("advanced_review_settings", GlobalSettings.getAdvancedEnabled());
@@ -396,39 +430,8 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                 pref.setVisible(visible);
             }
         });
-        ListPreference nightThemePreference = Objects.requireNonNull(findPreference("nightTheme"));
-        ListPreference themePreference = Objects.requireNonNull(findPreference("theme"));
-
-// Set the summary provider for night theme to update the summary when the preference changes
-        nightThemePreference.setSummaryProvider(preference -> {
-            CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
-            return entry + " is used in system wide dark mode";
-        });
-
-// Set the summary provider for theme to update the summary when the preference changes
-        themePreference.setSummaryProvider(preference -> {
-            CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
-            return entry + " theme is currently selected";
-        });
-
-// Listen for changes to update the summary for night theme accordingly
-        nightThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            // Update the state of the Preference with the new value.
-            // The SummaryProvider will handle updating the summary.
-            this.updateTheme();
-            requireActivity().recreate();
-            return true;
-        });
-
-// Listen for changes to update the summary for theme accordingly
-        themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            // Update the state of the Preference with the new value.
-            // The SummaryProvider will handle updating the summary.
-            return true;
-        });
-
-
     }
+
     // In PreferencesFragment
     public void updateTheme() {
         View view = requireView();
