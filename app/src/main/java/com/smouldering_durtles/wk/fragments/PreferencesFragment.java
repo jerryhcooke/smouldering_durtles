@@ -212,6 +212,40 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             audioLocation.setVisible(true);
         }
 
+        final @Nullable ListPreference nightThemePreference = findPreference("nightTheme");
+        if (nightThemePreference != null) {
+            // Set the summary provider for night theme to update the summary when the preference changes
+            nightThemePreference.setSummaryProvider(preference -> {
+                final CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
+                return entry + " is used in system wide dark mode";
+            });
+
+            // Listen for changes to update the summary for night theme accordingly
+            nightThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                // Update the state of the Preference with the new value.
+                // The SummaryProvider will handle updating the summary.
+                this.updateTheme();
+                requireActivity().recreate();
+                return true;
+            });
+        }
+
+        final @Nullable ListPreference themePreference = findPreference("theme");
+        if (themePreference != null) {
+            // Set the summary provider for theme to update the summary when the preference changes
+            themePreference.setSummaryProvider(preference -> {
+                final CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
+                return entry + " theme is currently selected";
+            });
+
+            // Listen for changes to update the summary for theme accordingly
+            themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                // Update the state of the Preference with the new value.
+                // The SummaryProvider will handle updating the summary.
+                return true;
+            });
+        }
+
         setVisibility("api_key_help", LiveApiState.getInstance().get() != ApiState.OK);
         setVisibility("advanced_lesson_settings", GlobalSettings.getAdvancedEnabled());
         setVisibility("advanced_review_settings", GlobalSettings.getAdvancedEnabled());
@@ -383,36 +417,17 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
     // Handles updating the descriptions for the light and dark themes with a concatenated string
     private void initialiseThemePreferences() {
 
-        @Nullable ListPreference nightThemePreference = findPreference("nightTheme");
-        @Nullable ListPreference themePreference = findPreference("theme");
 
-        if (nightThemePreference != null) {
-            nightThemePreference.setSummaryProvider(preference -> {
-                @Nullable CharSequence entry = ((ListPreference) preference).getEntry();
-                return (entry != null ? entry : "") + " is used in system wide dark mode";
-            });
-
-            nightThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                this.updateTheme();
-                requireActivity().recreate();
-                return true;
-            });
-        }
-
-        if (themePreference != null) {
-            themePreference.setSummaryProvider(preference -> {
-                @Nullable CharSequence entry = ((ListPreference) preference).getEntry();
-                return (entry != null ? entry : "") + " theme is currently selected";
-            });
-
-            themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                this.updateTheme();
-                requireActivity().recreate();
-                return true;
-            });
-        }
+    private void setVisibility(final CharSequence key, final boolean visible) {
+        safe(() -> {
+            final @Nullable Preference pref = findPreference(key);
+            if (pref != null) {
+                pref.setVisible(visible);
+            }
+        });
     }
-    // Handles automatic refresh of the theme upon selection of a new one
+
+    // In PreferencesFragment
     public void updateTheme() {
         View view = requireView();
         view.setBackgroundColor(ThemeUtil.getColor(R.attr.colorBackground));
