@@ -33,8 +33,7 @@
             android:id="@+id/previousButton"
             style="@style/WK.Button.Normal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="← Previous" />
+            android:layout_height="wrap_content"/>
 
         <androidx.legacy.widget.Space
             android:layout_width="0dp"
@@ -59,7 +58,7 @@
             style="@style/WK.Button.Normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next →" />
+            android:text="Next" />
 
     </LinearLayout>
 

@@ -58,7 +58,6 @@ import com.smouldering_durtles.wk.util.DbLogger;
 import com.smouldering_durtles.wk.util.ThemeUtil;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -81,7 +80,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(final @Nullable Bundle savedInstanceState, final @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
-
+        initialiseThemePreferences();
 
     }
 
@@ -115,8 +114,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                                 ((TwoStatePreference) preference).setChecked(true);
                             })).create().show();
                     return false;
-                }
-                else {
+                } else {
                     setVisibility("advanced_lesson_settings", enabled);
                     setVisibility("advanced_review_settings", enabled);
                     setVisibility("advanced_self_study_settings", enabled);
@@ -140,8 +138,6 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                     })).create().show();
             return true;
         }));
-
-
 
         setOnPreferenceClick("reset_tutorials", preference -> safe(false, () -> {
             new AlertDialog.Builder(preference.getContext())
@@ -188,8 +184,6 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-
-
         setOnPreferenceClick("upload_debug_log", preference -> safe(false, () -> {
             new AlertDialog.Builder(preference.getContext())
                     .setTitle("Upload debug log?")
@@ -202,8 +196,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                             result -> {
                                 if (result != null && result) {
                                     Toast.makeText(requireContext(), "Upload successful, thanks!", Toast.LENGTH_LONG).show();
-                                }
-                                else {
+                                } else {
                                     Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_LONG).show();
                                 }
                             }))).create().show();
@@ -212,8 +205,8 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
 
         final @Nullable ListPreference audioLocation = findPreference("audio_location");
         if (audioLocation != null) {
-            final List<String> locationValues = AudioUtil.getLocationValues();
-            final List<String> locations = AudioUtil.getLocations(locationValues);
+            final List < String > locationValues = AudioUtil.getLocationValues();
+            final List < String > locations = AudioUtil.getLocations(locationValues);
             audioLocation.setEntries(locations.toArray(new String[] {}));
             audioLocation.setEntryValues(locationValues.toArray(new String[] {}));
             audioLocation.setVisible(true);
@@ -309,7 +302,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void goToActivity(final Class<? extends AbstractActivity> clas) {
+    private void goToActivity(final Class < ? extends AbstractActivity > clas) {
         final @Nullable Activity a = getActivity();
         if (a instanceof Actment) {
             ((Actment) a).goToActivity(clas);
@@ -332,7 +325,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void setOnClickGoToActivity(final CharSequence key, final Class<? extends AbstractActivity> clas) {
+    private void setOnClickGoToActivity(final CharSequence key, final Class < ? extends AbstractActivity > clas) {
         safe(() -> setOnPreferenceClick(key, preference -> {
             safe(() -> goToActivity(clas));
             return true;
@@ -354,7 +347,6 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             startActivity(intent);
         });
     }
-
 
     private void setNumberInputType(final CharSequence key) {
         safe(() -> {
@@ -388,7 +380,43 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             }
         });
     }
+    // Handles updating the descriptions for the light and dark themes with a concatenated string
+    private void initialiseThemePreferences() {
 
+        @Nullable ListPreference nightThemePreference = findPreference("nightTheme");
+        @Nullable ListPreference themePreference = findPreference("theme");
+
+        if (nightThemePreference != null) {
+            nightThemePreference.setSummaryProvider(preference -> {
+                @Nullable CharSequence entry = ((ListPreference) preference).getEntry();
+                return (entry != null ? entry : "") + " is used in system wide dark mode";
+            });
+
+            nightThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                this.updateTheme();
+                requireActivity().recreate();
+                return true;
+            });
+        }
+
+        if (themePreference != null) {
+            themePreference.setSummaryProvider(preference -> {
+                @Nullable CharSequence entry = ((ListPreference) preference).getEntry();
+                return (entry != null ? entry : "") + " theme is currently selected";
+            });
+
+            themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                this.updateTheme();
+                requireActivity().recreate();
+                return true;
+            });
+        }
+    }
+    // Handles automatic refresh of the theme upon selection of a new one
+    public void updateTheme() {
+        View view = requireView();
+        view.setBackgroundColor(ThemeUtil.getColor(R.attr.colorBackground));
+    }
     private void setVisibility(final CharSequence key, final boolean visible) {
         safe(() -> {
             final @Nullable Preference pref = findPreference(key);
@@ -396,45 +424,6 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                 pref.setVisible(visible);
             }
         });
-        ListPreference nightThemePreference = Objects.requireNonNull(findPreference("nightTheme"));
-        ListPreference themePreference = Objects.requireNonNull(findPreference("theme"));
-
-// Set the summary provider for night theme to update the summary when the preference changes
-        nightThemePreference.setSummaryProvider(preference -> {
-            CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
-            return entry + " is used in system wide dark mode";
-        });
-
-// Set the summary provider for theme to update the summary when the preference changes
-        themePreference.setSummaryProvider(preference -> {
-            CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
-            return entry + " theme is currently selected";
-        });
-
-// Listen for changes to update the summary for night theme accordingly
-        nightThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            // Update the state of the Preference with the new value.
-            // The SummaryProvider will handle updating the summary.
-            this.updateTheme();
-            requireActivity().recreate();
-            return true;
-        });
-
-// Listen for changes to update the summary for theme accordingly
-        themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            // Update the state of the Preference with the new value.
-            // The SummaryProvider will handle updating the summary.
-            return true;
-        });
-
-
     }
-    // In PreferencesFragment
-    public void updateTheme() {
-        View view = requireView();
-        view.setBackgroundColor(ThemeUtil.getColor(R.attr.colorBackground));
-    }
-
-
 }
 
