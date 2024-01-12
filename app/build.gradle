@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 33
+    compileSdk 34
     defaultConfig {
         applicationId "com.smouldering_durtles.wk"
         minSdkVersion 21
         //noinspection OldTargetApi
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 69
         versionName "1.0.8"
         multiDexEnabled true
