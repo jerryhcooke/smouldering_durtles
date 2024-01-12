@@ -207,19 +207,6 @@ public final class LessonSessionFragment extends AbstractSessionFragment impleme
     }
 
     @Override
-    public void onSwipeLeft(final SwipingScrollView view) {
-        safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            if (!session.isOnFirstLessonItem()) {
-                disableInteraction();
-                session.moveToPreviousLessonItem();
-            }
-        });
-    }
-
-    @Override
     public void onSwipeRight(final SwipingScrollView view) {
         safe(() -> {
             if (!interactionEnabled) {

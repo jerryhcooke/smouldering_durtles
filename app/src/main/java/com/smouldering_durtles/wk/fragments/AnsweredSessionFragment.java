@@ -293,12 +293,6 @@ public final class AnsweredSessionFragment extends AbstractSessionFragment imple
         });
     }
 
-    @Override
-    public void onSwipeLeft(SwipingScrollView view) {
-        // do nothing, as there is no previous button on this screen
-    }
-
-    @Override
     public void onSwipeRight(SwipingScrollView view) {
         this.advanceNext(view);
     }

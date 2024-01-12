@@ -545,12 +545,6 @@ public final class SummarySessionFragment extends AbstractSessionFragment implem
                 }, result -> Toast.makeText(requireContext(), "Star ratings updated", Toast.LENGTH_SHORT).show())))
                 .create().show();
     }
-
-    @Override
-    public void onSwipeLeft(SwipingScrollView view) {
-
-    }
-
     @Override
     public void onSwipeRight(SwipingScrollView view) {
         onFinishClick(view);

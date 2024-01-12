@@ -58,6 +58,7 @@ import com.smouldering_durtles.wk.util.DbLogger;
 import com.smouldering_durtles.wk.util.ThemeUtil;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -80,7 +81,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(final @Nullable Bundle savedInstanceState, final @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
-        initialiseThemePreferences();
+
 
     }
 
@@ -114,7 +115,8 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                                 ((TwoStatePreference) preference).setChecked(true);
                             })).create().show();
                     return false;
-                } else {
+                }
+                else {
                     setVisibility("advanced_lesson_settings", enabled);
                     setVisibility("advanced_review_settings", enabled);
                     setVisibility("advanced_self_study_settings", enabled);
@@ -138,6 +140,8 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                     })).create().show();
             return true;
         }));
+
+
 
         setOnPreferenceClick("reset_tutorials", preference -> safe(false, () -> {
             new AlertDialog.Builder(preference.getContext())
@@ -184,6 +188,8 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+
+
         setOnPreferenceClick("upload_debug_log", preference -> safe(false, () -> {
             new AlertDialog.Builder(preference.getContext())
                     .setTitle("Upload debug log?")
@@ -196,7 +202,8 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                             result -> {
                                 if (result != null && result) {
                                     Toast.makeText(requireContext(), "Upload successful, thanks!", Toast.LENGTH_LONG).show();
-                                } else {
+                                }
+                                else {
                                     Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_LONG).show();
                                 }
                             }))).create().show();
@@ -205,8 +212,8 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
 
         final @Nullable ListPreference audioLocation = findPreference("audio_location");
         if (audioLocation != null) {
-            final List < String > locationValues = AudioUtil.getLocationValues();
-            final List < String > locations = AudioUtil.getLocations(locationValues);
+            final List<String> locationValues = AudioUtil.getLocationValues();
+            final List<String> locations = AudioUtil.getLocations(locationValues);
             audioLocation.setEntries(locations.toArray(new String[] {}));
             audioLocation.setEntryValues(locationValues.toArray(new String[] {}));
             audioLocation.setVisible(true);
@@ -336,7 +343,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void goToActivity(final Class < ? extends AbstractActivity > clas) {
+    private void goToActivity(final Class<? extends AbstractActivity> clas) {
         final @Nullable Activity a = getActivity();
         if (a instanceof Actment) {
             ((Actment) a).goToActivity(clas);
@@ -359,7 +366,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void setOnClickGoToActivity(final CharSequence key, final Class < ? extends AbstractActivity > clas) {
+    private void setOnClickGoToActivity(final CharSequence key, final Class<? extends AbstractActivity> clas) {
         safe(() -> setOnPreferenceClick(key, preference -> {
             safe(() -> goToActivity(clas));
             return true;
@@ -381,6 +388,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             startActivity(intent);
         });
     }
+
 
     private void setNumberInputType(final CharSequence key) {
         safe(() -> {
@@ -414,9 +422,6 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             }
         });
     }
-    // Handles updating the descriptions for the light and dark themes with a concatenated string
-    private void initialiseThemePreferences() {
-
 
     private void setVisibility(final CharSequence key, final boolean visible) {
         safe(() -> {
@@ -425,20 +430,13 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                 pref.setVisible(visible);
             }
         });
-    }
 
+    }
     // In PreferencesFragment
     public void updateTheme() {
         View view = requireView();
         view.setBackgroundColor(ThemeUtil.getColor(R.attr.colorBackground));
     }
-    private void setVisibility(final CharSequence key, final boolean visible) {
-        safe(() -> {
-            final @Nullable Preference pref = findPreference(key);
-            if (pref != null) {
-                pref.setVisible(visible);
-            }
-        });
-    }
-}
 
+
+}
