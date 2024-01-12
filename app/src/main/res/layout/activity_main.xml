@@ -180,8 +180,7 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone"/>
 
-    <com.smouldering_durtles.wk.views.SwipingScrollView
-        android:id="@+id/scrollView"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -217,8 +216,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:gravity="center_horizontal"
-                android:text="" />
+                android:gravity="center_horizontal"/>
 
             <com.smouldering_durtles.wk.views.SessionButtonsView
                 android:id="@+id/sessionButtonsView"
@@ -291,6 +289,6 @@
 
         </LinearLayout>
 
-    </com.smouldering_durtles.wk.views.SwipingScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

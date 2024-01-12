@@ -79,11 +79,11 @@
                     style="@style/WK.Button.Borderless.Light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end|bottom"
+                    android:text="Next"
                     android:paddingBottom="4dp"
-                    android:text="Next →"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:gravity="end|bottom"/>
 
                 <Button
                     android:id="@+id/specialButton1"
