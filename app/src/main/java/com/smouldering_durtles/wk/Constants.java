@@ -264,14 +264,6 @@ public final class Constants {
             + " the settings below will let you influence how the subjects for the session are selected.";
 
     /**
-     * Confirmation warning for uploading the debug log.
-     */
-    public static final String UPLOAD_DEBUG_LOG_WARNING = "Do you want to upload the debug log file to the developer?<br/><br/>"
-            + "This will consume a few MB of data. The file does not contain your API token or password, but may contain personally identifiable "
-            + "information such as your username, subscription status and how you have been using this app.<br/><br/>"
-            + "The data you upload will only be used to investigate and resolve problems in the app.";
-
-    /**
      * Confirmation warning for deleting downloaded audio.
      */
     public static final String DELETE_AUDIO_WARNING = "<b>Warning:</b> This will delete all audio files that have been downloaded so far.<br/><br/>"

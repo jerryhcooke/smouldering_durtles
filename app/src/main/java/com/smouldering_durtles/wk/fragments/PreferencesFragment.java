@@ -68,7 +68,6 @@ import static com.smouldering_durtles.wk.Constants.EXPERIMENTAL_PREFERENCE_STATU
 import static com.smouldering_durtles.wk.Constants.RESET_DATABASE_WARNING;
 import static com.smouldering_durtles.wk.Constants.RESET_TUTORIALS_WARNING;
 import static com.smouldering_durtles.wk.Constants.SUBJECT_SELECTION_NOTICE;
-import static com.smouldering_durtles.wk.Constants.UPLOAD_DEBUG_LOG_WARNING;
 import static com.smouldering_durtles.wk.util.ObjectSupport.isTrue;
 import static com.smouldering_durtles.wk.util.ObjectSupport.runAsync;
 import static com.smouldering_durtles.wk.util.ObjectSupport.safe;
@@ -187,28 +186,6 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                     }).create().show();
             return true;
         });
-
-
-
-        setOnPreferenceClick("upload_debug_log", preference -> safe(false, () -> {
-            new AlertDialog.Builder(preference.getContext())
-                    .setTitle("Upload debug log?")
-                    .setMessage(renderHtml(UPLOAD_DEBUG_LOG_WARNING))
-                    .setIcon(R.drawable.ic_baseline_warning_24px)
-                    .setNegativeButton("No", (dialog, which) -> {})
-                    .setPositiveButton("Yes", (dialog, which) -> safe(() -> runAsync(
-                            this,
-                            DbLogger::uploadLog,
-                            result -> {
-                                if (result != null && result) {
-                                    Toast.makeText(requireContext(), "Upload successful, thanks!", Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_LONG).show();
-                                }
-                            }))).create().show();
-            return true;
-        }));
 
         final @Nullable ListPreference audioLocation = findPreference("audio_location");
         if (audioLocation != null) {
