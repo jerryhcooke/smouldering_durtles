@@ -1259,11 +1259,6 @@
             android:title="Restore your settings"
             android:summary="Restore from a backup of your settings file" />
 
-        <Preference
-            app:title="Upload debug log"
-            app:key="upload_debug_log"
-            app:summary="Send debug logging to the developer"/>
-
     </PreferenceCategory>
 
 </PreferenceScreen>
