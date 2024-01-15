@@ -33,6 +33,8 @@ import javax.annotation.Nullable;
 
 import static com.smouldering_durtles.wk.util.ObjectSupport.runAsync;
 
+import java.util.Objects;
+
 /**
  * A fragment to show the full subject info dump.
  */
@@ -163,10 +165,7 @@ public final class SubjectInfoFragment extends AbstractFragment implements Swipi
         if (currentSubject == null || activity == null || args == null) {
             return;
         }
-        final long[] ids = args.getLongArray("ids");
-        if (ids == null) {
-            return;
-        }
+        final long[] ids = Objects.requireNonNull(args.getLongArray("ids"));
         for (int i=0; i<ids.length-1; i++) {
             if (ids[i] == currentSubject.getId()) {
                 activity.goToSubjectInfo(ids[i+1], ids, FragmentTransitionAnimation.RTL);

@@ -1,5 +1,98 @@
 
-### Version 2.3.0, 2020-XX-XX:
+## Smouldering Durtles changelog
+
+### Version 1.1.0, 2024-01-12
+
+Just bug fixes in this one:
+
+- Swipe gestures have been removed as these are not compatible with the review timeline in its current form
+- Automatic theme switching now working more consistently thanks to @hummusw
+
+### Version 1.0.9, 2023-11-07
+
+New in this version:
+
+- Added haptic feedback options (found under Lesson/Review Settings) for correct and incorrect answers
+- Added a monochrome icon option, thanks for the work @the-wright-jamie
+- Added a setting for limiting how many levels to show on the progress bars, thanks for the work @Cammymoop
+
+### Version 1.0.8, 2023-10-22
+
+New in this version:
+
+- Added haptic feedback options (found under Lesson/Review Settings) for correct and incorrect answers
+- Added a monochrome icon option, thanks for the work @the-wright-jamie
+- Added a setting for limiting how many levels to show on the progress bars, thanks for the work @Cammymoop
+
+### Version 1.0.6, 2023-05-27
+
+More bugs squished 👾
+
+New backup and restore feature for your custom settings 📦
+
+- Notifications for Android 13 restored
+- Audio buttons for kana-only vocab are in
+- Several other small fixes as well!
+
+### Version 1.0.5, 2023-05-24
+
+This update features a manual merge in of later commits from the dev brach of Flaming Durtles that I originally missed - the base code of Smouldering Durtles now contains all those changes combined with the additions I added.
+
+I've added in the requested alternative meanings toast option (thanks @gergelycsegzi) as well as fixing several bugs.
+
+Added a new Nord theme and updated several info pages.
+
+### Version 1.0.4, 2023-05-18
+
+All issues resolved (for now!)
+
+I'm happy to say this fixes the last of the issues, namely:
+
+- Gradient that remained after the advanced dialogs closed is gone
+- Color picker now is all in the right order (though an app restart is still required to change fully, as with Flaming Durtles)
+- Reset message is fixed
+
+### Version 1.0.3, 2023-05-16
+
+Remaining issues fixed! (except for one)
+
+This release resolves all outstanding issues except for the one present with the overlays in the advanced dialogs!
+
+### Version 1.0.2 (2nd Beta), 2023-05-14
+
+Widgets (and hopefully notifications) fixed
+
+- Resolved issue with PendingIntent immutability
+- Added required SCHEDULE_EEXACT_ALARM permission for Android 13
+- Added user prompt for permission when toggling on notification on Android 13
+- Resolved issue with widgets not updating
+
+### Version 1.0.2 (Beta), 2023-05-12
+
+All Preference Prompts (Theoretically) Fixed
+
+- Search URL and Number Preference preference dialog pop-ups both now work
+- Overlay isn't fully dismissed after dialog closed, issue known of and working on
+
+### Version 1.0.1, 2023-05-11
+
+Bug squashing 💥
+
+- Resolved issue with search customising dialogs not appearing (thanks @patarapolw for reporting!)
+- Resolved issue with review accounts appearing on the dashboard (thanks @MTLVMPR for reporting!)
+
+## Flaming Durtles changelog
+
+This is a copy of the changelog for Flaming Durtles before the Smouldering Durtles fork.
+An entry for version 2.3.1 has been added based off the Google Play release notes.
+
+### Version 2.3.1, 2022-04-18:
+
+- Fix for background tasks interfering with UI updates.
+
+### Version 2.3.0, 2022-04-17:
+
+- Update for Android 12 compatibility (to avoid the app being downrated as obsolete in the Play Store)
 
 ### Version 2.2.0, 2020-08-02:
 

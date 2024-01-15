@@ -68,7 +68,6 @@ import static com.smouldering_durtles.wk.Constants.EXPERIMENTAL_PREFERENCE_STATU
 import static com.smouldering_durtles.wk.Constants.RESET_DATABASE_WARNING;
 import static com.smouldering_durtles.wk.Constants.RESET_TUTORIALS_WARNING;
 import static com.smouldering_durtles.wk.Constants.SUBJECT_SELECTION_NOTICE;
-import static com.smouldering_durtles.wk.Constants.UPLOAD_DEBUG_LOG_WARNING;
 import static com.smouldering_durtles.wk.util.ObjectSupport.isTrue;
 import static com.smouldering_durtles.wk.util.ObjectSupport.runAsync;
 import static com.smouldering_durtles.wk.util.ObjectSupport.safe;
@@ -188,28 +187,6 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-
-
-        setOnPreferenceClick("upload_debug_log", preference -> safe(false, () -> {
-            new AlertDialog.Builder(preference.getContext())
-                    .setTitle("Upload debug log?")
-                    .setMessage(renderHtml(UPLOAD_DEBUG_LOG_WARNING))
-                    .setIcon(R.drawable.ic_baseline_warning_24px)
-                    .setNegativeButton("No", (dialog, which) -> {})
-                    .setPositiveButton("Yes", (dialog, which) -> safe(() -> runAsync(
-                            this,
-                            DbLogger::uploadLog,
-                            result -> {
-                                if (result != null && result) {
-                                    Toast.makeText(requireContext(), "Upload successful, thanks!", Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_LONG).show();
-                                }
-                            }))).create().show();
-            return true;
-        }));
-
         final @Nullable ListPreference audioLocation = findPreference("audio_location");
         if (audioLocation != null) {
             final List<String> locationValues = AudioUtil.getLocationValues();
@@ -217,6 +194,40 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
             audioLocation.setEntries(locations.toArray(new String[] {}));
             audioLocation.setEntryValues(locationValues.toArray(new String[] {}));
             audioLocation.setVisible(true);
+        }
+
+        final @Nullable ListPreference nightThemePreference = findPreference("nightTheme");
+        if (nightThemePreference != null) {
+            // Set the summary provider for night theme to update the summary when the preference changes
+            nightThemePreference.setSummaryProvider(preference -> {
+                final CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
+                return entry + " is used in system wide dark mode";
+            });
+
+            // Listen for changes to update the summary for night theme accordingly
+            nightThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                // Update the state of the Preference with the new value.
+                // The SummaryProvider will handle updating the summary.
+                this.updateTheme();
+                requireActivity().recreate();
+                return true;
+            });
+        }
+
+        final @Nullable ListPreference themePreference = findPreference("theme");
+        if (themePreference != null) {
+            // Set the summary provider for theme to update the summary when the preference changes
+            themePreference.setSummaryProvider(preference -> {
+                final CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
+                return entry + " theme is currently selected";
+            });
+
+            // Listen for changes to update the summary for theme accordingly
+            themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                // Update the state of the Preference with the new value.
+                // The SummaryProvider will handle updating the summary.
+                return true;
+            });
         }
 
         setVisibility("api_key_help", LiveApiState.getInstance().get() != ApiState.OK);
@@ -396,37 +407,6 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                 pref.setVisible(visible);
             }
         });
-        ListPreference nightThemePreference = Objects.requireNonNull(findPreference("nightTheme"));
-        ListPreference themePreference = Objects.requireNonNull(findPreference("theme"));
-
-// Set the summary provider for night theme to update the summary when the preference changes
-        nightThemePreference.setSummaryProvider(preference -> {
-            CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
-            return entry + " is used in system wide dark mode";
-        });
-
-// Set the summary provider for theme to update the summary when the preference changes
-        themePreference.setSummaryProvider(preference -> {
-            CharSequence entry = Objects.requireNonNull(((ListPreference) preference).getEntry());
-            return entry + " theme is currently selected";
-        });
-
-// Listen for changes to update the summary for night theme accordingly
-        nightThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            // Update the state of the Preference with the new value.
-            // The SummaryProvider will handle updating the summary.
-            this.updateTheme();
-            requireActivity().recreate();
-            return true;
-        });
-
-// Listen for changes to update the summary for theme accordingly
-        themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            // Update the state of the Preference with the new value.
-            // The SummaryProvider will handle updating the summary.
-            return true;
-        });
-
 
     }
     // In PreferencesFragment
@@ -437,4 +417,3 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
 
 
 }
-

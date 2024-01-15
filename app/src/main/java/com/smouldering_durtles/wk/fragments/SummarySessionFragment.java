@@ -548,7 +548,7 @@ public final class SummarySessionFragment extends AbstractSessionFragment implem
 
     @Override
     public void onSwipeLeft(SwipingScrollView view) {
-
+        // Do nothing (match behavior in AnsweredSessionFragment)
     }
 
     @Override

@@ -295,7 +295,7 @@ public final class AnsweredSessionFragment extends AbstractSessionFragment imple
 
     @Override
     public void onSwipeLeft(SwipingScrollView view) {
-        // do nothing, as there is no previous button on this screen
+        // Do nothing (match previous behavior before this fragment became a SwipingScrollView)
     }
 
     @Override

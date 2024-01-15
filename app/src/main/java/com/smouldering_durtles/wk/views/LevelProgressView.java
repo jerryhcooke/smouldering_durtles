@@ -17,11 +17,7 @@
 package com.smouldering_durtles.wk.views;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.TableLayout;
 
 import com.smouldering_durtles.wk.Actment;
@@ -80,7 +76,7 @@ public final class LevelProgressView extends TableLayout {
             inflate(getContext(), R.layout.level_progress, this);
             setColumnStretchable(0, true);
             setColumnShrinkable(0, true);
-            setBackgroundResource(R.drawable.main_activity_view_background);
+            setBackgroundColor(ThemeUtil.getColor(R.attr.tileColorBackground));
 
             legendBuckets.add(new ViewProxy(this, R.id.legendBucket0));
             legendBuckets.add(new ViewProxy(this, R.id.legendBucket1));
@@ -93,22 +89,10 @@ public final class LevelProgressView extends TableLayout {
             legendBuckets.add(new ViewProxy(this, R.id.legendBucket8));
             legendBuckets.add(new ViewProxy(this, R.id.legendBucket9));
 
-            for (int i=0; i<legendBuckets.size(); i++) {
-                // These are the apprentice ones. They are in a container with clipping set
-                if (i > 0 && i < 8) {
-                    legendBuckets.get(i).setBackgroundColor(ActiveTheme.getLevelProgressionBucketColors()[i]);
-                } else {
-                    Drawable background = getResources().getDrawable(R.drawable.small_rounded_corners);
-                    background.setColorFilter(new PorterDuffColorFilter(
-                            ActiveTheme.getLevelProgressionBucketColors()[i],
-                            PorterDuff.Mode.SRC_ATOP));
-                    legendBuckets.get(i).setBackground(background);
-                }
-            }
-
-            View apprenticeBucketContainer = findViewById(R.id.apprenticeBucketContainer);
-            // According to the android docs, this property cannot be set in XML
-            apprenticeBucketContainer.setClipToOutline(true);
+                    for (int i=0; i<legendBuckets.size(); i++) {
+                        legendBuckets.get(i).setBackgroundColor(ActiveTheme.getLevelProgressionBucketColors()
+                                [i]);
+                    }
         });
     }
 

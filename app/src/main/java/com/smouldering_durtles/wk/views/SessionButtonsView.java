@@ -40,7 +40,6 @@ public final class SessionButtonsView extends LinearLayout {
     private final ViewProxy startLessonsButton = new ViewProxy();
     private final ViewProxy startReviewsButton = new ViewProxy();
     private final ViewProxy startButtonsRow = new ViewProxy();
-    private ViewProxy primaryButton = new ViewProxy();
 
     /**
      * The constructor.
@@ -56,7 +55,7 @@ public final class SessionButtonsView extends LinearLayout {
      * The constructor.
      *
      * @param context Android context
-     * @param attrs attribute set
+     * @param attrs   attribute set
      */
     public SessionButtonsView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
@@ -117,26 +116,9 @@ public final class SessionButtonsView extends LinearLayout {
                 startReviewButtonVisible = true;
                 startRowVisible = true;
             }
-        }
-        else {
+        } else {
             resumeButtonVisible = true;
         }
-
-        // remove arrow from whichever button currently has it
-        resumeButton.setText("Resume session");
-        startReviewsButton.setText("Start reviews");
-        startLessonsButton.setText("Start lessons");
-
-        if (resumeButtonVisible) {
-            primaryButton = resumeButton;
-        } else if (startReviewButtonVisible) {
-            primaryButton = startReviewsButton;
-        } else if (startLessonButtonVisible) {
-            primaryButton = startLessonsButton;
-        }
-
-        // indicate the primary button to the user with an arrow
-        primaryButton.setText(primaryButton.getText() + " →");
 
         resumeButton.setVisibility(resumeButtonVisible);
         resumeButtonRow.setVisibility(resumeButtonVisible);
@@ -166,9 +148,5 @@ public final class SessionButtonsView extends LinearLayout {
             startReviewsButton.disableInteraction();
             resumeButton.disableInteraction();
         });
-    }
-
-    public ViewProxy getPrimaryButton() {
-        return this.primaryButton;
     }
 }

@@ -1669,7 +1669,7 @@ public final class Subject implements PronunciationAudioOwner {
         if (s == null) {
             s = "";
         }
-        s = "<b>Meaning mnemonic</b>: " + s;
+        s = "<b>Meaning mnemonic</b>: " + NL_PATTERN.matcher(s).replaceAll("<br>");
         return renderHtml(s);
     }
 
@@ -1765,7 +1765,7 @@ public final class Subject implements PronunciationAudioOwner {
         if (s == null) {
             s = "";
         }
-        s = "<b>Reading mnemonic</b>: " + s;
+        s = "<b>Reading mnemonic</b>: " + NL_PATTERN.matcher(s).replaceAll("<br>");
         return renderHtml(s);
     }
 
