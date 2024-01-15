@@ -140,6 +140,25 @@ public final class SubjectInfoFragment extends AbstractFragment implements Swipi
     }
 
     @Override
+    public void onSwipeLeft(final SwipingScrollView view) {
+        final @Nullable AbstractActivity activity = getAbstractActivity();
+        final @Nullable Bundle args = getArguments();
+        if (currentSubject == null || activity == null || args == null) {
+            return;
+        }
+        final long[] ids = args.getLongArray("ids");
+        if (ids == null) {
+            return;
+        }
+        for (int i=1; i<ids.length; i++) {
+            if (ids[i] == currentSubject.getId()) {
+                activity.goToSubjectInfo(ids[i-1], ids, FragmentTransitionAnimation.LTR);
+                break;
+            }
+        }
+    }
+
+    @Override
     public void onSwipeRight(final SwipingScrollView view) {
         final @Nullable AbstractActivity activity = getAbstractActivity();
         final @Nullable Bundle args = getArguments();

@@ -87,7 +87,6 @@ public final class SwipingScrollView extends ScrollView {
             if (active) {
                 endX = event.getRawX();
                 endY = event.getRawY();
-
             }
         }
         else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -99,6 +98,9 @@ public final class SwipingScrollView extends ScrollView {
                 final boolean horizontal = Math.abs(deltaX) > Math.abs(deltaY);
                 if (swipeListener != null && horizontal && deltaX < -100 * density) {
                     swipeListener.onSwipeRight(this);
+                }
+                if (swipeListener != null && horizontal && deltaX > 100 * density) {
+                    swipeListener.onSwipeLeft(this);
                 }
             }
         }
@@ -124,6 +126,12 @@ public final class SwipingScrollView extends ScrollView {
      * Listener interface for receive swipe events.
      */
     public interface OnSwipeListener {
+
+        /**
+         * Called when a swipe left is detected.
+         * @param view the view triggering the swipe event
+         */
+        void onSwipeLeft(@SuppressWarnings("unused") SwipingScrollView view);
 
         /**
          * Called when a swipe right is detected.
