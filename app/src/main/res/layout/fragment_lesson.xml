@@ -33,7 +33,8 @@
             android:id="@+id/previousButton"
             style="@style/WK.Button.Normal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Previous" />
 
         <androidx.legacy.widget.Space
             android:layout_width="0dp"
