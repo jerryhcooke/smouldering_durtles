@@ -293,6 +293,12 @@ public final class AnsweredSessionFragment extends AbstractSessionFragment imple
         });
     }
 
+    @Override
+    public void onSwipeLeft(SwipingScrollView view) {
+        // Do nothing (match previous behavior before this fragment became a SwipingScrollView)
+    }
+
+    @Override
     public void onSwipeRight(SwipingScrollView view) {
         this.advanceNext(view);
     }
