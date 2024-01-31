@@ -1,6 +1,14 @@
 
 ## Smouldering Durtles changelog
 
+### Version 1.1.1, 2024-01-15
+
+More bug fixes, thanks to @hummusw's excellent assistance:
+
+- Restored text to the 'Previous' button
+- Restored swiping behaviour in lesson mode
+- Realigned the SRS indicator to prevent going out of frame
+
 ### Version 1.1.0, 2024-01-12
 
 Just bug fixes in this one:
