@@ -721,6 +721,13 @@ s     *
                     return AnswerVerdict.NOK_WITH_RETRY;
                 }
             }
+
+            String expectedKana = subject.getCharacters().replaceAll("\\p{Script=Han}+", ".+");
+            boolean foundNecessaryKana = currentAnswer.matches(expectedKana);
+            if (!foundNecessaryKana) {
+                LOGGER.info("End submit: %s didn't find all expected kana", AnswerVerdict.NOK_WITH_RETRY);
+                return AnswerVerdict.NOK_WITH_RETRY;
+            }
         }
 
         final AnswerVerdict verdict = currentQuestion.checkAnswer(matchingKanji, currentAnswer.trim(),
