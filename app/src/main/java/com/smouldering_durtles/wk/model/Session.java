@@ -715,7 +715,7 @@ s     *
             }
 
             // Because the user input and subject can contain both Hiragana and Katakana in addition to Kanji, we convert Katakana to Hiragana for the next check
-            String normalizedSubjectCharacters = KanaUtil.convertKatakanaToHiragana(subject.getCharacters()).replace("〜", "");
+            String normalizedSubjectCharacters = KanaUtil.convertKatakanaToHiragana(subject.getCharacters().replaceAll("[〜ヶ]", ""));
             String normalizedAnswer = KanaUtil.convertKatakanaToHiragana(currentAnswer);
 
             // Check if the answer contains the subject's Kana characters in the expected order
