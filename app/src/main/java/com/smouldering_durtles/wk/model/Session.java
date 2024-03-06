@@ -715,6 +715,7 @@ s     *
             }
 
             // Because the user input and subject can contain both Hiragana and Katakana in addition to Kanji, we convert Katakana to Hiragana for the next check
+            // 〜 and the Katakana ヶ have a special meaning, so it's easier to ignore them
             String normalizedSubjectCharacters = KanaUtil.convertKatakanaToHiragana(subject.getCharacters().replaceAll("[〜ヶ]", ""));
             String normalizedAnswer = KanaUtil.convertKatakanaToHiragana(currentAnswer);
 
