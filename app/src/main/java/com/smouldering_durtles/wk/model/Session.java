@@ -721,7 +721,7 @@ s     *
             String normalizedAnswer = KanaUtil.convertKatakanaToHiragana(currentAnswer);
 
             // Check if the answer contains the subject's Kana characters in the expected order
-            String expectedKana = normalizedSubjectCharacters.replaceAll("\\p{Script=Han}+", ".+");
+            String expectedKana = normalizedSubjectCharacters.replaceAll("[\\p{Script=Han}０-９]+", ".+");
             boolean foundNecessaryKana = normalizedAnswer.matches(expectedKana);
             if (!foundNecessaryKana) {
                 LOGGER.info("End submit: %s didn't find all expected kana", AnswerVerdict.NOK_WITH_RETRY);
