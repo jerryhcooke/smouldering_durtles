@@ -336,7 +336,9 @@ public final class SubjectInfoButtonView extends View {
                 paint.setShadowLayer(3, 1, 1, Color.BLACK);
                 final int x = getPaddingLeft() + fontPaddingLeft;
                 final int y = getPaddingTop() + fontPaddingTop + textHeight / 2 - (int) (paint.ascent() + paint.descent()) / 2;
-                canvas.drawText(characters, x, y, paint);
+                Path path = new Path();
+                paint.getTextPath(characters, 0, characters.length(), x, y, path);
+                canvas.drawPath(path, paint);
             }
             else {
                 image.setBounds(
