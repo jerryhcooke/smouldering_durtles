@@ -64,6 +64,8 @@ dependencies {
 
     annotationProcessor 'androidx.room:room-compiler:2.6.1'
 
+    debugImplementation 'androidx.annotation:annotation:1.7.1'
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
