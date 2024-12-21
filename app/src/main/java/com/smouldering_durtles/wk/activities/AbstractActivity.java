@@ -55,6 +55,7 @@ import com.smouldering_durtles.wk.jobs.AutoSyncNowJob;
 import com.smouldering_durtles.wk.jobs.FlushTasksJob;
 import com.smouldering_durtles.wk.jobs.SettingChangedJob;
 import com.smouldering_durtles.wk.jobs.SyncNowJob;
+import com.smouldering_durtles.wk.jobs.SyncSubjectJob;
 import com.smouldering_durtles.wk.jobs.TickJob;
 import com.smouldering_durtles.wk.livedata.LiveLevelDuration;
 import com.smouldering_durtles.wk.livedata.LiveSessionProgress;
@@ -512,6 +513,12 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
             JobRunnerService.schedule(SyncNowJob.class, "");
             return true;
         }
+        if (itemId == R.id.action_sync_subject) {
+            final @Nullable Subject subject = getCurrentSubject();
+            if (subject != null) {
+                JobRunnerService.schedule(SyncSubjectJob.class, Long.toString(subject.getId()));
+            }
+        }
         if (itemId == R.id.action_flush_tasks) {
             new AlertDialog.Builder(this)
                     .setTitle("Flush background tasks?")
@@ -759,6 +766,10 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
                 final @Nullable MenuItem studyMaterialsItem = menu.findItem(R.id.action_study_materials);
                 if (studyMaterialsItem != null) {
                     studyMaterialsItem.setVisible(getCurrentSubject() != null && getCurrentSubject().getType().canHaveStudyMaterials());
+                }
+                final @Nullable MenuItem syncItem = menu.findItem(R.id.action_sync_subject);
+                if (syncItem != null) {
+                    syncItem.setVisible(getCurrentSubject() != null);
                 }
             }
         });
