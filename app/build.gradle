@@ -7,8 +7,8 @@ android {
         minSdkVersion 21
         //noinspection OldTargetApi
         targetSdkVersion 34
-        versionCode 73
-        versionName "1.1.1"
+        versionCode 74
+        versionName '1.1.2'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -30,6 +30,7 @@ android {
             resValue 'string', 'searchprovider_authority', 'com.smouldering_durtles.wk.db.SubjectContentProvider'
             resValue 'string', 'applabel', '@string/label'
             buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.smouldering_durtles.wk.fileprovider"'
+            signingConfig signingConfigs.debug
         }
         debug {
             applicationIdSuffix '.debug'
