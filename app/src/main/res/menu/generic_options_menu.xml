@@ -103,6 +103,9 @@
     <item android:id="@+id/action_sync_now"
         android:title="Sync now"
         app:showAsAction="never"/>
+    <item android:id="@+id/action_sync_subject"
+        android:title="Sync this subject"
+        app:showAsAction="never" />
     <item android:id="@+id/action_flush_tasks"
         android:title="Flush BG tasks"
         app:showAsAction="never"/>

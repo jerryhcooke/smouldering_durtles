@@ -355,7 +355,18 @@ public abstract class ApiTask {
             }
             final JsonNode data = body.get("data");
             final JsonParser parser = mapper.treeAsTokens(data);
-            return mapper.readValue(parser, cls);
+            final T value = mapper.readValue(parser, cls);
+
+            if (value instanceof WaniKaniEntity) {
+                if (!body.has("data") || !body.has("data_updated_at") || !body.has("id") || !body.has("object")) {
+                    db.propertiesDao().setApiInError(true);
+                    LiveApiState.getInstance().forceUpdate();
+                    return null;
+                }
+                ((WaniKaniEntity) value).setId(body.get("id").asInt());
+                ((WaniKaniEntity) value).setObject(body.get("object").asText());
+            }
+            return value;
         } catch (final IOException e) {
             LOGGER.error(e, "API data error");
             return null;

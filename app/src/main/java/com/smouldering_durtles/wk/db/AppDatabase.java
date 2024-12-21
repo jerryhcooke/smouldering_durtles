@@ -62,6 +62,7 @@ import com.smouldering_durtles.wk.tasks.GetPatchedStudyMaterialsTask;
 import com.smouldering_durtles.wk.tasks.GetReviewStatisticsTask;
 import com.smouldering_durtles.wk.tasks.GetSrsSystemsTask;
 import com.smouldering_durtles.wk.tasks.GetStudyMaterialsTask;
+import com.smouldering_durtles.wk.tasks.GetSubjectTask;
 import com.smouldering_durtles.wk.tasks.GetSubjectsTask;
 import com.smouldering_durtles.wk.tasks.GetSummaryTask;
 import com.smouldering_durtles.wk.tasks.GetUserTask;
@@ -407,6 +408,20 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     }
 
+    /**
+     * Adds a task to fetch the latest information for a specific subject.
+     * @param subjectId The id for the subject to get.
+     */
+    public final void assertGetSubjectTask(String subjectId) {
+        final int count = taskDefinitionDao().getCountByType(GetSubjectTask.class);
+        if (count == 0) {
+            final TaskDefinition taskDefinition = new TaskDefinition();
+            taskDefinition.setTaskClass(GetSubjectTask.class);
+            taskDefinition.setPriority(GetSubjectTask.PRIORITY);
+            taskDefinition.setData(subjectId);
+            taskDefinitionDao().insertTaskDefinition(taskDefinition);
+        }
+    }
     /**
      * Add a task for fetching the assignments endpoint if it doesn't exist already.
      */
