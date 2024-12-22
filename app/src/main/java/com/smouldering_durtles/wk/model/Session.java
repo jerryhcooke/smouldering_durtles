@@ -16,13 +16,7 @@
 
 package com.smouldering_durtles.wk.model;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Vibrator;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.smouldering_durtles.wk.GlobalSettings;
 import com.smouldering_durtles.wk.WkApplication;
@@ -53,12 +47,12 @@ import com.smouldering_durtles.wk.livedata.SubjectChangeListener;
 import com.smouldering_durtles.wk.livedata.SubjectChangeWatcher;
 import com.smouldering_durtles.wk.services.JobRunnerService;
 import com.smouldering_durtles.wk.util.AudioUtil;
+import com.smouldering_durtles.wk.util.KanaUtil;
 import com.smouldering_durtles.wk.util.Logger;
 import com.smouldering_durtles.wk.util.PitchInfoUtil;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
@@ -68,11 +62,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import static com.smouldering_durtles.wk.GlobalSettings.Review.enable_haptic_feedback_success;
 import static com.smouldering_durtles.wk.enums.SessionItemState.ABANDONED;
 import static com.smouldering_durtles.wk.enums.SessionState.ACTIVE;
 import static com.smouldering_durtles.wk.enums.SessionState.FINISHING;
@@ -720,6 +712,20 @@ s     *
                     LOGGER.info("End submit: %s non-kana in answer", AnswerVerdict.NOK_WITH_RETRY);
                     return AnswerVerdict.NOK_WITH_RETRY;
                 }
+            }
+
+            // Because the user input and subject can contain both Hiragana and Katakana in addition to Kanji, we convert Katakana to Hiragana for the next check
+            // 〜 and the small Katakana ヶ have a special meaning, so it's easier to ignore/convert them
+            String subjectCharacters = subject.getCharacters().replace("〜", "").replace("ヶ", "か");
+            String normalizedSubjectCharacters = KanaUtil.convertKatakanaToHiragana(subjectCharacters);
+            String normalizedAnswer = KanaUtil.convertKatakanaToHiragana(currentAnswer);
+
+            // Check if the answer contains the subject's Kana characters in the expected order
+            String expectedKana = normalizedSubjectCharacters.replaceAll("[\\p{Script=Han}０-９]+", ".+");
+            boolean foundNecessaryKana = normalizedAnswer.matches(expectedKana);
+            if (!foundNecessaryKana) {
+                LOGGER.info("End submit: %s didn't find all expected kana", AnswerVerdict.NOK_WITH_RETRY);
+                return AnswerVerdict.NOK_WITH_RETRY;
             }
         }
 

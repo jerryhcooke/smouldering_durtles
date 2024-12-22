@@ -1,6 +1,22 @@
 
 ## Smouldering Durtles changelog
 
+### Version 1.1.1, 2024-12-21
+
+Thanks to @LotusEcho's work there's now a workaround for WaniKani's API bug!
+
+- A new 'Sync this subject' button is present in the top right menu of every subject item.
+- Thanks to @Togtja there is now more compatability with High Contrast Text 
+- Thanks to @dlsf there's now soft rejection of mistypes of provided kana characters
+
+### Version 1.1.1, 2024-01-15
+
+More bug fixes, thanks to @hummusw's excellent assistance:
+
+- Restored text to the 'Previous' button
+- Restored swiping behaviour in lesson mode
+- Realigned the SRS indicator to prevent going out of frame
+
 ### Version 1.1.0, 2024-01-12
 
 Just bug fixes in this one:

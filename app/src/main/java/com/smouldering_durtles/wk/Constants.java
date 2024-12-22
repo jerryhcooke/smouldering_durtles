@@ -149,6 +149,7 @@ public final class Constants {
             + " service created by <a href=\"https://www.tofugu.com/\">Tofugu</a>.<br/><br/>"
             + " To be able to use this app, you must have an active WaniKani account and a valid API token."
             + " You haven't yet provided a token yet, or it's expired, so please provide one now to continue. <br/><br/> "
+            + " The only personal data this app stires is your API key, which is used solely for accessing WaniKani’s service. A full privacy policy is available <a href=\"https://jhcooke.com/sd\">here</a>.<br/><br/> "
             + " If you've not got an account, visit <a href=\"https://www.wanikani.com/\">WaniKani</a> to make one.<br/><br/>"
             + " To create a token, go to your <a href=\"https://www.wanikani.com/settings/personal_access_tokens\">settings page</a>."
             + " Click 'Generate a new token' and when prompted make sure to give the token at least these permissions:<br/><br/>"
