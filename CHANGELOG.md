@@ -1,7 +1,20 @@
 
 ## Smouldering Durtles changelog
 
-### Version 1.1.1, 2024-12-21
+### Version 1.1.5 2024-12-22
+- You can now stream audio for vocab if not downloaded
+- Drawables replaced where WaniKani now use Unicode for radicals
+- Donation link added to About page as requested
+
+### Version 1.1.4 2024-12-21
+
+Addition of a link to privacy notice as required by Google now.
+
+### Version 1.1.3 2024-12-21
+
+Removal of USE_EXPLICIT_ALARM permission as required by Google
+
+### Version 1.1.2, 2024-12-21
 
 Thanks to @LotusEcho's work there's now a workaround for WaniKani's API bug!
 
