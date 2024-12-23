@@ -33,13 +33,11 @@ import com.smouldering_durtles.wk.api.model.Reading;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.enums.SubjectInfoDump;
 import com.smouldering_durtles.wk.model.FloatingUiState;
-import com.smouldering_durtles.wk.model.GenderedFile;
 import com.smouldering_durtles.wk.model.PitchInfo;
 import com.smouldering_durtles.wk.model.Session;
 import com.smouldering_durtles.wk.proxy.ViewProxy;
 import com.smouldering_durtles.wk.util.AudioUtil;
 
-import java.io.File;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -250,7 +248,9 @@ public final class SubjectInfoHeadlineView extends ConstraintLayout {
         }
 
         // Play audio button(s)
-        if (showReadingAnswers || subject.getType().isKanaVocabulary()) {
+// Play audio button(s)
+        if ((subject.getType().isVocabulary() || subject.getType().isKanaVocabulary())
+                && !subject.getType().isRadical() && !subject.getType().isKanji()) {
             if (subject.getType().isKanaVocabulary() || !subject.getReadings().isEmpty()) {
                 final Button playButton = new Button(getContext());
                 playButton.setText(subject.getCharacters());
