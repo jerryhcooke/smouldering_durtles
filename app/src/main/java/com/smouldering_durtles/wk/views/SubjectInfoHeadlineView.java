@@ -251,26 +251,19 @@ public final class SubjectInfoHeadlineView extends ConstraintLayout {
 
         // Play audio button(s)
         if (showReadingAnswers || subject.getType().isKanaVocabulary()) {
-            if (subject.getType().isKanaVocabulary()) {
-                if (AudioUtil.hasAudio(subject)) { // Ensure there's audio available for this subject
-                    final Button playButton = new Button(getContext());
-                    playButton.setText(subject.getCharacters());
-                    playButton.setTextSize(FONT_SIZE_SMALL);
-                    playButton.setCompoundDrawablesWithIntrinsicBounds(
-                            ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_volume_up_24px), null, null, null);
-                    playButton.setOnClickListener(v -> safe(() -> AudioUtil.playAudio(subject, null)));
-                    final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, 0);
-                    layoutParams.width = WRAP_CONTENT;
-                    layoutParams.height = WRAP_CONTENT;
-                    buttonsColumn.addView(playButton, layoutParams);
-                }
-            }
-            else {
-                for (final Reading r: subject.getReadings()) {
-                    final @Nullable File testAudioFile = AudioUtil.getOneAudioFileMustMatch(subject, r.getReading());
-                    if (testAudioFile == null) {
-                        continue;
-                    }
+            if (subject.getType().isKanaVocabulary() || !subject.getReadings().isEmpty()) {
+                final Button playButton = new Button(getContext());
+                playButton.setText(subject.getCharacters());
+                playButton.setTextSize(FONT_SIZE_SMALL);
+                playButton.setCompoundDrawablesWithIntrinsicBounds(
+                        ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_volume_up_24px), null, null, null);
+                playButton.setOnClickListener(v -> safe(() -> AudioUtil.playAudio(subject, null)));
+                final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, 0);
+                layoutParams.width = WRAP_CONTENT;
+                layoutParams.height = WRAP_CONTENT;
+                buttonsColumn.addView(playButton, layoutParams);
+            } else {
+                for (final Reading r : subject.getReadings()) {
                     final Button playButton = new Button(getContext());
                     playButton.setText(r.getValue(GlobalSettings.Other.getShowOnInKatakana()));
                     playButton.setTextSize(FONT_SIZE_SMALL);
@@ -284,7 +277,6 @@ public final class SubjectInfoHeadlineView extends ConstraintLayout {
                 }
             }
         }
-
 
         revealButton.setText(getSubjectInfoDump().getRevealButtonLabel());
 

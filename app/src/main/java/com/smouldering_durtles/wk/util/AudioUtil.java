@@ -17,7 +17,6 @@
 package com.smouldering_durtles.wk.util;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -99,6 +98,7 @@ public final class AudioUtil {
         }
         return new File[] {WkApplication.getInstance().getExternalFilesDir(null)};
     }
+
 
     /**
      * Get a list of possible audio download locations. The first entry is always "Internal",
@@ -786,29 +786,59 @@ public final class AudioUtil {
 
         final @Nullable GenderedFile audioFile = getOneAudioFileShouldMatch(subject, lastMatchedAnswer);
         if (audioFile != null) {
-            lastWasMale = audioFile.isMale();
-            safe(() -> {
-                final @Nullable AudioManager audioManager = (AudioManager) WkApplication.getInstance().getSystemService(Context.AUDIO_SERVICE);
-                if (audioManager == null) {
-                    return;
-                }
-
-                final MediaPlayer player = new MediaPlayer();
-                savedMediaPlayer = player;
-
-                final boolean useAudioFocus = GlobalSettings.Audio.getUseAudioFocus();
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    playAudioPost26(audioManager, player, audioFile, useAudioFocus);
-                }
-                else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    playAudioPost21(audioManager, player, audioFile, useAudioFocus);
-                }
-                else {
-                    playAudioPre21(audioManager, player, audioFile, useAudioFocus);
-                }
-            });
+            playLocalAudio(audioFile);
+        } else {
+            // Fallback to streaming
+            final @Nullable String streamingUrl = getStreamingAudioUrl(subject, lastMatchedAnswer);
+            if (streamingUrl != null) {
+                playStreamingAudio(streamingUrl);
+            }
         }
+    }
+
+    private static void playLocalAudio(GenderedFile audioFile) {
+        safe(() -> {
+            final MediaPlayer player = new MediaPlayer();
+            savedMediaPlayer = player;
+
+            // Use audioFile directly
+            player.setDataSource(audioFile.getAbsolutePath());
+            player.prepare();
+            player.start();
+        });
+    }
+
+    private static void playStreamingAudio(String url) {
+        safe(() -> {
+            final MediaPlayer player = new MediaPlayer();
+            savedMediaPlayer = player;
+
+            player.setDataSource(url);
+            player.prepare();
+            player.start();
+        });
+    }
+
+    /**
+     * Stream an audio file for a subject. Take into account the user's preferences,
+     * and try to get a match for the given reading.
+     *
+     * @param subject the subject
+     * @param lastMatchedAnswer the reading to match if possible
+     */
+    public static @Nullable String getStreamingAudioUrl(Subject subject, @Nullable String lastMatchedAnswer) {
+        List<PronunciationAudio> audioList = subject.getParsedPronunciationAudios();
+        if (audioList.isEmpty()) {
+            return null;
+        }
+
+        // Filter based on user preferences or fallback to the first audio
+        for (PronunciationAudio audio : audioList) {
+            if (lastMatchedAnswer == null || audio.getMetadata().getPronunciation().equals(lastMatchedAnswer)) {
+                return audio.getUrl();
+            }
+        }
+        return audioList.get(0).getUrl(); // Default to the first audio if no match
     }
 
     /**

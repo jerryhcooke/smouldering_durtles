@@ -1,0 +1,1 @@
+A client for WaniKani, with advanced features built in and offline reviews!
