@@ -789,9 +789,9 @@ public final class AudioUtil {
             playLocalAudio(audioFile);
         } else {
             // Fallback to streaming
-            final @Nullable String streamingUrl = getStreamingAudioUrl(subject, lastMatchedAnswer);
-            if (streamingUrl != null) {
-                playStreamingAudio(streamingUrl);
+            final @Nullable PronunciationAudio streamingAudio = getStreamingAudio(subject, lastMatchedAnswer);
+            if (streamingAudio != null) {
+                playStreamingAudio(streamingAudio);
             }
         }
     }
@@ -800,6 +800,7 @@ public final class AudioUtil {
         safe(() -> {
             final MediaPlayer player = new MediaPlayer();
             savedMediaPlayer = player;
+            lastWasMale = audioFile.isMale();
 
             // Use audioFile directly
             player.setDataSource(audioFile.getAbsolutePath());
@@ -808,12 +809,13 @@ public final class AudioUtil {
         });
     }
 
-    private static void playStreamingAudio(String url) {
+    private static void playStreamingAudio(PronunciationAudio audio) {
         safe(() -> {
             final MediaPlayer player = new MediaPlayer();
             savedMediaPlayer = player;
 
-            player.setDataSource(url);
+            lastWasMale = audio.getMetadata().isMale();
+            player.setDataSource(audio.getUrl());
             player.prepare();
             player.start();
         });
@@ -826,19 +828,52 @@ public final class AudioUtil {
      * @param subject the subject
      * @param lastMatchedAnswer the reading to match if possible
      */
-    public static @Nullable String getStreamingAudioUrl(Subject subject, @Nullable String lastMatchedAnswer) {
-        List<PronunciationAudio> audioList = subject.getParsedPronunciationAudios();
+    public static @Nullable PronunciationAudio getStreamingAudio(Subject subject, @Nullable String lastMatchedAnswer) {
+        // Shuffle so pronunciation gender is random unless preferences alter it via the comparator.
+        List<PronunciationAudio> audioList = shuffle(subject.getParsedPronunciationAudios());
         if (audioList.isEmpty()) {
             return null;
         }
 
-        // Filter based on user preferences or fallback to the first audio
-        for (PronunciationAudio audio : audioList) {
-            if (lastMatchedAnswer == null || audio.getMetadata().getPronunciation().equals(lastMatchedAnswer)) {
-                return audio.getUrl();
+        final VoicePreference voicePreference = GlobalSettings.Audio.getVoicePreference();
+        // Prefer male if that is the preference or if the user chose alternate then prefer it if the last pronunciation was female.
+        final boolean malePreferred = voicePreference == MALE || voicePreference == ALTERNATE && !lastWasMale;
+        // Same as above for female preference. Same functionality for alternating.
+        final boolean femalePreferred = voicePreference == FEMALE || voicePreference == ALTERNATE && lastWasMale;
+
+        // Sorted based on pronunciation matching last matched answer and gender, taking into account their preference.
+        final Comparator<PronunciationAudio> comparator = (o1, o2) -> {
+            if (o1 == o2) {
+                return 0;
             }
-        }
-        return audioList.get(0).getUrl(); // Default to the first audio if no match
+            if (isEqual(o1.getMetadata().getPronunciation(), lastMatchedAnswer) && !isEqual(o2.getMetadata().getPronunciation(), lastMatchedAnswer)) {
+                return -1;
+            }
+            if (isEqual(o2.getMetadata().getPronunciation(), lastMatchedAnswer) && !isEqual(o1.getMetadata().getPronunciation(), lastMatchedAnswer)) {
+                return 1;
+            }
+            if (malePreferred) {
+                if (o1.getMetadata().isMale() && !o2.getMetadata().isMale()) {
+                    return -1;
+                }
+                if (o2.getMetadata().isMale() && !o1.getMetadata().isMale()) {
+                    return 1;
+                }
+            }
+            if (femalePreferred) {
+                if (o1.getMetadata().isFemale() && !o2.getMetadata().isFemale()) {
+                    return -1;
+                }
+                if (o2.getMetadata().isFemale() && !o1.getMetadata().isFemale()) {
+                    return 1;
+                }
+            }
+            return 0;
+        };
+
+        Collections.sort(audioList, comparator);
+
+        return audioList.get(0); // First audio should align with preferences.
     }
 
     /**
