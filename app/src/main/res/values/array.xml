@@ -74,9 +74,9 @@
 
     <string-array name="voicePreferences">
         <item>Random</item>
-        <item>Male</item>
-        <item>Female</item>
-        <item>Alternate between genders</item>
+        <item>Masculine</item>
+        <item>Femminine</item>
+        <item>Alternate between voices</item>
     </string-array>
 
     <string-array name="voicePreferenceValues">
