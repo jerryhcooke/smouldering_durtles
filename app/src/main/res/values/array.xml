@@ -198,6 +198,8 @@
 
     <string-array name="themes">
         <item>Wanikani</item>
+        <item>Wanikani Dark</item>
+        <item>Wanikani Black</item>
         <item>Breeze</item>
         <item>Black</item>
         <item>Nord</item>
@@ -205,6 +207,8 @@
 
     <string-array name="themeValues">
         <item>LIGHT</item>
+        <item>DARK_WANIKANI</item>
+        <item>BLACK_WANIKANI</item>
         <item>DARK</item>
         <item>BLACK_BREEZE</item>
         <item>NORD_POLAR_NIGHT</item>
