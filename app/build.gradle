@@ -28,7 +28,7 @@ android {
             minifyEnabled false
             resValue 'string', 'fileprovider_authority', 'com.smouldering_durtles.wk.fileprovider'
             resValue 'string', 'searchprovider_authority', 'com.smouldering_durtles.wk.db.SubjectContentProvider'
-            resValue 'string', 'applabel', '@string/label'
+            resValue 'string', 'applabel', 'Smouldering Durtles'
             buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.smouldering_durtles.wk.fileprovider"'
             signingConfig signingConfigs.debug
         }
@@ -36,7 +36,7 @@ android {
             applicationIdSuffix '.debug'
             resValue 'string', 'fileprovider_authority', 'com.smouldering_durtles.wk.debug.fileprovider'
             resValue 'string', 'searchprovider_authority', 'com.smouldering_durtles.wk.debug.db.SubjectContentProvider'
-            resValue 'string', 'applabel', '@string/labelDebug'
+            resValue 'string', 'applabel', 'Smouldering Durtles - Debug'
             buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.smouldering_durtles.wk.debug.fileprovider"'
         }
     }
