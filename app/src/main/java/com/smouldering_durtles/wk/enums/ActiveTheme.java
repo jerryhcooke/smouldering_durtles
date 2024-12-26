@@ -101,7 +101,7 @@ public enum ActiveTheme {
     },
     DARK_WANIKANI(
             true,
-            R.style.WKDarkTheme,
+            R.style.WKDarkWaniKaniTheme,
             R.drawable.ic_arrow_up_small_dark,
             new int[] {0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF},
             new int[] {0xFF0098F0, 0xFFE80092, 0xFF9808F3, 0xFF9808F3},
@@ -174,7 +174,7 @@ public enum ActiveTheme {
     },
     BLACK_WANIKANI(
             true,
-            R.style.WKBlackTheme,
+            R.style.WKBlackWaniKaniTheme,
             R.drawable.ic_arrow_up_small_dark,
             new int[] {0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF},
             new int[] {0xFF0098F0, 0xFFE80092, 0xFF9808F3, 0xFF9808F3},
