@@ -28,10 +28,7 @@ android {
             minifyEnabled false
             resValue 'string', 'fileprovider_authority', 'com.smouldering_durtles.wk.fileprovider'
             resValue 'string', 'searchprovider_authority', 'com.smouldering_durtles.wk.db.SubjectContentProvider'
-            resValue 'string', 'applabel', 'Smouldering Durtles'
-            resValue 'string', 'about_label', 'About Smouldering Durtles'
-            resValue 'string', 'uri_scheme', 'smouldering-durtles'
-            resValue 'string', 'subject_info_uri', 'smouldering-durtles://subejct-info'
+            resValue 'string', 'applabel', '@string/label'
             buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.smouldering_durtles.wk.fileprovider"'
             signingConfig signingConfigs.debug
         }
@@ -39,10 +36,7 @@ android {
             applicationIdSuffix '.debug'
             resValue 'string', 'fileprovider_authority', 'com.smouldering_durtles.wk.debug.fileprovider'
             resValue 'string', 'searchprovider_authority', 'com.smouldering_durtles.wk.debug.db.SubjectContentProvider'
-            resValue 'string', 'applabel', 'Smouldering Durtles - Debug'
-            resValue 'string', 'about_label', 'About Smouldering Durtles'
-            resValue 'string', 'uri_scheme', 'smouldering-durtles'
-            resValue 'string', 'subject_info_uri', 'smouldering-durtles://subejct-info'
+            resValue 'string', 'applabel', '@string/labelDebug'
             buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.smouldering_durtles.wk.debug.fileprovider"'
         }
     }
@@ -58,7 +52,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-        namespace 'com.smouldering_durtles.wk'
+    namespace 'com.smouldering_durtles.wk'
     buildFeatures {
         buildConfig true
     }
