@@ -9,14 +9,15 @@ Use Android Studio or the Gradle command line to build it.
 
 ## Preparing to build the code
 
-Before you can build this code, you will have to provide two files containing identification
-information for the app. This is because the open source license covering this app's code
-does not cover the name I gave the app, and it also doesn't cover my name. See the file
-LICENSE.md for details.
+Before you can build this code, you will have to replace the existing two files containing identification
+information for the app with your own versions. This is because the open source license covering this app's 
+code does not cover the name I gave the app, and it also doesn't cover my name. See the file LICENSE.md for details.
 
+- Remove any existing Indentification.java file from app/src/main/java/com.smouldering_durtles.wk
 - Copy the file app/Identification.java.sample.txt to app/src/main/java/com.smouldering_durtles.wk
 - Name the copy Identification.java
 - Edit the file to supply your own identification for the app
+- Remove any existing strings.xml file from app/src/res/values
 - Copy the file app/strings.xml.sample.txt to app/src/main/res/values
 - Name the copy strings.xml
 - Edit the file to supply your own identification for the app
