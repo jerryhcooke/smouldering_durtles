@@ -53,10 +53,10 @@
     </style>
 
     <style name="WKDarkWaniKaniTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/wkDarkColorPrimary</item>
-        <item name="colorPrimaryDark">@color/wkDarkColorPrimaryDark</item>
+        <item name="colorPrimary">@color/wkLightColorPrimaryLight</item>
+        <item name="colorPrimaryDark">@color/wkDarkBrowseLevelButtonColorBackground</item>
         <item name="colorPrimaryInverse">@color/wkLightColorPrimaryInverse</item>
-        <item name="colorPrimaryLight">@color/wkDarkColorPrimaryLight</item>
+        <item name="colorPrimaryLight">@color/wkLightColorPrimaryLight</item>
         <item name="colorPrimaryTonedDown">@color/wkDarkColorPrimaryTonedDown</item>
         <item name="colorAccent">@color/wkDarkColorAccent</item>
         <item name="colorBackground">@color/wkDarkColorBackground</item>
@@ -71,7 +71,7 @@
         <item name="alternativeToastColorPrimary">@color/wkDarkAlternativeToastColorPrimary</item>
         <item name="correctColorBackground">@color/wkDarkCorrectColorBackground</item>
         <item name="incorrectColorBackground">@color/wkDarkIncorrectColorBackground</item>
-        <item name="meaningHintColor">@color/wkDarkMeaningHintColor</item>
+        <item name="meaningHintColor">@color/wkLightMeaningHintColor</item>
         <item name="readingHintColor">@color/wkDarkReadingHintColor</item>
         <item name="editTextHintColor">@color/wkDarkEditTextHintColor</item>
         <item name="editTextHintColorInverse">@color/wkDarkEditTextHintColorInverse</item>
@@ -129,10 +129,10 @@
     </style>
 
     <style name="WKBlackWaniKaniTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/wkDarkColorPrimary</item>
-        <item name="colorPrimaryDark">@color/wkDarkColorPrimaryDark</item>
+        <item name="colorPrimary">@color/wkLightColorPrimaryLight</item>
+        <item name="colorPrimaryDark">@color/wkDarkBrowseLevelButtonColorBackground</item>
         <item name="colorPrimaryInverse">@color/wkLightColorPrimaryInverse</item>
-        <item name="colorPrimaryLight">@color/wkDarkColorPrimaryLight</item>
+        <item name="colorPrimaryLight">@color/wkLightColorPrimaryLight</item>
         <item name="colorPrimaryTonedDown">@color/wkDarkColorPrimaryTonedDown</item>
         <item name="colorAccent">@color/wkDarkColorAccent</item>
         <item name="colorBackground">@color/wkBlackColorBackground</item>
@@ -147,7 +147,7 @@
         <item name="alternativeToastColorPrimary">@color/wkDarkAlternativeToastColorPrimary</item>
         <item name="correctColorBackground">@color/wkDarkCorrectColorBackground</item>
         <item name="incorrectColorBackground">@color/wkDarkIncorrectColorBackground</item>
-        <item name="meaningHintColor">@color/wkDarkMeaningHintColor</item>
+        <item name="meaningHintColor">@color/wkLightMeaningHintColor</item>
         <item name="readingHintColor">@color/wkDarkReadingHintColor</item>
         <item name="editTextHintColor">@color/wkDarkEditTextHintColor</item>
         <item name="editTextHintColorInverse">@color/wkDarkEditTextHintColorInverse</item>
