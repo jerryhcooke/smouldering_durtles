@@ -52,6 +52,44 @@
         <item name="WK_Button_Borderless">@style/WK.Button.Borderless</item>
     </style>
 
+    <style name="WKDarkWaniKaniTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/wkLightColorPrimaryLight</item>
+        <item name="colorPrimaryDark">@color/wkDarkBrowseLevelButtonColorBackground</item>
+        <item name="colorPrimaryInverse">@color/wkLightColorPrimaryInverse</item>
+        <item name="colorPrimaryLight">@color/wkLightColorPrimaryLight</item>
+        <item name="colorPrimaryTonedDown">@color/wkDarkColorPrimaryTonedDown</item>
+        <item name="colorAccent">@color/wkDarkColorAccent</item>
+        <item name="colorBackground">@color/wkDarkColorBackground</item>
+        <item name="colorControlActivated">@color/wkDarkColorControlActivated</item>
+        <item name="colorDivider">@color/wkDarkColorDivider</item>
+        <item name="toolbarColorBackground">@color/wkDarkToolbarColorBackground</item>
+        <item name="browseLevelButtonColorBackground">@color/wkDarkBrowseLevelButtonColorBackground</item>
+        <item name="tileColorBackground">@color/wkDarkTileColorBackground</item>
+        <item name="colorWaterfallLine">@color/wkDarkColorWaterfallLine</item>
+        <item name="colorLevelProgressTarget">@color/wkDarkColorLevelProgressTarget</item>
+        <item name="customToastColorPrimary">@color/wkDarkCustomToastColorPrimary</item>
+        <item name="alternativeToastColorPrimary">@color/wkDarkAlternativeToastColorPrimary</item>
+        <item name="correctColorBackground">@color/wkDarkCorrectColorBackground</item>
+        <item name="incorrectColorBackground">@color/wkDarkIncorrectColorBackground</item>
+        <item name="meaningHintColor">@color/wkLightMeaningHintColor</item>
+        <item name="readingHintColor">@color/wkDarkReadingHintColor</item>
+        <item name="editTextHintColor">@color/wkDarkEditTextHintColor</item>
+        <item name="editTextHintColorInverse">@color/wkDarkEditTextHintColorInverse</item>
+        <item name="pitchInfoHeibanColor">@color/wkDarkPitchInfoHeibanColor</item>
+        <item name="pitchInfoOdakaColor">@color/wkDarkPitchInfoOdakaColor</item>
+        <item name="pitchInfoNakadakaColor">@color/wkDarkPitchInfoNakadakaColor</item>
+        <item name="pitchInfoAtamadakaColor">@color/wkDarkPitchInfoAtamadakaColor</item>
+        <item name="buttonHighlightColor">@color/wkDarkButtonHighlightColor</item>
+        <item name="strokeDiagramGhostColor">@color/wkDarkStrokeDiagramGhostColor</item>
+
+        <item name="android:windowBackground">@color/wkDarkWindowBackground</item>
+
+        <item name="WK_TextView_BrowseLevelButton">@style/WK.TextView.BrowseLevelButton</item>
+        <item name="WK_TextView_Normal">@style/WK.TextView.Normal</item>
+        <item name="WK_TextView_Large">@style/WK.TextView.Large</item>
+        <item name="WK_Button_Borderless">@style/WK.Button.Borderless</item>
+    </style>
+
     <style name="WKDarkTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/wkDarkColorPrimary</item>
         <item name="colorPrimaryDark">@color/wkDarkColorPrimaryDark</item>
@@ -83,6 +121,44 @@
         <item name="strokeDiagramGhostColor">@color/wkDarkStrokeDiagramGhostColor</item>
 
         <item name="android:windowBackground">@color/wkDarkWindowBackground</item>
+
+        <item name="WK_TextView_BrowseLevelButton">@style/WK.TextView.BrowseLevelButton</item>
+        <item name="WK_TextView_Normal">@style/WK.TextView.Normal</item>
+        <item name="WK_TextView_Large">@style/WK.TextView.Large</item>
+        <item name="WK_Button_Borderless">@style/WK.Button.Borderless</item>
+    </style>
+
+    <style name="WKBlackWaniKaniTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/wkLightColorPrimaryLight</item>
+        <item name="colorPrimaryDark">@color/wkDarkBrowseLevelButtonColorBackground</item>
+        <item name="colorPrimaryInverse">@color/wkLightColorPrimaryInverse</item>
+        <item name="colorPrimaryLight">@color/wkLightColorPrimaryLight</item>
+        <item name="colorPrimaryTonedDown">@color/wkDarkColorPrimaryTonedDown</item>
+        <item name="colorAccent">@color/wkDarkColorAccent</item>
+        <item name="colorBackground">@color/wkBlackColorBackground</item>
+        <item name="colorControlActivated">@color/wkDarkColorControlActivated</item>
+        <item name="colorDivider">@color/wkDarkColorDivider</item>
+        <item name="toolbarColorBackground">@color/wkBlackColorBackground</item>
+        <item name="browseLevelButtonColorBackground">@color/wkDarkBrowseLevelButtonColorBackground</item>
+        <item name="tileColorBackground">@color/wkBlackColorBackground</item>
+        <item name="colorWaterfallLine">@color/wkDarkColorWaterfallLine</item>
+        <item name="colorLevelProgressTarget">@color/wkDarkColorLevelProgressTarget</item>
+        <item name="customToastColorPrimary">@color/wkDarkCustomToastColorPrimary</item>
+        <item name="alternativeToastColorPrimary">@color/wkDarkAlternativeToastColorPrimary</item>
+        <item name="correctColorBackground">@color/wkDarkCorrectColorBackground</item>
+        <item name="incorrectColorBackground">@color/wkDarkIncorrectColorBackground</item>
+        <item name="meaningHintColor">@color/wkLightMeaningHintColor</item>
+        <item name="readingHintColor">@color/wkDarkReadingHintColor</item>
+        <item name="editTextHintColor">@color/wkDarkEditTextHintColor</item>
+        <item name="editTextHintColorInverse">@color/wkDarkEditTextHintColorInverse</item>
+        <item name="pitchInfoHeibanColor">@color/wkDarkPitchInfoHeibanColor</item>
+        <item name="pitchInfoOdakaColor">@color/wkDarkPitchInfoOdakaColor</item>
+        <item name="pitchInfoNakadakaColor">@color/wkDarkPitchInfoNakadakaColor</item>
+        <item name="pitchInfoAtamadakaColor">@color/wkDarkPitchInfoAtamadakaColor</item>
+        <item name="buttonHighlightColor">@color/wkDarkButtonHighlightColor</item>
+        <item name="strokeDiagramGhostColor">@color/wkDarkStrokeDiagramGhostColor</item>
+
+        <item name="android:windowBackground">@color/wkBlackColorBackground</item>
 
         <item name="WK_TextView_BrowseLevelButton">@style/WK.TextView.BrowseLevelButton</item>
         <item name="WK_TextView_Normal">@style/WK.TextView.Normal</item>
