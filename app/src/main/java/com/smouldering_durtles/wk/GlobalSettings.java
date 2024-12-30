@@ -216,6 +216,24 @@ public final class GlobalSettings {
     }
 
     /**
+     * Get the randomize inflection setting for the given combination of session type.
+     *
+     * @param sessionType the type of the current session
+     * @return true if randomize inflection is enabled
+     */
+    public static boolean getRandomizeInflections(final SessionType sessionType) {
+        if (sessionType == LESSON) {
+            return false;
+        }
+        else if (sessionType == REVIEW) {
+            return AdvancedReview.getRandomizeInflections();
+        }
+        else {
+            return AdvancedSelfStudy.getRandomizeInflections();
+        }
+    }
+
+    /**
      * Get the autoplay setting for the given session type.
      *
      * @param sessionType the type of the current session
@@ -2774,6 +2792,29 @@ public final class GlobalSettings {
             }
             return prefs().getInt("review_subjects_kana_vocabulary_max", -1);
         }
+
+        /**
+         * Randomize inflections in review sessions.
+         *
+         * @return the value
+         */
+        private static boolean getRandomizeInflections() {
+            if (!getAdvancedEnabled()) {
+                return false;
+            }
+            return prefs().getBoolean("review_randomize_inflections", false);
+        }
+
+        /**
+         * Randomize inflections in review sessions.
+         *
+         * @param value the value
+         */
+        private static void setRandomizeInflections(final boolean value) {
+            final SharedPreferences.Editor editor = prefs().edit();
+            editor.putBoolean("review_randomize_inflections", value);
+            editor.apply();
+        }
     }
 
     /**
@@ -3100,6 +3141,29 @@ public final class GlobalSettings {
                 return -1;
             }
             return prefs().getInt("self_study_subjects_kana_vocabulary_max", -1);
+        }
+
+        /**
+         * Randomize inflections in self-study sessions.
+         *
+         * @return the value
+         */
+        private static boolean getRandomizeInflections() {
+            if (!getAdvancedEnabled()) {
+                return false;
+            }
+            return prefs().getBoolean("self_study_randomize_inflections", false);
+        }
+
+        /**
+         * Randomize inflections in self-study sessions.
+         *
+         * @param value the value
+         */
+        private static void setRandomizeInflections(final boolean value) {
+            final SharedPreferences.Editor editor = prefs().edit();
+            editor.putBoolean("self_study_randomize_inflections", value);
+            editor.apply();
         }
     }
 

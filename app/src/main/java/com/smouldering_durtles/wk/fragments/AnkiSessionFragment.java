@@ -297,7 +297,7 @@ public final class AnkiSessionFragment extends AbstractSessionFragment {
         ankiIncorrectButton.setBackgroundColor(ActiveTheme.getAnkiColors()[3]);
 
         answer.setVisibility(showingAnswer);
-        answer.setText(question.getAnkiAnswerRichText(subject));
+        answer.setText(question.getAnkiAnswerRichText(subject, session.getType()));
         answer.setTextSize(GlobalSettings.Font.getFontSizeAnkiAnswer());
         answer.setTextColor(ActiveTheme.getAnkiColors()[4]);
         answer.setBackgroundColor(ActiveTheme.getAnkiColors()[5]);

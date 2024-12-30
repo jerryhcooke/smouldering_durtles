@@ -47,6 +47,7 @@ import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.model.TypefaceConfiguration;
 import com.smouldering_durtles.wk.util.ViewUtil;
+import com.smouldering_durtles.wk.enums.SessionType;
 
 import java.net.URLEncoder;
 import java.util.Locale;
@@ -399,7 +400,7 @@ public final class SubjectInfoButtonView extends View {
      * @param subject the subject
      */
     public void setSubject(final Subject subject) {
-        setSubject(subject, null);
+        setSubject(subject, null, null);
     }
 
     /**
@@ -407,10 +408,11 @@ public final class SubjectInfoButtonView extends View {
      *
      * @param subject the subject
      * @param question the optional question for this subject
+     * @param question the optional session type this subject appears in
      */
-    public void setSubject(final Subject subject, @Nullable final Question question) {
+    public void setSubject(final Subject subject, @Nullable final Question question, @Nullable SessionType sessionType) {
         safe(() -> {
-            characters = orElse(question != null ? question.getCharacters(subject) : subject.getCharacters(), "");
+            characters = orElse(question != null && sessionType != null ? question.getCharacters(subject, sessionType) : subject.getCharacters(), "");
             image = subject.needsTitleImage() ? ContextCompat.getDrawable(getContext(), subject.getTitleImageId()) : null;
             textColor = subject.getTextColor();
             if (image != null) {

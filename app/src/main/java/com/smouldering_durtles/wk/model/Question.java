@@ -22,6 +22,7 @@ import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.enums.CloseEnoughAction;
 import com.smouldering_durtles.wk.enums.QuestionType;
 import com.smouldering_durtles.wk.util.InflectionUtil;
+import com.smouldering_durtles.wk.enums.SessionType;
 
 import java.util.Locale;
 
@@ -201,16 +202,20 @@ public final class Question {
      * @param subject the subject for this item
      * @return the text
      */
-    public CharSequence getAnkiAnswerRichText(final Subject subject) {
-        String inflection = getInflection(subject);
+    public CharSequence getAnkiAnswerRichText(final Subject subject, final SessionType sessionType) {
+        String inflection = getInflection(subject, sessionType);
         return type.getAnkiAnswerRichText(subject) + (inflection != null ? " (" + inflection + ")" : "");
     }
 
-    private boolean isVerb(final Subject subject) {
-        return getInflectionForm(subject).contains("verb");
+    private boolean isVerb(final Subject subject, final SessionType sessionType) {
+        return getInflectionForm(subject, sessionType).contains("verb");
     }
 
-    private String getInflectionForm(final Subject subject) {
+    private String getInflectionForm(final Subject subject, final SessionType sessionType) {
+        if (!GlobalSettings.getRandomizeInflections(sessionType)) {
+            return null;
+        }
+
         for (String partOfSpeech : subject.getPartsOfSpeech()) {
             if (partOfSpeech.equals("godan verb") ||
                 partOfSpeech.equals("ichidan verb") || 
@@ -221,37 +226,40 @@ public final class Question {
         return null;
     }
 
-    private String getInflection(final Subject subject) {
+    private String getInflection(final Subject subject, final SessionType sessionType) {
         if (inflection != null) {
             return inflection;
         }
-        if (getInflectionForm(subject) == null) {
+        if (getInflectionForm(subject, sessionType) == null) {
             return null;
         }
 
-        inflection = isVerb(subject) ? InflectionUtil.getRandomVerbConjugation() : InflectionUtil.getRandomAdjectiveDeclension();
+        inflection = isVerb(subject, sessionType) ?
+            InflectionUtil.getRandomVerbConjugation() :
+            InflectionUtil.getRandomAdjectiveDeclension();
         return inflection;
     }
 
-    public @Nullable String getCharacters(final Subject subject) {
+    public @Nullable String getCharacters(final Subject subject, final SessionType sessionType) {
         String characters = subject.getCharacters();
         if (characters == null) {
             return null;
         }
 
-        String inflection = getInflectionForm(subject);
+        String inflection = getInflectionForm(subject, sessionType);
+        String inflectionType = getInflection(subject, sessionType);
         if (inflection == null)
             return characters;
         else if (inflection.equals("godan verb"))
-            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.GODAN, getInflection(subject));
+            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.GODAN, inflectionType);
         else if (inflection.equals("ichidan verb"))
-            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.ICHIDAN, getInflection(subject));
+            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.ICHIDAN, inflectionType);
         else if (inflection.equals("する verb"))
-            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.SURU, getInflection(subject));
+            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.SURU, inflectionType);
         else if (inflection.equals("い adjective"))
-            return InflectionUtil.getDeclinedAdjective(characters, InflectionUtil.AdjectiveType.I, getInflection(subject));
+            return InflectionUtil.getDeclinedAdjective(characters, InflectionUtil.AdjectiveType.I, inflectionType);
         else if (inflection.equals("な adjective"))
-            return InflectionUtil.getDeclinedAdjective(characters, InflectionUtil.AdjectiveType.NA_PLAIN, getInflection(subject));
+            return InflectionUtil.getDeclinedAdjective(characters, InflectionUtil.AdjectiveType.NA_PLAIN, inflectionType);
          else
             return characters;
     }

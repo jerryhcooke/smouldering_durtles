@@ -242,6 +242,7 @@ public class InflectionUtil {
     static {
         adjectiveEndings.put("past", new AdjectiveEnding("かった", "だった", "でした"));
         adjectiveEndings.put("conjunctive", new AdjectiveEnding("くて", "で", "でして"));
+        // FIXME as is, this will show (spoken/written) for い-adjectives, too, which may confuse people
         adjectiveEndings.put("negative (spoken)", new AdjectiveEnding("くない", "じゃない", "じゃありません"));
         adjectiveEndings.put("negative (written)", new AdjectiveEnding("くない", "ではない", "ではありません"));
         adjectiveEndings.put("negative past (spoken)", new AdjectiveEnding("くなかった", "じゃなかった", "じゃありませんでした"));
