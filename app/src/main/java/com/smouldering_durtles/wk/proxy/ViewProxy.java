@@ -46,6 +46,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.madrapps.pikolo.ColorPicker;
 import com.madrapps.pikolo.listeners.OnColorSelectionListener;
 import com.smouldering_durtles.wk.Actment;
+import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.components.CustomMovementMethod;
 import com.smouldering_durtles.wk.model.AdvancedSearchParameters;
@@ -268,9 +269,13 @@ public final class ViewProxy {
     }
 
     public void setSubject(final Subject subject) {
+        setSubject(subject, null);
+    }
+
+    public void setSubject(final Subject subject, final Question question) {
         final @Nullable View delegate = getDelegate();
         if (delegate instanceof SubjectInfoButtonView) {
-            ((SubjectInfoButtonView) delegate).setSubject(subject);
+            ((SubjectInfoButtonView) delegate).setSubject(subject, question);
         }
         else if (delegate instanceof SubjectInfoHeadlineView) {
             ((SubjectInfoHeadlineView) delegate).setSubject(subject);

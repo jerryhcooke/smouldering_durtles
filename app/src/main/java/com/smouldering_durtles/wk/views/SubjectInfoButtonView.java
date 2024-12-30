@@ -44,6 +44,7 @@ import com.smouldering_durtles.wk.Constants;
 import com.smouldering_durtles.wk.GlobalSettings;
 import com.smouldering_durtles.wk.R;
 import com.smouldering_durtles.wk.db.model.Subject;
+import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.model.TypefaceConfiguration;
 import com.smouldering_durtles.wk.util.ViewUtil;
 
@@ -398,8 +399,18 @@ public final class SubjectInfoButtonView extends View {
      * @param subject the subject
      */
     public void setSubject(final Subject subject) {
+        setSubject(subject, null);
+    }
+
+    /**
+     * Set the subject for this button contextualized by a question.
+     *
+     * @param subject the subject
+     * @param question the optional question for this subject
+     */
+    public void setSubject(final Subject subject, @Nullable final Question question) {
         safe(() -> {
-            characters = orElse(subject.getCharacters(), "");
+            characters = orElse(question != null ? question.getCharacters(subject) : subject.getCharacters(), "");
             image = subject.needsTitleImage() ? ContextCompat.getDrawable(getContext(), subject.getTitleImageId()) : null;
             textColor = subject.getTextColor();
             if (image != null) {

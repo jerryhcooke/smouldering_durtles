@@ -21,6 +21,7 @@ import com.smouldering_durtles.wk.db.model.SessionItem;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.enums.CloseEnoughAction;
 import com.smouldering_durtles.wk.enums.QuestionType;
+import com.smouldering_durtles.wk.util.InflectionUtil;
 
 import java.util.Locale;
 
@@ -39,6 +40,12 @@ import static java.util.Objects.requireNonNull;
 public final class Question {
     private final SessionItem item;
     private final QuestionType type;
+    
+    /**
+     * If this is a verb or adjective and the user requested questions to be shown in
+     * forms with inflection, this field contains the name of the inflection for this question.
+     */
+    private @Nullable String inflection;
 
     /**
      * The constructor.
@@ -195,6 +202,57 @@ public final class Question {
      * @return the text
      */
     public CharSequence getAnkiAnswerRichText(final Subject subject) {
-        return type.getAnkiAnswerRichText(subject);
+        String inflection = getInflection(subject);
+        return type.getAnkiAnswerRichText(subject) + (inflection != null ? " (" + inflection + ")" : "");
+    }
+
+    private boolean isVerb(final Subject subject) {
+        return getInflectionForm(subject).contains("verb");
+    }
+
+    private String getInflectionForm(final Subject subject) {
+        for (String partOfSpeech : subject.getPartsOfSpeech()) {
+            if (partOfSpeech.equals("godan verb") ||
+                partOfSpeech.equals("ichidan verb") || 
+                partOfSpeech.equals("する verb") ||
+                partOfSpeech.equals("い adjective") || 
+                partOfSpeech.equals("な adjective")) return partOfSpeech;
+        }
+        return null;
+    }
+
+    private String getInflection(final Subject subject) {
+        if (inflection != null) {
+            return inflection;
+        }
+        if (getInflectionForm(subject) == null) {
+            return null;
+        }
+
+        inflection = isVerb(subject) ? InflectionUtil.getRandomVerbConjugation() : InflectionUtil.getRandomAdjectiveDeclension();
+        return inflection;
+    }
+
+    public @Nullable String getCharacters(final Subject subject) {
+        String characters = subject.getCharacters();
+        if (characters == null) {
+            return null;
+        }
+
+        String inflection = getInflectionForm(subject);
+        if (inflection == null)
+            return characters;
+        else if (inflection.equals("godan verb"))
+            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.GODAN, getInflection(subject));
+        else if (inflection.equals("ichidan verb"))
+            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.ICHIDAN, getInflection(subject));
+        else if (inflection.equals("する verb"))
+            return InflectionUtil.getConjugatedVerb(characters, InflectionUtil.VerbType.SURU, getInflection(subject));
+        else if (inflection.equals("い adjective"))
+            return InflectionUtil.getDeclinedAdjective(characters, InflectionUtil.AdjectiveType.I, getInflection(subject));
+        else if (inflection.equals("な adjective"))
+            return InflectionUtil.getDeclinedAdjective(characters, InflectionUtil.AdjectiveType.NA_PLAIN, getInflection(subject));
+         else
+            return characters;
     }
 }
