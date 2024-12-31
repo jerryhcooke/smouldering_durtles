@@ -39,6 +39,22 @@ public class InflectionUtil {
             if (this.stemForm == StemForm.DICTIONARY)
                 return verb;
 
+            if (verbType == VerbType.SURU) {
+                String prefix = verb.endsWith("する") ? verb.substring(0, verb.length() - 2) : verb;
+                switch (this.stemForm) {
+                    case DICTIONARY: return prefix + "する";
+                    case CONJUNCTIVE: return prefix + "し";
+                    case NAI: return prefix + "しな";
+                    case IMPERATIVE: return prefix + "しろ";
+                    case VOLITIONAL: return prefix + "しよう";
+                    case TE: return prefix + "して";
+                    case TA: return prefix + "した";
+                    case HYPOTHETICAL:
+                        // TODO conditional: すれば, potential: できる
+                        return null;
+                }
+            }
+
             String prefix = verb.substring(0, verb.length() - 1);
             String lastChar = verb.substring(verb.length() - 1, verb.length());
 
@@ -48,21 +64,6 @@ public class InflectionUtil {
                 if (stemForm == StemForm.TA) return prefix + "た";
                 if (stemForm == StemForm.VOLITIONAL) return prefix + "よ";
                 return prefix;
-            }
-
-            if (verbType == VerbType.SURU) {
-                switch (this.stemForm) {
-                    case DICTIONARY: return "する";
-                    case CONJUNCTIVE: return "し";
-                    case NAI: return "しな";
-                    case IMPERATIVE: return "しろ";
-                    case VOLITIONAL: return "しよう";
-                    case TE: return "して";
-                    case TA: return "した";
-                    case HYPOTHETICAL:
-                        // TODO conditional: すれば, potential: できる
-                        return null;
-                }
             }
 
             HashMap<String, String[]> endings = new HashMap<>();
@@ -270,6 +271,7 @@ public class InflectionUtil {
         System.out.println(getDeclinedAdjective("不安", AdjectiveType.NA_PLAIN, "past"));
         System.out.println(getDeclinedAdjective("不安", AdjectiveType.NA_POLITE, "past"));
         System.out.println(getConjugatedVerb("集中する", VerbType.SURU, "speaker's desire"));
+        System.out.println(getConjugatedVerb("どきどき", VerbType.SURU, "speaker's desire"));
         System.out.println(getConjugatedVerb("食", VerbType.ICHIDAN, "speaker's desire"));
         System.out.println(getConjugatedVerb("飲む", VerbType.GODAN, "past"));
     }
