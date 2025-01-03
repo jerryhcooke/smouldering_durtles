@@ -81,7 +81,20 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(final @Nullable Bundle savedInstanceState, final @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
+        // Add listener for always_hide_wk_mnemonic changes
+        final @Nullable TwoStatePreference alwaysHideWKPref = findPreference("always_hide_wk_mnemonic");
+        final @Nullable TwoStatePreference notAlwaysHideWKPref = findPreference("not_always_hide_wk_mnemonic");
 
+        if (alwaysHideWKPref != null && notAlwaysHideWKPref != null) {
+            alwaysHideWKPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean alwaysHide = (Boolean) newValue;
+                notAlwaysHideWKPref.setChecked(!alwaysHide);
+                return true;
+            });
+
+            // Set initial state
+            notAlwaysHideWKPref.setChecked(!alwaysHideWKPref.isChecked());
+        }
     }
 
     private void onViewCreatedBase(final View view, final @Nullable Bundle savedInstanceState) {
