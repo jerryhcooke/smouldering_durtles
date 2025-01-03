@@ -135,7 +135,7 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
         final int maxHeight = dp2px(GlobalSettings.Font.getMaxFontSizeQuizText());
         questionText.setTransparent(true);
         questionText.setTypefaceConfiguration(typefaceConfiguration);
-        questionText.setSubject(subject);
+        questionText.setSubject(subject, question, session.getType());
         questionText.setMaxSize(maxWidth, maxHeight);
         questionText.setSizeForQuiz(true);
         questionText.setOnClickListener(v -> safe(() -> questionText.setTypefaceConfiguration(TypefaceConfiguration.DEFAULT)));
