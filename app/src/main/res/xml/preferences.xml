@@ -337,16 +337,32 @@
             android:summary="This replaces tags such as &lt;kanji&gt; with appropriate colouring instead of just making the text bold"/>
 
         <SwitchPreferenceCompat
+            app:key="not_always_hide_wk_mnemonic"
+            app:title="Always hide WaniKani's own mnemonics"
+            app:singleLineTitle="false"
+            app:defaultValue="true"
+            android:persistent="false"
+            app:isPreferenceVisible="false"/>
+
+        <SwitchPreferenceCompat
+            app:key="always_hide_wk_mnemonic"
+            app:title="Always hide WaniKani's own mnemonics"
+            app:singleLineTitle="false"
+            app:defaultValue="false"/>
+
+        <SwitchPreferenceCompat
             app:key="hide_meaning_mnemonic"
             app:title="Hide WaniKani's meaning mnemonic if a user note is present"
             app:singleLineTitle="false"
-            app:defaultValue="false"/>
+            app:defaultValue="false"
+            android:dependency="not_always_hide_wk_mnemonic"/>
 
         <SwitchPreferenceCompat
             app:key="hide_reading_mnemonic"
             app:title="Hide WaniKani's reading mnemonic if a user note is present"
             app:singleLineTitle="false"
-            app:defaultValue="false"/>
+            app:defaultValue="false"
+            android:dependency="not_always_hide_wk_mnemonic"/>
 
         <SwitchPreferenceCompat
             app:key="show_legacy"

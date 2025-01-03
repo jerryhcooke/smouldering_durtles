@@ -1174,12 +1174,44 @@ public final class GlobalSettings {
         }
 
         /**
+         * Always hide WaniKani's mnemonics regardless of user notes
+         *
+         * @return the value
+         */
+        public static boolean getAlwaysHideWKMnemonic() {
+            return prefs().getBoolean("always_hide_wk_mnemonic", false);
+        }
+
+        /**
+         * Helper method to invert the always_hide_wk_mnemonic preference.
+         * Used for enabling/disabling conditional mnemonic hiding preferences.
+         *
+         * @return true if mnemonics should not always be hidden
+         */
+        public static boolean getNotAlwaysHideWKMnemonic() {
+            return !prefs().getBoolean("always_hide_wk_mnemonic", false);
+        }
+
+        /**
+         * Helper method to invert the always_hide_wk_mnemonic preference.
+         * Used for enabling/disabling conditional mnemonic hiding preferences.
+         *
+         * @param value true if mnemonics should not always be hidden
+         */
+        public static void setNotAlwaysHideWKMnemonic(final boolean value) {
+            final SharedPreferences.Editor editor = prefs().edit();
+            editor.putBoolean("not_always_hide_wk_mnemonic", value);
+            editor.apply();
+        }
+
+        /**
          * Hide WaniKani's meaning mnemonic if a user note is present
          *
          * @return the value
          */
         public static boolean getHideMeaningMnemonic() {
-            return prefs().getBoolean("hide_meaning_mnemonic", false);
+            return prefs().getBoolean("always_hide_wk_mnemonic", false) ||
+                   prefs().getBoolean("hide_meaning_mnemonic", false);
         }
 
         /**
@@ -1188,7 +1220,8 @@ public final class GlobalSettings {
          * @return the value
          */
         public static boolean getHideReadingMnemonic() {
-            return prefs().getBoolean("hide_reading_mnemonic", false);
+            return prefs().getBoolean("always_hide_wk_mnemonic", false) ||
+                   prefs().getBoolean("hide_reading_mnemonic", false);
         }
 
         /**
