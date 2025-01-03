@@ -609,7 +609,7 @@
             app:singleLineTitle="false"
             app:defaultValue="false"
             app:isPreferenceVisible="false"
-            app:summary="Enable this to suggest a keyboard language for reading questions"/>
+            app:summary="Enable this to suggest a keyboard language for meaning questions"/>
 
         <SwitchPreferenceCompat
             app:key="ime_hint_reading"
