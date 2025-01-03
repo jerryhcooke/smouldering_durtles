@@ -17,6 +17,7 @@
 package com.smouldering_durtles.wk.services;
 
 import static com.smouldering_durtles.wk.Constants.HOUR;
+import static com.smouldering_durtles.wk.Constants.MINUTE;
 import static com.smouldering_durtles.wk.util.ObjectSupport.getTopOfHour;
 import static com.smouldering_durtles.wk.util.ObjectSupport.runAsync;
 import static com.smouldering_durtles.wk.util.ObjectSupport.safe;
@@ -73,8 +74,7 @@ public final class BackgroundAlarmReceiver extends BroadcastReceiver {
         final @Nullable AlarmManager alarmManager = (AlarmManager) WkApplication.getInstance().getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             final Intent intent = new Intent(WkApplication.getInstance(), BackgroundAlarmReceiver.class);
-            final int flags = PendingIntent.FLAG_UPDATE_CURRENT;
-            @SuppressLint("UnspecifiedImmutableFlag")
+            final int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
             final PendingIntent pendingIntent = PendingIntent.getBroadcast(WkApplication.getInstance(),
                     StableIds.BACKGROUND_ALARM_REQUEST_CODE_1, intent, flags);
             alarmManager.set(AlarmManager.RTC_WAKEUP, nextTrigger, pendingIntent);
@@ -89,7 +89,6 @@ public final class BackgroundAlarmReceiver extends BroadcastReceiver {
         if (alarmManager != null) {
             final Intent intent = new Intent(WkApplication.getInstance(), BackgroundAlarmReceiver.class);
             final int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
-            @SuppressLint("UnspecifiedImmutableFlag")
             final PendingIntent pendingIntent = PendingIntent.getBroadcast(WkApplication.getInstance(),
                     StableIds.BACKGROUND_ALARM_REQUEST_CODE_1, intent, flags);
             alarmManager.cancel(pendingIntent);
@@ -102,20 +101,9 @@ public final class BackgroundAlarmReceiver extends BroadcastReceiver {
     public static void scheduleOrCancelAlarm() {
         safe(() -> {
             if (isAlarmRequired()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    BackgroundAlarmReceiverPost23.scheduleAlarm();
-                }
-                else {
-                    BackgroundAlarmReceiverPost19.scheduleAlarm();
-                }
-            }
-            else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    BackgroundAlarmReceiverPost23.cancelAlarm();
-                }
-                else {
-                    BackgroundAlarmReceiverPost19.cancelAlarm();
-                }
+                scheduleAlarm();
+            } else {
+                cancelAlarm();
             }
         });
     }
