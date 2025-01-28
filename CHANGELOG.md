@@ -1,7 +1,30 @@
 
 ## Smouldering Durtles changelog
 
+### Version 1.2.0 2025-01-28
+
+- Thanks to @Kaiserdragon2, notifications should be fixed
+- Thanks to @voidzero, new option to hide WaniKani mnemonics
+- Thanks to @tom95, new option to randomise inflections
+
+### Version 1.1.9 2024-12-27
+
+- Updated settings for F-Droid submission
+
+### Version 1.1.8 2024-12-24
+
+- Updates settings backup logic to fix white screen and use better methods.
+
+### Version 1.1.7 2024-12-23
+
+- Thanks to @LotusEcho for fixing voice reading preferences.
+
+### Version 1.1.6 2024-12-23
+
+- Minor bugfix to prevent play audio button showing on items with no audio
+
 ### Version 1.1.5 2024-12-22
+
 - You can now stream audio for vocab if not downloaded
 - Drawables replaced where WaniKani now use Unicode for radicals
 - Donation link added to About page as requested
