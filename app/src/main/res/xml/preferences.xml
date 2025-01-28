@@ -1049,6 +1049,13 @@
                 app:useSimpleSummaryProvider="true"
                 app:defaultValue="false"/>
 
+            <SwitchPreferenceCompat
+                app:key="review_randomize_inflections"
+                app:title="Randomize inflections in review"
+                app:singleLineTitle="false"
+                app:defaultValue="false"
+                app:summary="Random inflections will be added to adjectives and verbs. Note that answers and audio will use only dictionary forms. Works best with Anki mode, where you can see the type of inflection added in the answer screen."/>
+
             <com.smouldering_durtles.wk.components.InfoPreference
                 app:title="" app:key="review_subject_selection"/>
             <com.smouldering_durtles.wk.components.NumberRangePreference
@@ -1143,6 +1150,13 @@
                 app:singleLineTitle="false"
                 app:useSimpleSummaryProvider="true"
                 app:defaultValue="false"/>
+
+            <SwitchPreferenceCompat
+                app:key="self_study_randomize_inflections"
+                app:title="Randomize inflections in self-study"
+                app:singleLineTitle="false"
+                app:defaultValue="false"
+                app:summary="Random inflections will be added to adjectives and verbs. Note that answers and audio will use only dictionary forms. Works best with Anki mode, where you can see the type of inflection added in the answer screen."/>
 
             <com.smouldering_durtles.wk.components.InfoPreference
                 app:title="" app:key="self_study_subject_selection"/>
