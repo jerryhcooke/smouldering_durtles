@@ -531,8 +531,8 @@ public final class SubjectInfoView extends LinearLayout implements SubjectChange
         final boolean showReadingAnswers = getSubjectInfoDump().getShowReadingAnswers(Session.getInstance().getCurrentQuestion());
         final boolean showMeaningRelated = getSubjectInfoDump().getShowMeaningRelated(Session.getInstance().getCurrentQuestion());
         final boolean showReadingRelated = getSubjectInfoDump().getShowReadingRelated(Session.getInstance().getCurrentQuestion());
-        final boolean showMeaningMnemonic = !GlobalSettings.SubjectInfo.getHideMeaningMnemonic() && !subject.hasMeaningNote();
-        final boolean showReadingMnemonic = !GlobalSettings.SubjectInfo.getHideReadingMnemonic() && !subject.hasReadingNote();
+        final boolean showMeaningMnemonic = !GlobalSettings.SubjectInfo.getHideMeaningMnemonic(subject.hasMeaningNote());
+        final boolean showReadingMnemonic = !GlobalSettings.SubjectInfo.getHideReadingMnemonic(subject.hasReadingNote());
 
         headline.setSubject(subject);
 

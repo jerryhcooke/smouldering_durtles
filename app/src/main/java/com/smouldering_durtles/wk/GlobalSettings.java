@@ -1227,9 +1227,9 @@ public final class GlobalSettings {
          *
          * @return the value
          */
-        public static boolean getHideMeaningMnemonic() {
+        public static boolean getHideMeaningMnemonic(final boolean hasMeaningNote) {
             return prefs().getBoolean("always_hide_wk_mnemonic", false) ||
-                   prefs().getBoolean("hide_meaning_mnemonic", false);
+                   prefs().getBoolean("hide_meaning_mnemonic", false) && hasMeaningNote;
         }
 
         /**
@@ -1237,9 +1237,9 @@ public final class GlobalSettings {
          *
          * @return the value
          */
-        public static boolean getHideReadingMnemonic() {
+        public static boolean getHideReadingMnemonic(final boolean hasReadingNote) {
             return prefs().getBoolean("always_hide_wk_mnemonic", false) ||
-                   prefs().getBoolean("hide_reading_mnemonic", false);
+                   prefs().getBoolean("hide_reading_mnemonic", false) && hasReadingNote;
         }
 
         /**
