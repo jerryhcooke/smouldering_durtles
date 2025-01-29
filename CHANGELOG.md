@@ -1,6 +1,9 @@
 
 ## Smouldering Durtles changelog
 
+### Version 1.2.1 2025-01-29
+- Thanks to @mchlnx, bugfix to make 'hide all mnemonics' not break 'hide if user note'
+
 ### Version 1.2.0 2025-01-28
 
 - Thanks to @Kaiserdragon2, notifications should be fixed
