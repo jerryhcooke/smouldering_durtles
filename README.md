@@ -7,6 +7,15 @@ The following is the original information regarding licencing and sharing:
 It's set up as an Android project with Google's default gradle set up.
 Use Android Studio or the Gradle command line to build it.
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.smouldering_durtles.wk/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.smouldering_durtles.wk)
+
+Or download the latest APK from the [Releases Section](https://github.com/jerryhcooke/smouldering_durtles/releases/latest).
+
 ## Preparing to build the code
 
 Before you can build this code, you will have to replace the existing two files containing identification
