@@ -489,6 +489,13 @@ public final class SubjectInfoButtonView extends View {
     }
 
     /**
+     * Get the typeface configuration for the text if this is not a radical with an image.
+     */
+    public TypefaceConfiguration getTypefaceConfiguration() {
+        return this.typefaceConfiguration;
+    }
+
+    /**
      * Get the calculated width for the view, excluding padding.
      *
      * @return the width in pixels
