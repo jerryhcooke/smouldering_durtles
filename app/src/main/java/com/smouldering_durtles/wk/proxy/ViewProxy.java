@@ -269,6 +269,14 @@ public final class ViewProxy {
         }
     }
 
+    public @Nullable TypefaceConfiguration getTypefaceConfiguration() {
+        final @Nullable View delegate = getDelegate();
+        if (delegate instanceof SubjectInfoButtonView) {
+            return ((SubjectInfoButtonView) delegate).getTypefaceConfiguration();
+        }
+        return null;
+    }
+
     public void setSubject(final Subject subject) {
         setSubject(subject, null, null);
     }

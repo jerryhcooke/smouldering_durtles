@@ -138,7 +138,15 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
         questionText.setSubject(subject, question, session.getType());
         questionText.setMaxSize(maxWidth, maxHeight);
         questionText.setSizeForQuiz(true);
-        questionText.setOnClickListener(v -> safe(() -> questionText.setTypefaceConfiguration(TypefaceConfiguration.DEFAULT)));
+
+        // Toggle between typefaceConfiguration and DEFAULT on click
+        questionText.setOnClickListener(v -> safe(() ->
+                questionText.setTypefaceConfiguration(
+                        questionText.getTypefaceConfiguration() == TypefaceConfiguration.DEFAULT
+                                ? typefaceConfiguration
+                                : TypefaceConfiguration.DEFAULT
+                )
+        ));
 
         // Color the question type view white or black for meaning and reading respectively
         questionType.setText(question.getTitle());
