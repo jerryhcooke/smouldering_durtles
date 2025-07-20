@@ -1,0 +1,1 @@
+Client für WaniKani mit erweiterten Funktionen und Offline-Bewertungen
