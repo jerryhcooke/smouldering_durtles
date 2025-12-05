@@ -105,6 +105,23 @@ public enum SpecialButtonBehavior {
                 Session.getInstance().skip();
             }
         }
+    },
+
+    /**
+     * Toggle lightning mode on/off temporarily.
+     */
+    TOGGLE_LIGHTNING_MODE("Lightning") {
+        @Override
+        public boolean canShow() {
+            return Session.getInstance().isActive();
+        }
+
+        @Override
+        public void perform() {
+            if (canShow()) {
+                Session.getInstance().toggleLightningMode();
+            }
+        }
     };
 
     /**
@@ -127,6 +144,10 @@ public enum SpecialButtonBehavior {
      * @return the label
      */
     public final String getLabel() {
+        if (this == TOGGLE_LIGHTNING_MODE) {
+            final Session session = Session.getInstance();
+            return session.isLightningModeActive() ? "Lightning" : "L̶i̶g̶h̶t̶n̶i̶n̶g̶";
+        }
         return label;
     }
 

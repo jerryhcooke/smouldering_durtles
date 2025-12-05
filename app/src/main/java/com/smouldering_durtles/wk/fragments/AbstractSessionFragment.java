@@ -160,6 +160,7 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
             }
             disableInteraction();
             GlobalSettings.AdvancedOther.getSpecialButton1Behavior().perform();
+            specialButton1.setText(GlobalSettings.AdvancedOther.getSpecialButton1Behavior().getLabel());
         }));
 
         specialButton2.setOnClickListener(v -> safe(() -> {
@@ -168,6 +169,7 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
             }
             disableInteraction();
             GlobalSettings.AdvancedOther.getSpecialButton2Behavior().perform();
+            specialButton2.setText(GlobalSettings.AdvancedOther.getSpecialButton2Behavior().getLabel());
         }));
 
         specialButton3.setOnClickListener(v -> safe(() -> {
@@ -176,6 +178,7 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
             }
             disableInteraction();
             GlobalSettings.AdvancedOther.getSpecialButton3Behavior().perform();
+            specialButton3.setText(GlobalSettings.AdvancedOther.getSpecialButton3Behavior().getLabel());
         }));
     }
 
