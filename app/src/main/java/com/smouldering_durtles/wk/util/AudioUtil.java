@@ -39,6 +39,7 @@ import com.smouldering_durtles.wk.db.AppDatabase;
 import com.smouldering_durtles.wk.db.model.PronunciationAudioOwner;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.db.model.SubjectPronunciationAudio;
+import com.smouldering_durtles.wk.enums.OnlineStatus;
 import com.smouldering_durtles.wk.enums.VoicePreference;
 import com.smouldering_durtles.wk.livedata.LiveAudioDownloadStatus;
 import com.smouldering_durtles.wk.model.GenderedFile;
@@ -787,12 +788,14 @@ public final class AudioUtil {
         final @Nullable GenderedFile audioFile = getOneAudioFileShouldMatch(subject, lastMatchedAnswer);
         if (audioFile != null) {
             playLocalAudio(audioFile);
-        } else {
+        } else if (WkApplication.getInstance().getOnlineStatus() != OnlineStatus.NO_CONNECTION) {
             // Fallback to streaming
             final @Nullable PronunciationAudio streamingAudio = getStreamingAudio(subject, lastMatchedAnswer);
             if (streamingAudio != null) {
                 playStreamingAudio(streamingAudio);
             }
+        } else {
+            LOGGER.info("Couldn't play the audio for %d, no local file or network connection.", lastMatchedAnswer);
         }
     }
 
