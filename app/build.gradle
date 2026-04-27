@@ -63,9 +63,6 @@ android {
         includeInBundle = false
     }
 
-    aaptOptions {
-        cruncherEnabled = false
-    }
 
     defaultConfig {
         vectorDrawables.generatedDensities = []
