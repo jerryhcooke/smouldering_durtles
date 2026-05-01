@@ -1533,6 +1533,7 @@ public final class Subject implements PronunciationAudioOwner {
             case 8797: return R.drawable.radical_8797;
             case 8798: return R.drawable.radical_8798;
             case 8799: return R.drawable.radical_8799;
+            case 9452: return R.drawable.radical_9452;
             default: break;
         }
         return 0;
