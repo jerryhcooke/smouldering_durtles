@@ -357,7 +357,10 @@ public final class WkApplication extends MultiDexApplication {
 
         @Override
         public void onPostExecute(final @Nullable Void result) {
-            LiveAlertContext.getInstance().observeForever(BackgroundAlarmReceiver::processAlarm);
+            LiveAlertContext.getInstance().observeForever(alertContext -> {
+                BackgroundAlarmReceiver.processAlarm(alertContext);
+                com.smouldering_durtles.wk.widgets.WidgetUpdater.updateAll(instance);
+            });
         }
 
         @Override
