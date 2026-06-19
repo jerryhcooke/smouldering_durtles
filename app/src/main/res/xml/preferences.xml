@@ -760,7 +760,13 @@
 
     <PreferenceScreen
         app:key="other_settings"
-        app:title="Other settings">
+        app:title="Notifications and other settings">
+
+        <Preference
+            app:key="grant_notification_permission"
+            app:title="Grant notification permission"
+            app:summary="Open system settings to allow this app to send notifications"
+            app:singleLineTitle="false"/>
 
         <SwitchPreferenceCompat
             app:key="enable_notifications"
