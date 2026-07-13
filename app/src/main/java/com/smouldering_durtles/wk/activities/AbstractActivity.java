@@ -35,6 +35,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
@@ -181,8 +184,22 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
         creationTheme = ActiveTheme.getCurrentTheme();
         setContentView(layoutId);
 
-        final @Nullable Toolbar toolbar = getToolbar();
+        final Toolbar toolbar = getToolbar();
         if (toolbar != null) {
+            final int initialPaddingTop = toolbar.getPaddingTop();
+
+            ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, insets) -> {
+                Insets bars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+
+                v.setPadding(
+                        v.getPaddingLeft(),
+                        initialPaddingTop + bars.top,
+                        v.getPaddingRight(),
+                        v.getPaddingBottom());
+
+                return insets;
+            });
+
             setSupportActionBar(toolbar);
             final @Nullable ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
