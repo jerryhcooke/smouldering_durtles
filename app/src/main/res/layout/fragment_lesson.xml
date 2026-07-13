@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Previous" />
 
-        <androidx.legacy.widget.Space
+        <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -49,7 +49,7 @@
             android:text=""
             style="@style/WK.TextView.Normal"/>
 
-        <androidx.legacy.widget.Space
+        <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>

@@ -69,7 +69,7 @@ public final class SubjectInfoButtonView extends View {
     private int textColor = 0;
     private @Nullable ColorFilter textColorFilter = null;
     private @Nullable ColorFilter shadowColorFilter = null;
-    private Drawable background = getResources().getDrawable(R.drawable.small_rounded_corners);
+    private Drawable background = ContextCompat.getDrawable(getContext(),R.drawable.small_rounded_corners);
     private @Nullable Drawable image = null;
     private int sizeSp = -1;
     private int maxWidth = -1;
