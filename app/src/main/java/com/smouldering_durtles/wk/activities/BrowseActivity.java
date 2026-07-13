@@ -61,6 +61,14 @@ public final class BrowseActivity extends AbstractActivity {
                 }
             }
 
+            if (Intent.ACTION_SEND.equals(getIntent().getAction()) && "text/plain".equals(getIntent().getType())) {
+                final @Nullable String sharedText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                if (sharedText != null) {
+                    loadSearchResultFragment(null, 1, sharedText);
+                    return;
+                }
+            }
+
             final long id = getIntent().getLongExtra("id", -1);
             if (id > 0) {
                 long[] ids = getIntent().getLongArrayExtra("ids");

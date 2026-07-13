@@ -345,6 +345,27 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
         if (searchItem != null && searchManager != null) {
             final SearchView searchView = (SearchView) searchItem.getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, BrowseActivity.class)));
+            searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    final @Nullable AbstractFragment fragment = getCurrentFragment();
+                    if (fragment != null) {
+                        final @Nullable String query = fragment.getPrefillSearchQuery();
+                        if (query != null) {
+                            searchView.post(() -> {
+                                searchView.setIconified(false);
+                                searchView.setQuery(query, false);
+                            });
+                        }
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    return true;
+                }
+            });
         }
 
         final @Nullable MenuItem testItem = menu.findItem(R.id.action_test);
@@ -375,10 +396,6 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
 
         if (itemId == R.id.action_settings) {
             goToPreferencesActivity(null);
-            return true;
-        }
-        if (itemId == R.id.action_search) {
-            startSearch(null, false, null, false);
             return true;
         }
         if (itemId == R.id.action_mute) {

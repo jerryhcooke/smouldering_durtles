@@ -266,6 +266,14 @@ public final class SearchResultFragment extends AbstractFragment {
         numHits.setTextFormat("%s: %d subject(s) found", searchDescription, adapter.getNumSubjects());
     }
 
+    @Override
+    public @Nullable String getPrefillSearchQuery() {
+        if (searchType == 1) {
+            return searchParameters;
+        }
+        return null;
+    }
+
     private void savePreset(final String name) {
         final SearchPreset preset = new SearchPreset();
         preset.name = name;
