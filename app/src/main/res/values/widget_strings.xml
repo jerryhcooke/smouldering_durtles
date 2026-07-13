@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name_legacy_session">Session (Legacy)</string>
+    <string name="widget_name_lessons">Lessons</string>
+    <string name="widget_name_reviews">Reviews</string>
+    <string name="widget_name_combined">Lessons &amp; Reviews</string>
+    <string name="widget_desc_legacy_session">Legacy widget showing your WK session status.</string>
+    <string name="widget_desc_lessons">Shows the number of available lessons.</string>
+    <string name="widget_desc_reviews">Shows the number of available reviews.</string>
+    <string name="widget_desc_combined">Scalable Material You widget showing both lessons and reviews.</string>
+</resources>
+

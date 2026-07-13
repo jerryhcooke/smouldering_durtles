@@ -180,12 +180,33 @@
 
         <receiver android:name=".services.BackgroundAlarmReceiver"/>
 
-        <receiver android:name=".services.SessionWidgetProvider" android:exported="true">
+        <receiver android:name=".services.SessionWidgetProvider" android:exported="true" android:label="@string/widget_name_legacy_session">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_OPTIONS_CHANGED" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/session_appwidget_info" />
+        </receiver>
+
+        <receiver android:name=".widgets.LessonsWidgetReceiver" android:exported="true" android:label="@string/widget_name_lessons">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/lessons_widget_info" />
+        </receiver>
+
+        <receiver android:name=".widgets.ReviewsWidgetReceiver" android:exported="true" android:label="@string/widget_name_reviews">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/reviews_widget_info" />
+        </receiver>
+
+        <receiver android:name=".widgets.LessonsAndReviewsWidgetReceiver" android:exported="true" android:label="@string/widget_name_combined">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/lessons_and_reviews_widget_info" />
         </receiver>
     </application>
 

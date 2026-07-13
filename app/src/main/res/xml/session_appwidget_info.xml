@@ -23,6 +23,8 @@
     android:targetCellHeight="1"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000"
+    android:description="@string/widget_desc_legacy_session"
+    android:previewLayout="@layout/session_appwidget"
     android:widgetCategory="home_screen"
     tools:ignore="UnusedAttribute">
 </appwidget-provider>
