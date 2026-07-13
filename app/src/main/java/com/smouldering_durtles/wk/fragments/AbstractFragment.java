@@ -310,4 +310,14 @@ public abstract class AbstractFragment extends Fragment implements Actment {
      * Update variable view state for this fragment.
      */
     public abstract void updateViews();
+
+    /**
+     * Get a query string to pre-fill the search bar when it expands,
+     * or null if no query should be pre-filled.
+     *
+     * @return the query or null
+     */
+    public @Nullable String getPrefillSearchQuery() {
+        return null;
+    }
 }

@@ -486,7 +486,7 @@ public final class ObjectSupport {
      * @param bundle The bundle to extract
      * @return The extracted Map, null if the bundle was null
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "deprecation"})
     public static @Nullable Map<String, Object> extractBundle(final @Nullable Bundle bundle) {
         if (bundle == null) {
             return null;

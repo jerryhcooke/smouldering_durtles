@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <androidx.legacy.widget.Space
+        <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -851,7 +851,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp">
 
-        <androidx.legacy.widget.Space
+        <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
