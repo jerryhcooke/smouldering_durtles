@@ -97,6 +97,7 @@ public final class Session implements SubjectChangeListener {
     private boolean readingFirst = false;
     private boolean meaningFirst = false;
     private boolean delayed = false;
+    private boolean lightningModeTemporarilyDisabled = false;
     private SessionState state = INACTIVE;
     private @Nullable SessionItem currentItem = null;
     private @Nullable Question currentQuestion = null;
@@ -1044,6 +1045,25 @@ s     *
     }
 
     /**
+     * Toggle lightning mode on/off temporarily for this session.
+     */
+    public void toggleLightningMode() {
+        lightningModeTemporarilyDisabled = !lightningModeTemporarilyDisabled;
+        LOGGER.info("Lightning mode temporarily %s", lightningModeTemporarilyDisabled ? "disabled" : "enabled");
+        LiveSessionProgress.getInstance().ping();
+        LiveSessionState.getInstance().post(state);
+    }
+
+    /**
+     * Check if lightning mode should be active, considering both global setting and temporary override.
+     *
+     * @return true if lightning mode should be active
+     */
+    public boolean isLightningModeActive() {
+        return GlobalSettings.Review.getEnableLightningMode() && !lightningModeTemporarilyDisabled;
+    }
+
+    /**
      * Get the typeface configuration used to display the current question's text.
      *
      * @param text the question text to show, for testing compatibility
@@ -1451,6 +1471,7 @@ s     *
         backToBack = GlobalSettings.AdvancedLesson.getBackToBack();
         readingFirst = GlobalSettings.AdvancedLesson.getReadingFirst();
         meaningFirst = GlobalSettings.AdvancedLesson.getMeaningFirst();
+        lightningModeTemporarilyDisabled = false;
         final AppDatabase db = WkApplication.getDatabase();
         db.propertiesDao().setSessionType(type);
         db.propertiesDao().setSessionOnkun(onkun);
@@ -1498,6 +1519,7 @@ s     *
         backToBack = GlobalSettings.AdvancedReview.getBackToBack();
         readingFirst = GlobalSettings.AdvancedReview.getReadingFirst();
         meaningFirst = GlobalSettings.AdvancedReview.getMeaningFirst();
+        lightningModeTemporarilyDisabled = false;
         final AppDatabase db = WkApplication.getDatabase();
         db.propertiesDao().setSessionType(type);
         db.propertiesDao().setSessionOnkun(onkun);
@@ -1549,6 +1571,7 @@ s     *
         backToBack = GlobalSettings.AdvancedSelfStudy.getBackToBack();
         readingFirst = GlobalSettings.AdvancedSelfStudy.getReadingFirst();
         meaningFirst = GlobalSettings.AdvancedSelfStudy.getMeaningFirst();
+        lightningModeTemporarilyDisabled = false;
         final AppDatabase db = WkApplication.getDatabase();
         db.propertiesDao().setSessionType(type);
         db.propertiesDao().setSessionOnkun(onkun);

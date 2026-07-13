@@ -142,6 +142,7 @@
         <item>Undo and retry immediately</item>
         <item>Undo and put back into queue</item>
         <item>Skip (put back into queue)</item>
+        <item>Toggle lightning mode</item>
     </string-array>
 
     <string-array name="specialBehaviorValues">
@@ -150,6 +151,7 @@
         <item>UNDO_AND_RETRY_NOW</item>
         <item>UNDO_AND_PUT_BACK</item>
         <item>SKIP</item>
+        <item>TOGGLE_LIGHTNING_MODE</item>
     </string-array>
 
     <string-array name="dontKnowBehaviors">
