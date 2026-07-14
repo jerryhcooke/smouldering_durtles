@@ -63,6 +63,10 @@ import static com.smouldering_durtles.wk.util.ObjectSupport.orElse;
 import static com.smouldering_durtles.wk.util.ObjectSupport.runAsync;
 import static com.smouldering_durtles.wk.util.ObjectSupport.safe;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 /**
  * Fragment for an unanswered non-Anki mode question.
  */
@@ -130,6 +134,22 @@ public final class UnansweredSessionFragment extends AbstractSessionFragment {
         if (question == null || subject == null) {
             return;
         }
+
+        final int originalBottomPadding = view.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
+
+            v.setPadding(
+                    v.getPaddingLeft(),
+                    v.getPaddingTop(),
+                    v.getPaddingRight(),
+                    originalBottomPadding + Math.max(systemBars.bottom, ime.bottom)
+            );
+
+            return insets;
+        });
 
         onViewCreatedCommon(view, question, subject, false);
 
