@@ -26,6 +26,8 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -211,6 +213,27 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
                 LiveTaskCounts.getInstance().observe(this, t -> safe(() -> onCreateBaseLiveTaskCounts(actionBar, t)));
             }
         }
+
+        ViewGroup root = findViewById(android.R.id.content);
+        View content = ((ViewGroup) root.getChildAt(0)).getChildAt(1); // toolbar is child 0
+
+        final int originalLeft = content.getPaddingLeft();
+        final int originalTop = content.getPaddingTop();
+        final int originalRight = content.getPaddingRight();
+        final int originalBottom = content.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(content, (view, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            view.setPadding(
+                    originalLeft + bars.left,
+                    originalTop,
+                    originalRight + bars.right,
+                    originalBottom + bars.bottom
+            );
+
+            return insets;
+        });
 
         LiveSessionState.getInstance().observe(this, t -> safe(this::liveSessionStateOnChangeHelper));
 
