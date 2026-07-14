@@ -37,6 +37,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -262,7 +263,7 @@ public final class DbLogger {
     @SuppressLint("NewApi")
     private void writeLogContents(final OutputStream stream) throws IOException {
         stream.write(String.format("%s version %s, username %s\n", Identification.APP_NAME, BuildConfig.VERSION_NAME,
-                db.propertiesDao().getUsername()).getBytes("UTF-8"));
+                db.propertiesDao().getUsername()).getBytes(StandardCharsets.UTF_8));
         long id = 0;
         while (true) {
             final @Nullable LogRecord record = db.logRecordDao().getNext(id);
@@ -271,7 +272,7 @@ public final class DbLogger {
             }
             final ZonedDateTime dt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(record.timestamp), ZoneId.systemDefault());
             final String data = String.format("%s %s %s\n", dt.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME), record.tag, record.message);
-            stream.write(data.getBytes("UTF-8"));
+            stream.write(data.getBytes(StandardCharsets.UTF_8));
             id = record.id;
         }
     }

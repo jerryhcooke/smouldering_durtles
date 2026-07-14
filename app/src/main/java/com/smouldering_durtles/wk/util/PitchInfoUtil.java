@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -206,7 +207,7 @@ public final class PitchInfoUtil {
             try (final InputStream is = connection.getInputStream()) {
                 final byte[] body = StreamUtil.slurp(is);
                 LOGGER.info("Weblio fetch done");
-                return new String(body, "UTF-8");
+                return new String(body, StandardCharsets.UTF_8);
             }
         } catch (final Exception e) {
             LOGGER.error(e, "Exception downloading weblio page");
