@@ -8,7 +8,7 @@ android {
         compileSdk 34
         versionCode 87
         versionName '1.2.6'
-        multiDexEnabled trueb95e2bf3-7fca-470e-ac62-fbdfef631369
+        multiDexEnabled true
 
         vectorDrawables.useSupportLibrary = true
 
