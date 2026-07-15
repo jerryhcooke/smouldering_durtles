@@ -16,10 +16,8 @@
 
 package com.smouldering_durtles.wk.fragments;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.SpannableString;
@@ -27,7 +25,6 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +45,7 @@ import com.smouldering_durtles.wk.model.AnswerVerdict;
 import com.smouldering_durtles.wk.model.FloatingUiState;
 import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.proxy.ViewProxy;
+import com.smouldering_durtles.wk.util.HapticUtil;
 import com.smouldering_durtles.wk.util.Logger;
 import com.smouldering_durtles.wk.util.PseudoIme;
 
@@ -300,16 +298,7 @@ public final class UnansweredSessionFragment extends AbstractSessionFragment {
                 showSoftInput(questionEdit);
                 if (enable_haptic_feedback_failure()) {
                     Log.d("HapticFeedback", "Vibing");
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        requireView().performHapticFeedback(HapticFeedbackConstants.REJECT); // Assuming REJECT is the desired feedback for a failure
-                    } else {
-                        // Fallback for older API versions using Vibrator
-                        Vibrator vibrator = (Vibrator) requireContext().getSystemService(Context.VIBRATOR_SERVICE);
-                        if (vibrator != null && vibrator.hasVibrator()) {
-                            // Vibrate for 200 milliseconds for a slightly longer feedback on failure
-                            vibrator.vibrate(300);
-                        }
-                    }
+                    HapticUtil.onWrong(requireView(), requireContext());
                 }
             }
         }));
@@ -472,16 +461,7 @@ public final class UnansweredSessionFragment extends AbstractSessionFragment {
                 final AnswerVerdict verdict = session.submit(match);
 
                 if (verdict.isOk() && enable_haptic_feedback_success()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        requireView().performHapticFeedback(HapticFeedbackConstants.CONFIRM);
-                    } else {
-                        // Fallback for older API versions using Vibrator
-                        Vibrator vibrator = (Vibrator) requireContext().getSystemService(Context.VIBRATOR_SERVICE);
-                        if (vibrator != null && vibrator.hasVibrator()) {
-                            // Vibrate for 100 milliseconds as a short feedback
-                            vibrator.vibrate(100);
-                        }
-                    }
+                    HapticUtil.onCorrect(requireView(), requireContext());
                 }
 
                 if (verdict.isRetry()) {
@@ -493,16 +473,7 @@ public final class UnansweredSessionFragment extends AbstractSessionFragment {
                     questionEdit.setTag(true);
                     if (enable_haptic_feedback_failure()) {
                         Log.d("HapticFeedback", "Vibing");
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            requireView().performHapticFeedback(HapticFeedbackConstants.REJECT); // Assuming REJECT is the desired feedback for a failure
-                        } else {
-                            // Fallback for older API versions using Vibrator
-                            Vibrator vibrator = (Vibrator) requireContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            if (vibrator != null && vibrator.hasVibrator()) {
-                                // Vibrate for 200 milliseconds for a slightly longer feedback on failure
-                                vibrator.vibrate(200);
-                            }
-                        }
+                        HapticUtil.onRetry(requireView(), requireContext());
                     }
                 }
             }
