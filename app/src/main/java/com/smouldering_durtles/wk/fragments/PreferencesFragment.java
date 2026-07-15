@@ -16,10 +16,16 @@
 
 package com.smouldering_durtles.wk.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+
+import androidx.core.content.ContextCompat;
+
 import android.text.InputType;
 import android.view.View;
 import android.widget.Toast;
@@ -127,8 +133,7 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                                 ((TwoStatePreference) preference).setChecked(true);
                             })).create().show();
                     return false;
-                }
-                else {
+                } else {
                     setVisibility("advanced_lesson_settings", enabled);
                     setVisibility("advanced_review_settings", enabled);
                     setVisibility("advanced_self_study_settings", enabled);
@@ -167,6 +172,22 @@ public final class PreferencesFragment extends PreferenceFragmentCompat {
                     })).create().show();
             return true;
         }));
+
+        final @Nullable Preference grantNotificationPref = findPreference("grant_notification_permission");
+        if (grantNotificationPref != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                    && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                grantNotificationPref.setOnPreferenceClickListener(preference -> safe(false, () -> {
+                    final Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+                    startActivity(intent);
+                    return true;
+                }));
+            } else {
+                grantNotificationPref.setVisible(false);
+            }
+        }
 
         setOnPreferenceClick("backup_settings", preference -> {
             new AlertDialog.Builder(preference.getContext())

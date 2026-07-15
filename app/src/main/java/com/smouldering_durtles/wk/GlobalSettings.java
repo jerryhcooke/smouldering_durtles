@@ -642,6 +642,7 @@ public final class GlobalSettings {
         Tutorials.setSearchResultDismissed(false);
         Tutorials.setStartSelfStudyDismissed(false);
         Tutorials.setSessionLogDismissed(false);
+        Tutorials.setNotificationPermissionAsked(false);
     }
 
     /**
@@ -3524,6 +3525,16 @@ public final class GlobalSettings {
         public static void setSessionLogDismissed(final boolean value) {
             final SharedPreferences.Editor editor = prefs().edit();
             editor.putBoolean("session_log_dismissed", value);
+            editor.apply();
+        }
+
+        public static boolean getNotificationPermissionAsked() {
+            return prefs().getBoolean("notification_permission_asked", false);
+        }
+
+        public static void setNotificationPermissionAsked(final boolean value) {
+            final SharedPreferences.Editor editor = prefs().edit();
+            editor.putBoolean("notification_permission_asked", value);
             editor.apply();
         }
     }
