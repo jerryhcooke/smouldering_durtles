@@ -173,7 +173,7 @@ public final class SessionActivity extends AbstractActivity {
             return;
         }
 
-        final boolean lightningMode = GlobalSettings.Review.getEnableLightningMode();
+        final boolean lightningMode = session.isLightningModeActive();
         final boolean ankiMode = question != null && GlobalSettings.getAnkiMode(session.getType(), question.getType());
 
         if (lightningMode && session.isAnswered() && session.isCorrect()

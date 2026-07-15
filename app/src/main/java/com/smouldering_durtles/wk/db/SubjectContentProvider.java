@@ -27,7 +27,7 @@ import android.provider.BaseColumns;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.util.SearchUtil;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -142,12 +142,7 @@ public final class SubjectContentProvider extends ContentProvider {
             if (value == null) {
                 return new byte[0];
             }
-            try {
-                return value.getBytes("UTF-8");
-            } catch (final UnsupportedEncodingException e) {
-                // Can't happen
-                return new byte[0];
-            }
+            return value.getBytes(StandardCharsets.UTF_8);
         }
 
         @Override
