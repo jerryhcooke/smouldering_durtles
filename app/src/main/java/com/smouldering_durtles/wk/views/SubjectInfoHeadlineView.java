@@ -19,6 +19,7 @@ package com.smouldering_durtles.wk.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -303,7 +304,13 @@ public final class SubjectInfoHeadlineView extends ConstraintLayout {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
-    private int sp2px(final int sp) {
-        return (int) (sp * getResources().getDisplayMetrics().scaledDensity);
+    private int sp2px(float sp) {
+        return Math.round(
+                TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_SP,
+                        sp,
+                        getResources().getDisplayMetrics()
+                )
+        );
     }
 }
