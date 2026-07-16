@@ -140,7 +140,7 @@ public final class WaniKaniTagHandler implements Html.TagHandler {
             else {
                 if (GlobalSettings.SubjectInfo.getHighlightSubjectTags()) {
                     end(output, Reading.class,
-                            new ButtonStyleSpan(ThemeUtil.getColor(R.attr.colorPrimaryLight), ThemeUtil.getColor(R.attr.colorPrimaryDark)));
+                            new ButtonStyleSpan(ThemeUtil.getColor(R.attr.colorPrimaryLight), ThemeUtil.getColor(androidx.appcompat.R.attr.colorPrimaryDark)));
                 }
                 else {
                     end(output, Reading.class, new StyleSpan(Typeface.BOLD));

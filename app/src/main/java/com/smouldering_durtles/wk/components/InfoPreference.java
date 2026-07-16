@@ -95,7 +95,7 @@ public final class InfoPreference extends Preference {
             holder.itemView.setClickable(false);
             holder.itemView.setFocusable(false);
             final ViewProxy summary = new ViewProxy(holder.itemView, android.R.id.summary);
-            summary.setTextColor(ThemeUtil.getColor(R.attr.colorPrimary));
+            summary.setTextColor(ThemeUtil.getColor(androidx.appcompat.R.attr.colorPrimary));
             summary.setTextSize(FONT_SIZE_NORMAL);
             summary.setLinkMovementMethod();
             summary.setVisibility(true);
