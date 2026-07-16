@@ -215,25 +215,10 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
         }
 
         ViewGroup root = findViewById(android.R.id.content);
-        View content = ((ViewGroup) root.getChildAt(0)).getChildAt(1); // toolbar is child 0
+        View content = ((ViewGroup) root.getChildAt(0)).getChildAt(1);
 
-        final int originalLeft = content.getPaddingLeft();
-        final int originalTop = content.getPaddingTop();
-        final int originalRight = content.getPaddingRight();
-        final int originalBottom = content.getPaddingBottom();
-
-        ViewCompat.setOnApplyWindowInsetsListener(content, (view, insets) -> {
-            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-
-            view.setPadding(
-                    originalLeft + bars.left,
-                    originalTop,
-                    originalRight + bars.right,
-                    originalBottom + bars.bottom
-            );
-
-            return insets;
-        });
+        applyContentInsets(content);
+        applyContentInsets(findViewById(R.id.mainScrollView));
 
         LiveSessionState.getInstance().observe(this, t -> safe(this::liveSessionStateOnChangeHelper));
 
@@ -259,6 +244,32 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
                 }
             }
         }));
+    }
+
+    private void applyContentInsets(@Nullable View view) {
+        if (view == null) {
+            return;
+        }
+
+        final int originalLeft = view.getPaddingLeft();
+        final int originalTop = view.getPaddingTop();
+        final int originalRight = view.getPaddingRight();
+        final int originalBottom = view.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            v.setPadding(
+                    originalLeft + bars.left,
+                    originalTop,
+                    originalRight + bars.right,
+                    originalBottom + bars.bottom
+            );
+
+            return insets;
+        });
+
+        ViewCompat.requestApplyInsets(view);
     }
 
     @Override

@@ -64,7 +64,7 @@ public final class HeaderItemViewHolder extends LogItemViewHolder implements Vie
         final int icon = item.isCollapsed() ? R.drawable.ic_expand_less : R.drawable.ic_expand_more;
         final @Nullable Drawable drawable = ContextCompat.getDrawable(itemView.getContext(), icon);
         if (drawable != null) {
-            drawable.setColorFilter(new SimpleColorFilter(ThemeUtil.getColor(R.attr.colorPrimary)));
+            drawable.setColorFilter(new SimpleColorFilter(ThemeUtil.getColor(androidx.appcompat.R.attr.colorPrimary)));
             arrowHead.setImageDrawable(drawable);
         }
 

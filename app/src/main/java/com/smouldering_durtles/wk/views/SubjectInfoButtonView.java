@@ -31,6 +31,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,7 +70,7 @@ public final class SubjectInfoButtonView extends View {
     private int textColor = 0;
     private @Nullable ColorFilter textColorFilter = null;
     private @Nullable ColorFilter shadowColorFilter = null;
-    private Drawable background = ContextCompat.getDrawable(getContext(),R.drawable.small_rounded_corners);
+    private final Drawable background = ContextCompat.getDrawable(getContext(), R.drawable.small_rounded_corners);
     private @Nullable Drawable image = null;
     private int sizeSp = -1;
     private int maxWidth = -1;
@@ -511,7 +512,13 @@ public final class SubjectInfoButtonView extends View {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
-    private int sp2px(final int sp) {
-        return (int) (sp * getResources().getDisplayMetrics().scaledDensity);
+    private int sp2px(float sp) {
+        return Math.round(
+                TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_SP,
+                        sp,
+                        getResources().getDisplayMetrics()
+                )
+        );
     }
 }

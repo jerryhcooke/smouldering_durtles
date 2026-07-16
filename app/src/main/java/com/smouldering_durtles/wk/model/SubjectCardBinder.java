@@ -178,10 +178,10 @@ public final class SubjectCardBinder {
             final int bgColor;
             if (availableNow) {
                 textColor = ThemeUtil.getColor(R.attr.colorBackground);
-                bgColor = ThemeUtil.getColor(R.attr.colorPrimary);
+                bgColor = ThemeUtil.getColor(androidx.appcompat.R.attr.colorPrimary);
             }
             else {
-                textColor = ThemeUtil.getColor(R.attr.colorPrimary);
+                textColor = ThemeUtil.getColor(androidx.appcompat.R.attr.colorPrimary);
                 bgColor = ThemeUtil.getColor(R.attr.colorBackground);
             }
 
@@ -206,7 +206,7 @@ public final class SubjectCardBinder {
 
             if (ThemeUtil.isLightColor(bgColor)) {
                 stageLetter.setShadowLayer(0, 0, 0, 0);
-                textColor = ThemeUtil.getColor(R.attr.colorPrimaryDark);
+                textColor = ThemeUtil.getColor(androidx.appcompat.R.attr.colorPrimaryDark);
             }
             else {
                 stageLetter.setShadowLayer(3, 1, 1, Color.BLACK);

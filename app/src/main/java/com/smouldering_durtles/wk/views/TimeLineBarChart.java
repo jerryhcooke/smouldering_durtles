@@ -119,7 +119,7 @@ public final class TimeLineBarChart extends View implements GestureDetector.OnGe
     public TimeLineBarChart(final Context context, final @Nullable AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
         safe(() -> {
-            colorPrimary = ThemeUtil.getColor(R.attr.colorPrimary);
+            colorPrimary = ThemeUtil.getColor(androidx.appcompat.R.attr.colorPrimary);
             colorPrimaryTonedDown = ThemeUtil.getColor(R.attr.colorPrimaryTonedDown);
             colorWaterfall = ThemeUtil.getColor(R.attr.colorWaterfallLine);
             density = context.getResources().getDisplayMetrics().density;

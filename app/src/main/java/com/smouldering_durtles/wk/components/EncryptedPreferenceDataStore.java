@@ -28,6 +28,7 @@ import androidx.security.crypto.MasterKey;
 import com.smouldering_durtles.wk.WkApplication;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.spec.AlgorithmParameterSpec;
 
@@ -77,7 +78,7 @@ public final class EncryptedPreferenceDataStore extends PreferenceDataStore {
             final AlgorithmParameterSpec ivspec = new IvParameterSpec(iv);
             final Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
             aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(KEY, "AES"), ivspec);
-            return new String(aes.doFinal(Base64.decode(encrypted, Base64.DEFAULT)), "UTF-8");
+            return new String(aes.doFinal(Base64.decode(encrypted, Base64.DEFAULT)), StandardCharsets.UTF_8);
         });
     }
 

@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import javax.annotation.Nullable;
 import javax.net.ssl.HttpsURLConnection;
@@ -128,7 +129,7 @@ public abstract class ApiTask {
                     if (code >= 100) {
                         LOGGER.info("Response code: %d %s", code, connection.getResponseMessage());
                         final byte[] body = StreamUtil.slurp(connection.getErrorStream());
-                        LOGGER.info("Response body: %s", new String(body, "ISO-8859-1"));
+                        LOGGER.info("Response body: %s", new String(body, StandardCharsets.ISO_8859_1));
                     }
                 } catch (final Exception e1) {
                     //
@@ -252,7 +253,7 @@ public abstract class ApiTask {
                     if (code >= 100) {
                         LOGGER.info("Response code: %d %s", code, connection.getResponseMessage());
                         final byte[] body = StreamUtil.slurp(connection.getErrorStream());
-                        LOGGER.info("Response body: %s", new String(body, "ISO-8859-1"));
+                        LOGGER.info("Response body: %s", new String(body, StandardCharsets.ISO_8859_1));
                     }
                 } catch (final Exception e1) {
                     //

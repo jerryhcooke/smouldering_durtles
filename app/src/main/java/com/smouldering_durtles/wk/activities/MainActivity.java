@@ -19,7 +19,14 @@ package com.smouldering_durtles.wk.activities;
 import static com.smouldering_durtles.wk.util.ObjectSupport.runAsync;
 import static com.smouldering_durtles.wk.util.ObjectSupport.safe;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 
 import com.smouldering_durtles.wk.GlobalSettings;
 import com.smouldering_durtles.wk.R;
@@ -74,6 +81,7 @@ public final class MainActivity extends AbstractActivity {
     private final ViewProxy apiErrorView = new ViewProxy();
     private final ViewProxy apiKeyRejectedView = new ViewProxy();
     private final ViewProxy keyboardHelpView = new ViewProxy();
+    private @Nullable ActivityResultLauncher<String> notificationPermissionLauncher = null;
 
     /**
      * The constructor.
@@ -84,6 +92,12 @@ public final class MainActivity extends AbstractActivity {
 
     @Override
     protected void onCreateLocal(final @Nullable Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher = registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    isGranted -> GlobalSettings.Tutorials.setNotificationPermissionAsked(true));
+        }
+
         apiErrorView.setDelegate(this, R.id.apiErrorView);
         apiKeyRejectedView.setDelegate(this, R.id.apiKeyRejectedView);
         keyboardHelpView.setDelegate(this, R.id.keyboardHelpView);
@@ -194,6 +208,15 @@ public final class MainActivity extends AbstractActivity {
 
     @Override
     protected void onResumeLocal() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                && notificationPermissionLauncher != null
+                && !GlobalSettings.Tutorials.getNotificationPermissionAsked()
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
+            GlobalSettings.Tutorials.setNotificationPermissionAsked(true);
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+        }
+
         BackgroundAlarmReceiver.scheduleOrCancelAlarm();
         BackgroundSyncWorker.scheduleOrCancelWork();
 

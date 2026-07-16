@@ -4,10 +4,10 @@ android {
     defaultConfig {
         applicationId "com.smouldering_durtles.wk"
         minSdkVersion 21
-        targetSdkVersion 35
-        compileSdk 34
-        versionCode 88
-        versionName '1.2.7'
+        targetSdkVersion 36
+        compileSdk = 36
+        versionCode 89
+        versionName '1.2.8'
         multiDexEnabled true
 
         vectorDrawables.useSupportLibrary = true
