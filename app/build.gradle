@@ -4,8 +4,8 @@ android {
     defaultConfig {
         applicationId "com.smouldering_durtles.wk"
         minSdkVersion 21
-        targetSdkVersion 36
-        compileSdk = 36
+        targetSdkVersion 37
+        compileSdk = 37
         versionCode 89
         versionName '1.2.8'
         multiDexEnabled true

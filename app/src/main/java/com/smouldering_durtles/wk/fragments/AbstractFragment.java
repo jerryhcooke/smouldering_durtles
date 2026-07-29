@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.widget.Toolbar;
@@ -30,6 +31,7 @@ import com.smouldering_durtles.wk.Actment;
 import com.smouldering_durtles.wk.activities.AbstractActivity;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.enums.FragmentTransitionAnimation;
+import com.smouldering_durtles.wk.util.Logger;
 
 import java.util.List;
 
@@ -41,10 +43,23 @@ import static com.smouldering_durtles.wk.util.ObjectSupport.safe;
  * Abstract superclass for the various quiz fragments.
  */
 public abstract class AbstractFragment extends Fragment implements Actment {
+    private static final Logger LOGGER = Logger.get(AbstractFragment.class);
+
     /**
      * Is interaction with e.g. buttons on this display currently enabled?.
      */
     protected boolean interactionEnabled = true;
+
+    /**
+     * A window focus listener waiting to show the IME, set when showSoftInput() was called while
+     * the window did not have focus yet. Null when no request is pending.
+     */
+    private @Nullable ViewTreeObserver.OnWindowFocusChangeListener pendingSoftInputListener = null;
+
+    /**
+     * The view that pendingSoftInputListener will show the IME for. Null when no request is pending.
+     */
+    private @Nullable View pendingSoftInputView = null;
 
     /**
      * The constructor.
@@ -73,6 +88,13 @@ public abstract class AbstractFragment extends Fragment implements Actment {
     }
 
     @Override
+    public final void onDestroyView() {
+        // A deferred IME request must not outlive the view it targets.
+        removePendingSoftInputListener();
+        super.onDestroyView();
+    }
+
+    @Override
     public final void onViewCreated(final View view, final @Nullable Bundle savedInstanceState) {
         safe(() -> {
             super.onViewCreated(view, savedInstanceState);
@@ -93,6 +115,10 @@ public abstract class AbstractFragment extends Fragment implements Actment {
      * Hide the soft keyboard.
      */
     protected final void hideSoftInput() {
+        // A show request deferred until the window regains focus must not outlive the decision to
+        // hide the keyboard - otherwise it fires later and pops the IME back up.
+        removePendingSoftInputListener();
+
         safe(() -> {
             final @Nullable AbstractActivity activity = getAbstractActivity();
             if (activity == null) {
@@ -114,16 +140,74 @@ public abstract class AbstractFragment extends Fragment implements Actment {
     /**
      * Show the soft keyboard.
      *
+     * <p>The IME can only be shown for a view whose window currently has focus. This method is
+     * routinely called from onResume, which runs <em>before</em> the window regains focus, so the
+     * request is deferred to the next window focus gain when needed. Until Android 17 the system
+     * restored the IME's previous visibility across a configuration change by itself, which masked
+     * the early request being dropped; from Android 17 on it does not, so the deferral is what
+     * keeps the keyboard up across a rotation.
+     *
      * @param view the view to attach the IME to.
      */
     @SuppressWarnings("MethodMayBeStatic")
     protected final void showSoftInput(final View view) {
-        safe(() -> {
-            final @Nullable InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        // This request supersedes any earlier deferred one. A stale listener must not survive: it
+        // only fires on a focus *change*, so one registered for a view that turned out to be
+        // attached to an already-focused window never fires at all, and would otherwise sit there
+        // until the next unrelated focus loss and regain - popping the IME up out of nowhere.
+        removePendingSoftInputListener();
+
+        if (view.hasWindowFocus()) {
+            requestSoftInput(view);
+            return;
+        }
+
+        final ViewTreeObserver.OnWindowFocusChangeListener listener = hasFocus -> {
+            if (!hasFocus) {
+                return;
             }
-        });
+            removePendingSoftInputListener();
+            requestSoftInput(view);
+        };
+        pendingSoftInputListener = listener;
+        pendingSoftInputView = view;
+        view.getViewTreeObserver().addOnWindowFocusChangeListener(listener);
+    }
+
+    /**
+     * Ask the IME to show itself for a view that already has window focus.
+     *
+     * @param view the view to attach the IME to.
+     */
+    private static void requestSoftInput(final View view) {
+        final @Nullable InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm == null) {
+            LOGGER.info("No InputMethodManager available, cannot show the soft keyboard");
+            return;
+        }
+        if (!imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)) {
+            // Not fatal - the user can still tap the field - but it means the answer field is
+            // silently unusable, so it must not disappear without a trace.
+            LOGGER.info("Request to show the soft keyboard was refused (window focus: %s, view focus: %s)",
+                    view.hasWindowFocus(), view.hasFocus());
+        }
+    }
+
+    /**
+     * Detach the pending window focus listener, if any, and forget it.
+     */
+    private void removePendingSoftInputListener() {
+        final @Nullable ViewTreeObserver.OnWindowFocusChangeListener listener = pendingSoftInputListener;
+        final @Nullable View view = pendingSoftInputView;
+        pendingSoftInputListener = null;
+        pendingSoftInputView = null;
+        if (listener == null || view == null) {
+            return;
+        }
+        final ViewTreeObserver observer = view.getViewTreeObserver();
+        if (observer.isAlive()) {
+            observer.removeOnWindowFocusChangeListener(listener);
+        }
     }
 
     @Override
