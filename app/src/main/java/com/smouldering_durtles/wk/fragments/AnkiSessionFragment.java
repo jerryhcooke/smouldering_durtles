@@ -32,6 +32,7 @@ import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.enums.ActiveTheme;
 import com.smouldering_durtles.wk.enums.FragmentTransitionAnimation;
 import com.smouldering_durtles.wk.enums.QuestionType;
+import com.smouldering_durtles.wk.enums.RemoteKeyAction;
 import com.smouldering_durtles.wk.model.FloatingUiState;
 import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.proxy.ViewProxy;
@@ -173,42 +174,143 @@ public final class AnkiSessionFragment extends AbstractSessionFragment {
 
         updateViews();
 
-        ankiShowAnswerButton.setOnClickListener(v -> safe(() -> {
-            showingAnswer = true;
-            playAudio();
-            updateViews();
-        }));
+        ankiShowAnswerButton.setOnClickListener(v -> safe(this::showAnswer));
 
-        ankiNextButton.setOnClickListener(v -> safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            disableInteraction();
-            showingAnswer = false;
-            session.advance();
-        }));
+        ankiNextButton.setOnClickListener(v -> safe(this::next));
 
-        ankiCorrectButton.setOnClickListener(v -> safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            disableInteraction();
-            showingAnswer = false;
-            if (GlobalSettings.getTestMode() && !question.getItem().hasIncorrectAnswers()) {
-                session.submitAnkiIncorrect();
-            } else {
-                session.submitAnkiCorrect();
-            }
-        }));
+        ankiCorrectButton.setOnClickListener(v -> safe(this::markCorrect));
 
-        ankiIncorrectButton.setOnClickListener(v -> safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            disableInteraction();
-            showingAnswer = false;
+        ankiIncorrectButton.setOnClickListener(v -> safe(this::markIncorrect));
+    }
+
+    /**
+     * Reveal the answer for the current question.
+     */
+    private void showAnswer() {
+        if (showingAnswer || session.isAnswered()) {
+            return;
+        }
+        showingAnswer = true;
+        playAudio();
+        updateViews();
+    }
+
+    /**
+     * Advance to the next question. Only meaningful once the current question has been answered.
+     */
+    private void next() {
+        if (!interactionEnabled || !session.isAnswered()) {
+            return;
+        }
+        disableInteraction();
+        showingAnswer = false;
+        session.advance();
+    }
+
+    /**
+     * Grade the current question as correct.
+     */
+    private void markCorrect() {
+        if (!interactionEnabled || question == null || session.isAnswered() || !showingAnswer) {
+            return;
+        }
+        disableInteraction();
+        showingAnswer = false;
+        if (GlobalSettings.getTestMode() && !question.getItem().hasIncorrectAnswers()) {
             session.submitAnkiIncorrect();
-        }));
+        } else {
+            session.submitAnkiCorrect();
+        }
+    }
+
+    /**
+     * Grade the current question as incorrect.
+     */
+    private void markIncorrect() {
+        if (!interactionEnabled || session.isAnswered() || !showingAnswer) {
+            return;
+        }
+        disableInteraction();
+        showingAnswer = false;
+        session.submitAnkiIncorrect();
+    }
+
+    @Override
+    protected boolean wantsRemoteKeys() {
+        return true;
+    }
+
+    @Override
+    protected void performRemoteAction(final RemoteKeyAction action) {
+        if (question == null || subject == null) {
+            return;
+        }
+
+        final boolean answered = session.isAnswered();
+
+        switch (action) {
+            case ADVANCE_OR_CORRECT:
+                if (answered) {
+                    next();
+                }
+                else if (showingAnswer) {
+                    markCorrect();
+                }
+                else {
+                    showAnswer();
+                }
+                break;
+            case ADVANCE_OR_INCORRECT:
+                if (answered) {
+                    next();
+                }
+                else if (showingAnswer) {
+                    markIncorrect();
+                }
+                else {
+                    showAnswer();
+                }
+                break;
+            case SHOW_ANSWER:
+                showAnswer();
+                break;
+            case CORRECT:
+                if (answered) {
+                    next();
+                }
+                else {
+                    markCorrect();
+                }
+                break;
+            case INCORRECT:
+                if (answered) {
+                    next();
+                }
+                else {
+                    markIncorrect();
+                }
+                break;
+            case NEXT:
+                next();
+                break;
+            case PLAY_AUDIO:
+                if (subject != null) {
+                    AudioUtil.playAudio(subject, null);
+                }
+                break;
+            case SPECIAL_BUTTON_1:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton1Behavior());
+                break;
+            case SPECIAL_BUTTON_2:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton2Behavior());
+                break;
+            case SPECIAL_BUTTON_3:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton3Behavior());
+                break;
+            case NONE:
+            default:
+                break;
+        }
     }
 
     @Override

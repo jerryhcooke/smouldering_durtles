@@ -1258,6 +1258,105 @@
 
         </PreferenceScreen>
 
+        <PreferenceScreen
+            app:key="remote_control_settings"
+            app:title="Remote control (Anki ring)"
+            app:summary="Drive Anki mode with a Bluetooth remote">
+
+            <SwitchPreferenceCompat
+                app:key="remote_control_enabled"
+                app:title="Enable remote control"
+                app:singleLineTitle="false"
+                app:defaultValue="false"
+                app:summary="Let the buttons of a paired Bluetooth remote/ring control Anki mode questions"/>
+
+            <SwitchPreferenceCompat
+                app:key="remote_control_keep_screen_on"
+                app:title="Keep the screen on during a session"
+                app:singleLineTitle="false"
+                app:defaultValue="true"
+                app:dependency="remote_control_enabled"
+                app:summary="Recommended, since you are not touching the device while using a remote"/>
+
+            <SeekBarPreference
+                app:key="remote_control_debounce"
+                app:title="Minimum time between button presses (ms)"
+                app:singleLineTitle="false"
+                app:defaultValue="250"
+                app:min="0"
+                android:max="1000"
+                app:seekBarIncrement="10"
+                app:showSeekBarValue="true"
+                app:adjustable="true"
+                app:dependency="remote_control_enabled"
+                app:summary="Many remotes send duplicate presses. Raise this if a single press is registered twice"/>
+
+            <com.smouldering_durtles.wk.components.RemoteKeyPreference
+                app:key="remote_control_keycode_1"
+                app:title="Button 1 key"
+                app:singleLineTitle="false"
+                app:dependency="remote_control_enabled"/>
+
+            <ListPreference
+                app:key="remote_control_action_1"
+                app:title="Button 1 action"
+                app:singleLineTitle="false"
+                app:entries="@array/remoteKeyActions"
+                app:entryValues="@array/remoteKeyActionValues"
+                app:defaultValue="ADVANCE_OR_CORRECT"
+                app:dependency="remote_control_enabled"
+                app:useSimpleSummaryProvider="true"/>
+
+            <com.smouldering_durtles.wk.components.RemoteKeyPreference
+                app:key="remote_control_keycode_2"
+                app:title="Button 2 key"
+                app:singleLineTitle="false"
+                app:dependency="remote_control_enabled"/>
+
+            <ListPreference
+                app:key="remote_control_action_2"
+                app:title="Button 2 action"
+                app:singleLineTitle="false"
+                app:entries="@array/remoteKeyActions"
+                app:entryValues="@array/remoteKeyActionValues"
+                app:defaultValue="ADVANCE_OR_INCORRECT"
+                app:dependency="remote_control_enabled"
+                app:useSimpleSummaryProvider="true"/>
+
+            <com.smouldering_durtles.wk.components.RemoteKeyPreference
+                app:key="remote_control_keycode_3"
+                app:title="Button 3 key"
+                app:singleLineTitle="false"
+                app:dependency="remote_control_enabled"/>
+
+            <ListPreference
+                app:key="remote_control_action_3"
+                app:title="Button 3 action"
+                app:singleLineTitle="false"
+                app:entries="@array/remoteKeyActions"
+                app:entryValues="@array/remoteKeyActionValues"
+                app:defaultValue="SPECIAL_BUTTON_1"
+                app:dependency="remote_control_enabled"
+                app:useSimpleSummaryProvider="true"/>
+
+            <com.smouldering_durtles.wk.components.RemoteKeyPreference
+                app:key="remote_control_keycode_4"
+                app:title="Button 4 key"
+                app:singleLineTitle="false"
+                app:dependency="remote_control_enabled"/>
+
+            <ListPreference
+                app:key="remote_control_action_4"
+                app:title="Button 4 action"
+                app:singleLineTitle="false"
+                app:entries="@array/remoteKeyActions"
+                app:entryValues="@array/remoteKeyActionValues"
+                app:defaultValue="ADVANCE_OR_CORRECT"
+                app:dependency="remote_control_enabled"
+                app:useSimpleSummaryProvider="true"/>
+
+        </PreferenceScreen>
+
     </PreferenceCategory>
 
     <PreferenceCategory app:key="about" app:title="Other actions">

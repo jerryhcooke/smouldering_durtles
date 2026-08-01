@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -319,5 +320,18 @@ public abstract class AbstractFragment extends Fragment implements Actment {
      */
     public @Nullable String getPrefillSearchQuery() {
         return null;
+    }
+
+    /**
+     * Handle a key event coming from an external input device such as a Bluetooth
+     * remote/ring. This is called from the activity's dispatchKeyEvent, i.e. before
+     * the event reaches any view or the IME, so implementations must be conservative
+     * and only consume the events they really want.
+     *
+     * @param event the key event
+     * @return true if the event was consumed and must not be dispatched any further
+     */
+    public boolean onRemoteKey(final KeyEvent event) {
+        return false;
     }
 }

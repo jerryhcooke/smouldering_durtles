@@ -20,6 +20,7 @@ package com.smouldering_durtles.wk;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.Log;
+import android.view.KeyEvent;
 
 
 import androidx.preference.PreferenceManager;
@@ -35,6 +36,7 @@ import com.smouldering_durtles.wk.enums.NotificationCategory;
 import com.smouldering_durtles.wk.enums.NotificationPriority;
 import com.smouldering_durtles.wk.enums.NotificationUpdateFrequency;
 import com.smouldering_durtles.wk.enums.QuestionType;
+import com.smouldering_durtles.wk.enums.RemoteKeyAction;
 import com.smouldering_durtles.wk.enums.ReviewOrder;
 import com.smouldering_durtles.wk.enums.SessionPriority;
 import com.smouldering_durtles.wk.enums.SessionType;
@@ -3198,6 +3200,175 @@ public final class GlobalSettings {
             final SharedPreferences.Editor editor = prefs().edit();
             editor.putBoolean("self_study_randomize_inflections", value);
             editor.apply();
+        }
+    }
+
+    /**
+     * Settings for an external remote control, such as a Bluetooth "anki ring".
+     */
+    public static final class RemoteControl {
+        /**
+         * Private constructor.
+         */
+        private RemoteControl() {
+            //
+        }
+
+        /**
+         * Is remote control of Anki mode enabled at all?.
+         *
+         * @return the value
+         */
+        public static boolean getEnabled() {
+            if (!getAdvancedEnabled()) {
+                return false;
+            }
+            return prefs().getBoolean("remote_control_enabled", false);
+        }
+
+        /**
+         * The minimum time in ms between two accepted remote key presses. These devices
+         * frequently send duplicate events, and a stray double press would silently grade
+         * an item the user never saw.
+         *
+         * @return the value
+         */
+        public static int getDebounce() {
+            return prefs().getInt("remote_control_debounce", 250);
+        }
+
+        /**
+         * Keep the screen on while a session is in progress. With a remote the user isn't
+         * touching the tablet at all, so it would otherwise go to sleep mid-session.
+         *
+         * @return the value
+         */
+        public static boolean getKeepScreenOn() {
+            return prefs().getBoolean("remote_control_keep_screen_on", true);
+        }
+
+        /**
+         * The action for remote button 1.
+         *
+         * @return the value
+         */
+        public static RemoteKeyAction getAction1() {
+            return getAction("remote_control_action_1", RemoteKeyAction.ADVANCE_OR_CORRECT);
+        }
+
+        /**
+         * The action for remote button 2.
+         *
+         * @return the value
+         */
+        public static RemoteKeyAction getAction2() {
+            return getAction("remote_control_action_2", RemoteKeyAction.ADVANCE_OR_INCORRECT);
+        }
+
+        /**
+         * The action for remote button 3.
+         *
+         * @return the value
+         */
+        public static RemoteKeyAction getAction3() {
+            return getAction("remote_control_action_3", RemoteKeyAction.SPECIAL_BUTTON_1);
+        }
+
+        /**
+         * The action for remote button 4.
+         *
+         * @return the value
+         */
+        public static RemoteKeyAction getAction4() {
+            return getAction("remote_control_action_4", RemoteKeyAction.ADVANCE_OR_CORRECT);
+        }
+
+        /**
+         * The keycode assigned to remote button 1.
+         *
+         * @return the value
+         */
+        public static int getKeyCode1() {
+            return prefs().getInt("remote_control_keycode_1", KeyEvent.KEYCODE_1);
+        }
+
+        /**
+         * The keycode assigned to remote button 2.
+         *
+         * @return the value
+         */
+        public static int getKeyCode2() {
+            return prefs().getInt("remote_control_keycode_2", KeyEvent.KEYCODE_2);
+        }
+
+        /**
+         * The keycode assigned to remote button 3.
+         *
+         * @return the value
+         */
+        public static int getKeyCode3() {
+            return prefs().getInt("remote_control_keycode_3", KeyEvent.KEYCODE_4);
+        }
+
+        /**
+         * The keycode assigned to remote button 4.
+         *
+         * @return the value
+         */
+        public static int getKeyCode4() {
+            return prefs().getInt("remote_control_keycode_4", KeyEvent.KEYCODE_SPACE);
+        }
+
+        /**
+         * Record the keycode for one of the remote buttons, as captured by the
+         * "learn button" flow in the settings screen.
+         *
+         * @param index the button number, 1 through 4
+         * @param keyCode the keycode to record
+         */
+        public static void setKeyCode(final int index, final int keyCode) {
+            final SharedPreferences.Editor editor = prefs().edit();
+            editor.putInt("remote_control_keycode_" + index, keyCode);
+            editor.apply();
+        }
+
+        private static RemoteKeyAction getAction(final String key, final RemoteKeyAction defaultValue) {
+            final @Nullable String value = prefs().getString(key, null);
+            if (value != null) {
+                try {
+                    return RemoteKeyAction.valueOf(value);
+                }
+                catch (final Exception e) {
+                    //
+                }
+            }
+            return defaultValue;
+        }
+
+        /**
+         * Find the action configured for a given keycode, or NONE if this keycode
+         * is not bound to anything.
+         *
+         * @param keyCode the keycode of the key that was pressed
+         * @return the action to perform
+         */
+        public static RemoteKeyAction getActionForKeyCode(final int keyCode) {
+            if (!getEnabled()) {
+                return RemoteKeyAction.NONE;
+            }
+            if (keyCode == getKeyCode1()) {
+                return getAction1();
+            }
+            if (keyCode == getKeyCode2()) {
+                return getAction2();
+            }
+            if (keyCode == getKeyCode3()) {
+                return getAction3();
+            }
+            if (keyCode == getKeyCode4()) {
+                return getAction4();
+            }
+            return RemoteKeyAction.NONE;
         }
     }
 

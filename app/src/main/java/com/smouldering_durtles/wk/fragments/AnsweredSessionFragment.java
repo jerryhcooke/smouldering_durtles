@@ -29,10 +29,12 @@ import com.smouldering_durtles.wk.db.model.SessionItem;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.enums.FragmentTransitionAnimation;
 import com.smouldering_durtles.wk.enums.QuestionType;
+import com.smouldering_durtles.wk.enums.RemoteKeyAction;
 import com.smouldering_durtles.wk.model.DigraphMatch;
 import com.smouldering_durtles.wk.model.FloatingUiState;
 import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.proxy.ViewProxy;
+import com.smouldering_durtles.wk.util.AudioUtil;
 import com.smouldering_durtles.wk.util.HapticUtil;
 import com.smouldering_durtles.wk.util.ThemeUtil;
 import com.smouldering_durtles.wk.views.SubjectInfoView;
@@ -269,16 +271,50 @@ public final class AnsweredSessionFragment extends AbstractSessionFragment imple
     }
 
     private void advanceNext(View v) {
-        safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            if (session.isNextButtonFrozen()) {
-                return;
-            }
-            disableInteraction();
-            session.advance();
-        });
+        safe(this::advanceNext);
+    }
+
+    /**
+     * Advance to the next question.
+     */
+    private void advanceNext() {
+        if (!interactionEnabled || session.isNextButtonFrozen()) {
+            return;
+        }
+        disableInteraction();
+        session.advance();
+    }
+
+    @Override
+    protected boolean wantsRemoteKeys() {
+        // This screen has no text input, so it is safe to grab the remote's keys here. Any
+        // action other than the special buttons just means "move on".
+        return true;
+    }
+
+    @Override
+    protected void performRemoteAction(final RemoteKeyAction action) {
+        switch (action) {
+            case SPECIAL_BUTTON_1:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton1Behavior());
+                break;
+            case SPECIAL_BUTTON_2:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton2Behavior());
+                break;
+            case SPECIAL_BUTTON_3:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton3Behavior());
+                break;
+            case PLAY_AUDIO:
+                if (subject != null) {
+                    AudioUtil.playAudio(subject, null);
+                }
+                break;
+            case NONE:
+                break;
+            default:
+                advanceNext();
+                break;
+        }
     }
 
     @Override

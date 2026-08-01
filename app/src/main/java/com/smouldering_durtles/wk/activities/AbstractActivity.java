@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -897,6 +898,31 @@ public abstract class AbstractActivity extends AppCompatActivity implements Shar
      */
     protected final int dp2px(final int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
+    }
+
+    /**
+     * Intercept key events before they reach any view or the IME, and offer them to the
+     * current fragment first. This is what makes external input devices such as Bluetooth
+     * remotes/rings usable for driving a session.
+     *
+     * <p>
+     *     The fragment decides whether it wants the event. If it doesn't, normal dispatch
+     *     continues, so ordinary keyboard use is unaffected.
+     * </p>
+     *
+     * @param event the key event
+     * @return true if the event was consumed
+     */
+    @Override
+    public boolean dispatchKeyEvent(final KeyEvent event) {
+        final boolean consumed = safe(false, () -> {
+            final @Nullable AbstractFragment fragment = getCurrentFragment();
+            return fragment != null && fragment.onRemoteKey(event);
+        });
+        if (consumed) {
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     /**

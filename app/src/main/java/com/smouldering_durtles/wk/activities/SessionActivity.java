@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -115,7 +116,24 @@ public final class SessionActivity extends AbstractActivity {
 
     @Override
     protected void onResumeLocal() {
+        applyKeepScreenOn();
         updateFragment();
+    }
+
+    /**
+     * Keep the screen on for the duration of the session if the remote control is in use.
+     * With a remote the user never touches the tablet, so it would otherwise fall asleep
+     * in the middle of a session.
+     */
+    private void applyKeepScreenOn() {
+        final boolean keepOn = GlobalSettings.RemoteControl.getEnabled()
+                && GlobalSettings.RemoteControl.getKeepScreenOn();
+        if (keepOn) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     @Override

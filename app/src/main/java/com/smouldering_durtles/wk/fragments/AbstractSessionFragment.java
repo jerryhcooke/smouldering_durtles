@@ -17,7 +17,9 @@
 package com.smouldering_durtles.wk.fragments;
 
 import android.animation.Animator;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.smouldering_durtles.wk.GlobalSettings;
@@ -25,6 +27,8 @@ import com.smouldering_durtles.wk.R;
 import com.smouldering_durtles.wk.db.model.SessionItem;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.enums.FragmentTransitionAnimation;
+import com.smouldering_durtles.wk.enums.RemoteKeyAction;
+import com.smouldering_durtles.wk.enums.SpecialButtonBehavior;
 import com.smouldering_durtles.wk.livedata.SubjectChangeListener;
 import com.smouldering_durtles.wk.model.FloatingUiState;
 import com.smouldering_durtles.wk.model.Question;
@@ -55,6 +59,80 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
      * The singleton session for convenience.
      */
     protected static final Session session = Session.getInstance();
+
+    /**
+     * Timestamp of the last remote control key press that was acted upon, used for debouncing.
+     */
+    private long lastRemoteKeyTime = 0;
+
+    /**
+     * Does this fragment want to receive key events from an external remote control?.
+     *
+     * <p>
+     *     Fragments that contain a text field for typing answers must return false, otherwise
+     *     the remote's keys (which on most of these devices are ordinary character keys) would
+     *     be swallowed instead of typed.
+     * </p>
+     *
+     * @return true if remote control keys should be handled here
+     */
+    protected boolean wantsRemoteKeys() {
+        return false;
+    }
+
+    /**
+     * Perform the action bound to a remote control button. Actions are context sensitive, so
+     * that a remote with only a couple of buttons can drive a whole session.
+     *
+     * @param action the action to perform
+     */
+    protected void performRemoteAction(final RemoteKeyAction action) {
+        //
+    }
+
+    @Override
+    public final boolean onRemoteKey(final KeyEvent event) {
+        if (!GlobalSettings.RemoteControl.getEnabled() || !wantsRemoteKeys()) {
+            return false;
+        }
+
+        final RemoteKeyAction action = GlobalSettings.RemoteControl.getActionForKeyCode(event.getKeyCode());
+        if (action == RemoteKeyAction.NONE) {
+            return false;
+        }
+
+        // Swallow the whole press/release cycle, and ignore auto-repeat. If the ACTION_UP were
+        // let through, keys that have a system meaning (volume, media) would still act on the
+        // system even though we handled the press.
+        if (event.getAction() != KeyEvent.ACTION_DOWN || event.getRepeatCount() > 0) {
+            return true;
+        }
+
+        // These devices frequently send duplicate events, and a stray double press would grade
+        // an item the user never actually saw.
+        final long now = SystemClock.elapsedRealtime();
+        if (now - lastRemoteKeyTime < GlobalSettings.RemoteControl.getDebounce()) {
+            return true;
+        }
+        lastRemoteKeyTime = now;
+
+        safe(() -> performRemoteAction(action));
+        return true;
+    }
+
+    /**
+     * Perform the behaviour of one of the special buttons, as triggered by a remote control.
+     *
+     * @param behavior the behaviour to perform
+     */
+    protected final void performSpecialButton(final SpecialButtonBehavior behavior) {
+        if (!interactionEnabled || !behavior.canShow()) {
+            return;
+        }
+        disableInteraction();
+        behavior.perform();
+        updateViews();
+    }
 
     /**
      * The constructor.

@@ -154,6 +154,34 @@
         <item>TOGGLE_LIGHTNING_MODE</item>
     </string-array>
 
+    <string-array name="remoteKeyActions">
+        <item>Do nothing</item>
+        <item>Show answer / Correct / Next</item>
+        <item>Show answer / Incorrect / Next</item>
+        <item>Show answer only</item>
+        <item>Correct (or Next when answered)</item>
+        <item>Incorrect (or Next when answered)</item>
+        <item>Next only</item>
+        <item>Play audio</item>
+        <item>Special button 1</item>
+        <item>Special button 2</item>
+        <item>Special button 3</item>
+    </string-array>
+
+    <string-array name="remoteKeyActionValues">
+        <item>NONE</item>
+        <item>ADVANCE_OR_CORRECT</item>
+        <item>ADVANCE_OR_INCORRECT</item>
+        <item>SHOW_ANSWER</item>
+        <item>CORRECT</item>
+        <item>INCORRECT</item>
+        <item>NEXT</item>
+        <item>PLAY_AUDIO</item>
+        <item>SPECIAL_BUTTON_1</item>
+        <item>SPECIAL_BUTTON_2</item>
+        <item>SPECIAL_BUTTON_3</item>
+    </string-array>
+
     <string-array name="dontKnowBehaviors">
         <item>Disable</item>
         <item>Enable</item>
