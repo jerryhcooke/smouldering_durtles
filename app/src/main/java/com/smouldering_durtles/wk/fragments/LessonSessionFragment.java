@@ -24,6 +24,7 @@ import com.smouldering_durtles.wk.R;
 import com.smouldering_durtles.wk.db.model.SessionItem;
 import com.smouldering_durtles.wk.db.model.Subject;
 import com.smouldering_durtles.wk.enums.FragmentTransitionAnimation;
+import com.smouldering_durtles.wk.enums.RemoteKeyAction;
 import com.smouldering_durtles.wk.model.FloatingUiState;
 import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.proxy.ViewProxy;
@@ -115,28 +116,81 @@ public final class LessonSessionFragment extends AbstractSessionFragment impleme
         nextButton.setText(session.isOnLastLessonItem() ? "Start quiz" : "Next");
         progress.setTextFormat("%d/%d", items.indexOf(item)+1, items.size());
 
-        previousButton.setOnClickListener(v -> safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            if (!session.isOnFirstLessonItem()) {
-                disableInteraction();
-                session.moveToPreviousLessonItem();
-            }
-        }));
+        previousButton.setOnClickListener(v -> safe(this::previousItem));
 
-        nextButton.setOnClickListener(v -> safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            disableInteraction();
-            if (session.isOnLastLessonItem()) {
-                session.startQuiz();
-            }
-            else {
-                session.moveToNextLessonItem();
-            }
-        }));
+        nextButton.setOnClickListener(v -> safe(this::nextItem));
+    }
+
+    /**
+     * Go back to the previous item in the lesson presentation.
+     */
+    private void previousItem() {
+        if (!interactionEnabled || session.isOnFirstLessonItem()) {
+            return;
+        }
+        disableInteraction();
+        session.moveToPreviousLessonItem();
+    }
+
+    /**
+     * Advance to the next item in the lesson presentation, or start the quiz if this was the last one.
+     */
+    private void nextItem() {
+        if (!interactionEnabled) {
+            return;
+        }
+        disableInteraction();
+        if (session.isOnLastLessonItem()) {
+            session.startQuiz();
+        }
+        else {
+            session.moveToNextLessonItem();
+        }
+    }
+
+    @Override
+    protected boolean wantsRemoteKeys() {
+        return true;
+    }
+
+    @Override
+    protected void performRemoteAction(final RemoteKeyAction action) {
+        if (item == null || subject == null) {
+            return;
+        }
+
+        // In the lesson presentation there is nothing to grade, so the grading actions are
+        // reinterpreted as navigation: the "positive" actions move forward through the lesson,
+        // and the "negative" one goes back to re-read the previous item.
+        switch (action) {
+            case ADVANCE_OR_CORRECT:
+            case SHOW_ANSWER:
+            case CORRECT:
+            case NEXT:
+                nextItem();
+                break;
+            case ADVANCE_OR_INCORRECT:
+            case INCORRECT:
+                previousItem();
+                break;
+            case PLAY_AUDIO:
+                if (subject != null) {
+                    AudioUtil.playAudio(subject, null);
+                }
+                break;
+            case SPECIAL_BUTTON_1:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton1Behavior());
+                break;
+            case SPECIAL_BUTTON_2:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton2Behavior());
+                break;
+            case SPECIAL_BUTTON_3:
+                performSpecialButton(GlobalSettings.AdvancedOther.getSpecialButton3Behavior());
+                break;
+            case NONE:
+            default:
+                break;
+        }
     }
 
     @Override
@@ -208,31 +262,12 @@ public final class LessonSessionFragment extends AbstractSessionFragment impleme
 
     @Override
     public void onSwipeLeft(final SwipingScrollView view) {
-        safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            if (!session.isOnFirstLessonItem()) {
-                disableInteraction();
-                session.moveToPreviousLessonItem();
-            }
-        });
+        safe(this::previousItem);
     }
 
     @Override
     public void onSwipeRight(final SwipingScrollView view) {
-        safe(() -> {
-            if (!interactionEnabled) {
-                return;
-            }
-            disableInteraction();
-            if (session.isOnLastLessonItem()) {
-                session.startQuiz();
-            }
-            else {
-                session.moveToNextLessonItem();
-            }
-        });
+        safe(this::nextItem);
     }
 
     private void playAudio() {
