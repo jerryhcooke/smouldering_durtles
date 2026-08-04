@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/lesson_picker_radicals"
+        android:title="Radicals"/>
+    <item
+        android:id="@+id/lesson_picker_kanji"
+        android:title="Kanji"/>
+    <item
+        android:id="@+id/lesson_picker_vocabulary"
+        android:title="Vocabulary"/>
+    <item
+        android:id="@+id/lesson_picker_manual"
+        android:title="Pick lessons"/>
+</menu>
