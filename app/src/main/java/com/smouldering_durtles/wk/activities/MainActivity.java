@@ -23,14 +23,19 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 
 import com.smouldering_durtles.wk.GlobalSettings;
 import com.smouldering_durtles.wk.R;
+import com.smouldering_durtles.wk.WkApplication;
 import com.smouldering_durtles.wk.api.ApiState;
+import com.smouldering_durtles.wk.db.model.Subject;
+import com.smouldering_durtles.wk.enums.LessonPickerCategory;
 import com.smouldering_durtles.wk.jobs.RetryApiErrorJob;
 import com.smouldering_durtles.wk.livedata.LiveAlertContext;
 import com.smouldering_durtles.wk.livedata.LiveApiState;
@@ -43,6 +48,7 @@ import com.smouldering_durtles.wk.livedata.LiveLevelProgress;
 import com.smouldering_durtles.wk.livedata.LiveRecentUnlocks;
 import com.smouldering_durtles.wk.livedata.LiveSrsBreakDown;
 import com.smouldering_durtles.wk.livedata.LiveTimeLine;
+import com.smouldering_durtles.wk.model.LessonPickerModel;
 import com.smouldering_durtles.wk.model.Session;
 import com.smouldering_durtles.wk.model.TimeLine;
 import com.smouldering_durtles.wk.proxy.ViewProxy;
@@ -65,6 +71,8 @@ import com.smouldering_durtles.wk.views.SrsBreakDownView;
 import com.smouldering_durtles.wk.views.SyncProgressView;
 import com.smouldering_durtles.wk.views.TimeLineBarChart;
 import com.smouldering_durtles.wk.views.UpcomingReviewsView;
+
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -108,6 +116,7 @@ public final class MainActivity extends AbstractActivity {
         final ViewProxy viewKeyboardHelpButton = new ViewProxy(this, R.id.viewKeyboardHelpButton);
         final ViewProxy dismissKeyboardHelpButton = new ViewProxy(this, R.id.dismissKeyboardHelpButton);
         final ViewProxy startLessonsButton = new ViewProxy(this, R.id.startLessonsButton);
+        final ViewProxy startLessonsMenuButton = new ViewProxy(this, R.id.startLessonsMenuButton);
         final ViewProxy startReviewsButton = new ViewProxy(this, R.id.startReviewsButton);
         final ViewProxy resumeButton = new ViewProxy(this, R.id.resumeButton);
 
@@ -117,6 +126,7 @@ public final class MainActivity extends AbstractActivity {
         viewKeyboardHelpButton.setOnClickListener(v -> viewKeyboardHelp());
         dismissKeyboardHelpButton.setOnClickListener(v -> dismissKeyboardHelp());
         startLessonsButton.setOnClickListener(v -> startLessonSession());
+        startLessonsMenuButton.setOnClickListener(this::showLessonPickerMenu);
         startReviewsButton.setOnClickListener(v -> startReviewSession());
         resumeButton.setOnClickListener(v -> resumeSession());
 
@@ -315,6 +325,97 @@ public final class MainActivity extends AbstractActivity {
             else {
                 enableInteraction();
             }
+        });
+    }
+
+    /**
+     * Show the lesson selection actions beside the ordinary Start lessons button.
+     *
+     * @param anchor the popup anchor
+     */
+    private void showLessonPickerMenu(final View anchor) {
+        safe(() -> {
+            if (!interactionEnabled) {
+                return;
+            }
+
+            final PopupMenu popupMenu = new PopupMenu(this, anchor);
+            popupMenu.inflate(R.menu.lesson_picker_options);
+            final List<Subject> availableLessons =
+                    LiveTimeLine.getInstance().get().getAvailableLessons();
+            popupMenu.getMenu().findItem(R.id.lesson_picker_radicals).setEnabled(
+                    !LessonPickerModel.filter(
+                            availableLessons, LessonPickerCategory.RADICALS).isEmpty());
+            popupMenu.getMenu().findItem(R.id.lesson_picker_kanji).setEnabled(
+                    !LessonPickerModel.filter(
+                            availableLessons, LessonPickerCategory.KANJI).isEmpty());
+            popupMenu.getMenu().findItem(R.id.lesson_picker_vocabulary).setEnabled(
+                    !LessonPickerModel.filter(
+                            availableLessons, LessonPickerCategory.VOCABULARY).isEmpty());
+            popupMenu.setOnMenuItemClickListener(item ->
+                    safe(false, () -> handleLessonPickerAction(item.getItemId())));
+            popupMenu.show();
+        });
+    }
+
+    /**
+     * Handle a lesson selection popup action.
+     *
+     * @param itemId selected menu item ID
+     * @return true if the action was handled
+     */
+    private boolean handleLessonPickerAction(final int itemId) {
+        if (itemId == R.id.lesson_picker_radicals) {
+            startLessonSession(LessonPickerCategory.RADICALS);
+            return true;
+        }
+        if (itemId == R.id.lesson_picker_kanji) {
+            startLessonSession(LessonPickerCategory.KANJI);
+            return true;
+        }
+        if (itemId == R.id.lesson_picker_vocabulary) {
+            startLessonSession(LessonPickerCategory.VOCABULARY);
+            return true;
+        }
+        if (itemId == R.id.lesson_picker_manual) {
+            goToActivity(LessonPickerActivity.class);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Start an automatic lesson session restricted to one picker category.
+     *
+     * @param category the category to start
+     */
+    private void startLessonSession(final LessonPickerCategory category) {
+        safe(() -> {
+            if (!interactionEnabled) {
+                return;
+            }
+            disableInteraction();
+            runAsync(this, () -> {
+                final int maxLevel =
+                        WkApplication.getDatabase().propertiesDao().getUserMaxLevelGranted();
+                final List<Subject> availableLessons =
+                        WkApplication.getDatabase().subjectCollectionsDao()
+                                .getAvailableLessonItems(maxLevel);
+                final List<Subject> candidates =
+                        LessonPickerModel.filter(availableLessons, category);
+                if (candidates.isEmpty() || !Session.getInstance().isInactive()) {
+                    return false;
+                }
+                Session.getInstance().startNewLessonSession(candidates);
+                return true;
+            }, started -> {
+                if (Boolean.TRUE.equals(started)) {
+                    goToActivity(SessionActivity.class);
+                }
+                else {
+                    enableInteraction();
+                }
+            });
         });
     }
 

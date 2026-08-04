@@ -15,48 +15,72 @@
   ~ limitations under the License.
   -->
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/startButtonsRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/startLessonsButton"
+        <LinearLayout
+            android:id="@+id/startLessonsButtonGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start lessons"
-            android:visibility="gone"
-            style="@style/WK.Button.Normal"/>
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            <Button
+                android:id="@+id/startLessonsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="220dp"
+                android:text="Start lessons"
+                android:visibility="gone"
+                style="@style/WK.Button.Normal"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/startLessonsMenuButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Choose lessons"
+                android:paddingStart="4dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="12dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_expand_more"
+                app:tint="?attr/colorPrimary"/>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/startReviewsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="220dp"
             android:text="Start reviews"
             android:visibility="gone"
             style="@style/WK.Button.Normal"/>
 
-        <Space
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/startButtonsFlow"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            app:constraint_referenced_ids="startLessonsButtonGroup,startReviewsButton"
+            app:flow_horizontalAlign="center"
+            app:flow_horizontalGap="8dp"
+            app:flow_horizontalStyle="packed"
+            app:flow_verticalGap="8dp"
+            app:flow_wrapMode="chain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/resumeButtonRow"

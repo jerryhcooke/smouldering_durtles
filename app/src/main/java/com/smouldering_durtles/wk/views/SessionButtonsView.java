@@ -38,6 +38,7 @@ public final class SessionButtonsView extends LinearLayout {
     private final ViewProxy resumeButton = new ViewProxy();
     private final ViewProxy resumeButtonRow = new ViewProxy();
     private final ViewProxy startLessonsButton = new ViewProxy();
+    private final ViewProxy startLessonsMenuButton = new ViewProxy();
     private final ViewProxy startReviewsButton = new ViewProxy();
     private final ViewProxy startButtonsRow = new ViewProxy();
 
@@ -73,6 +74,7 @@ public final class SessionButtonsView extends LinearLayout {
             resumeButton.setDelegate(this, R.id.resumeButton);
             resumeButtonRow.setDelegate(this, R.id.resumeButtonRow);
             startLessonsButton.setDelegate(this, R.id.startLessonsButton);
+            startLessonsMenuButton.setDelegate(this, R.id.startLessonsMenuButton);
             startReviewsButton.setDelegate(this, R.id.startReviewsButton);
             startButtonsRow.setDelegate(this, R.id.startButtonsRow);
         });
@@ -104,12 +106,15 @@ public final class SessionButtonsView extends LinearLayout {
 
         boolean resumeButtonVisible = false;
         boolean startLessonButtonVisible = false;
+        boolean startLessonMenuButtonVisible = false;
         boolean startReviewButtonVisible = false;
         boolean startRowVisible = false;
 
         if (Session.getInstance().isInactive()) {
             if (timeLine.hasAvailableLessons()) {
                 startLessonButtonVisible = true;
+                startLessonMenuButtonVisible =
+                        GlobalSettings.AdvancedLesson.getLessonPickerEnabled();
                 startRowVisible = true;
             }
             if (timeLine.hasAvailableReviews()) {
@@ -123,6 +128,7 @@ public final class SessionButtonsView extends LinearLayout {
         resumeButton.setVisibility(resumeButtonVisible);
         resumeButtonRow.setVisibility(resumeButtonVisible);
         startLessonsButton.setVisibility(startLessonButtonVisible);
+        startLessonsMenuButton.setVisibility(startLessonMenuButtonVisible);
         startReviewsButton.setVisibility(startReviewButtonVisible);
         startButtonsRow.setVisibility(startRowVisible);
         setVisibility(startRowVisible || resumeButtonVisible ? VISIBLE : GONE);
@@ -134,6 +140,7 @@ public final class SessionButtonsView extends LinearLayout {
     public void enableInteraction() {
         safe(() -> {
             startLessonsButton.enableInteraction();
+            startLessonsMenuButton.enableInteraction();
             startReviewsButton.enableInteraction();
             resumeButton.enableInteraction();
         });
@@ -145,6 +152,7 @@ public final class SessionButtonsView extends LinearLayout {
     public void disableInteraction() {
         safe(() -> {
             startLessonsButton.disableInteraction();
+            startLessonsMenuButton.disableInteraction();
             startReviewsButton.disableInteraction();
             resumeButton.disableInteraction();
         });

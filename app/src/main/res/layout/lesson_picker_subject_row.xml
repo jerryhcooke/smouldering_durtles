@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lessonPickerSubjectRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="@drawable/lesson_picker_row_foreground"
+    android:minHeight="48dp"
+    android:padding="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lessonPickerSubjectLevel"
+            style="@style/WK.TextView.Small"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"/>
+
+        <FrameLayout
+            android:id="@+id/lessonPickerSubjectCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <CheckBox
+            android:id="@+id/lessonPickerSelected"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="center"
+            android:importantForAccessibility="no"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+
+</FrameLayout>

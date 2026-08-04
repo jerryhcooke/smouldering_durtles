@@ -893,6 +893,13 @@
             app:key="advanced_lesson_settings"
             app:title="Lesson advanced settings">
 
+            <SwitchPreferenceCompat
+                app:key="lesson_picker_enabled"
+                app:title="Enable lesson picker"
+                app:summary="Show lesson selection options next to Start lessons."
+                app:singleLineTitle="false"
+                app:defaultValue="false"/>
+
             <ListPreference
                 app:key="lesson_order"
                 app:title="Order"

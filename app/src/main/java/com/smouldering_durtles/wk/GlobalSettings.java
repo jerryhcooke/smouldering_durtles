@@ -2198,6 +2198,18 @@ public final class GlobalSettings {
         }
 
         /**
+         * Show lesson selection options on the dashboard.
+         *
+         * @return the value
+         */
+        public static boolean getLessonPickerEnabled() {
+            if (!getAdvancedEnabled()) {
+                return false;
+            }
+            return prefs().getBoolean("lesson_picker_enabled", false);
+        }
+
+        /**
          * Order of items in lesson sessions.
          *
          * @return the value
