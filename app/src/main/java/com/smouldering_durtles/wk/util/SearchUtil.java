@@ -225,12 +225,7 @@ public final class SearchUtil {
             subjects = runQuery(sb2.toString(), args);
         }
 
-        final List<String> javaTerms = splitTermsForJava(query);
-        for (final Subject subject: subjects) {
-            subject.setRanking(getSearchRanking(subject, javaTerms));
-        }
-
-        Collections.sort(subjects, (o1, o2) -> Integer.compare(o2.getRanking(), o1.getRanking()));
+        sortSearchResult(query, subjects);
 
         return subjects;
     }
@@ -257,14 +252,38 @@ public final class SearchUtil {
         }
         final List<Subject> subjects = runQuery(sb.toString(), args);
 
+        sortSearchResult(query, subjects);
+
+        return subjects;
+    }
+
+    /**
+     * Rank a search result and sort it, best match first. A subject whose primary meaning is
+     * exactly the query sorts above everything else, since that is almost always what was
+     * being looked for; the rest fall back to the computed ranking.
+     *
+     * @param query the search query
+     * @param subjects the results to rank and sort, sorted in place
+     */
+    private static void sortSearchResult(final CharSequence query, final List<Subject> subjects) {
         final List<String> javaTerms = splitTermsForJava(query);
         for (final Subject subject: subjects) {
             subject.setRanking(getSearchRanking(subject, javaTerms));
         }
 
-        Collections.sort(subjects, (o1, o2) -> Integer.compare(o2.getRanking(), o1.getRanking()));
+        final String queryUpperCase = query.toString().toUpperCase(Locale.ROOT);
 
-        return subjects;
+        Collections.sort(subjects, (o1, o2) -> {
+            // Both flags have to be computed before comparing them. Returning early on the first
+            // exact match alone would report o1 < o2 and o2 < o1 when both match, which breaks the
+            // Comparator contract and makes TimSort throw once a result set is large enough.
+            final boolean exact1 = o1.getOneMeaning().toUpperCase(Locale.ROOT).contentEquals(queryUpperCase);
+            final boolean exact2 = o2.getOneMeaning().toUpperCase(Locale.ROOT).contentEquals(queryUpperCase);
+            if (exact1 != exact2) {
+                return exact1 ? -1 : 1;
+            }
+            return Integer.compare(o2.getRanking(), o1.getRanking());
+        });
     }
 
     /**
