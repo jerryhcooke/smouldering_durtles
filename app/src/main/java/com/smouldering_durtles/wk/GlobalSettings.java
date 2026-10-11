@@ -1536,6 +1536,17 @@ public final class GlobalSettings {
         }
 
         /**
+         * Balanced lessons: split each lesson session between vocabulary and radicals/kanji in
+         * proportion to the remaining lesson work of each kind, level-up radicals and kanji first.
+         * Overrides the advanced lesson priority and subject selection settings.
+         *
+         * @return the value
+         */
+        public static boolean getBalancedLessons() {
+            return prefs().getBoolean("balanced_lessons", false);
+        }
+
+        /**
          * Maximum size of a lesson session.
          *
          * @return the value
@@ -2273,6 +2284,9 @@ public final class GlobalSettings {
          * @return the value
          */
         public static SessionPriority getOrderPriority() {
+            if (Review.getBalancedLessons()) {
+                return SessionPriority.LEVEL_UP_FIRST;
+            }
             if (!getAdvancedEnabled()) {
                 return SessionPriority.NONE;
             }

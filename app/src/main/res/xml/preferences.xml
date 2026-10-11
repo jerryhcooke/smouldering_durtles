@@ -519,6 +519,13 @@
             app:defaultValue="5"
             app:useSimpleSummaryProvider="true"/>
 
+        <SwitchPreferenceCompat
+            app:key="balanced_lessons"
+            app:title="Balanced lessons"
+            app:singleLineTitle="false"
+            app:defaultValue="false"
+            app:summary="Split each lesson session between vocabulary and radicals/kanji based on how much of each is left (available lessons plus your current level's locked items), so vocab keeps pace with leveling. Level-up radicals/kanji go first. Overrides the advanced lesson priority and subject selection settings."/>
+
         <EditTextPreference
             app:key="max_review_session_size"
             app:title="Max. # of reviews per session"

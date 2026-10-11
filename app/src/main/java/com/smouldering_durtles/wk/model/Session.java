@@ -33,6 +33,7 @@ import com.smouldering_durtles.wk.enums.ReviewOrder;
 import com.smouldering_durtles.wk.enums.SessionItemState;
 import com.smouldering_durtles.wk.enums.SessionState;
 import com.smouldering_durtles.wk.enums.SessionType;
+import com.smouldering_durtles.wk.enums.SubjectType;
 import com.smouldering_durtles.wk.fragments.AbstractSessionFragment;
 import com.smouldering_durtles.wk.fragments.AnkiSessionFragment;
 import com.smouldering_durtles.wk.fragments.AnsweredSessionFragment;
@@ -1351,8 +1352,39 @@ s     *
         LiveSessionProgress.getInstance().ping();
     }
 
+    /**
+     * Get the subjects on the user's current level that are still locked, for balanced lesson selection.
+     *
+     * @return the list, empty if the current level is not accessible on the user's subscription
+     */
+    private static List<Subject> getLockedCurrentLevelSubjects() {
+        final AppDatabase db = WkApplication.getDatabase();
+        final int userLevel = db.propertiesDao().getUserLevel();
+        final int maxLevel = db.propertiesDao().getUserMaxLevelGranted();
+        final List<Subject> result = new ArrayList<>();
+        if (userLevel > maxLevel) {
+            return result;
+        }
+        final SubjectType[] types = {SubjectType.WANIKANI_RADICAL, SubjectType.WANIKANI_KANJI,
+                SubjectType.WANIKANI_VOCAB, SubjectType.WANIKANI_KANA_VOCAB};
+        for (final SubjectType subjectType: types) {
+            for (final Subject subject: db.subjectCollectionsDao().getLevelProgressSubjects(userLevel, subjectType)) {
+                if (subject.isLocked()) {
+                    result.add(subject);
+                }
+            }
+        }
+        return result;
+    }
+
     private List<Subject> trimSelection(final List<Subject> candidates, final int maxSize) {
-        final SubjectSelectionRules rules = GlobalSettings.getSubjectSelectionRules(type);
+        final SubjectSelectionRules rules;
+        if (type == LESSON && GlobalSettings.Review.getBalancedLessons()) {
+            rules = SubjectSelectionRules.balanced(maxSize, candidates, getLockedCurrentLevelSubjects());
+        }
+        else {
+            rules = GlobalSettings.getSubjectSelectionRules(type);
+        }
         if (rules.isEmpty()) {
             return new ArrayList<>(candidates.subList(0, maxSize));
         }
@@ -1403,11 +1435,15 @@ s     *
             list = trimSelection(list, maxSize);
         }
 
-        LOGGER.info("Subject IDs for session: %s", list.stream().map(Subject::getId).map(Object::toString).collect(Collectors.joining(",")));
-
         if (GlobalSettings.getShuffleAfterSelection(type)) {
+            // Actually shuffle the selected subjects: the list is still sorted by the selection
+            // comparator (including priority), so only swapping the comparator would leave
+            // e.g. level-up items always at the front of the session.
+            Collections.shuffle(list);
             comparator = LessonOrder.SHUFFLE.getComparator();
         }
+
+        LOGGER.info("Subject IDs for session: %s", list.stream().map(Subject::getId).map(Object::toString).collect(Collectors.joining(",")));
 
         if (GlobalSettings.Api.getAutoDownloadAudio()) {
             AudioUtil.scheduleDownloadTasks(list, 100);
