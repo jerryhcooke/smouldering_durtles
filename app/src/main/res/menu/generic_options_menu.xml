@@ -21,7 +21,7 @@
         android:title="Settings"
         app:showAsAction="never"/>
     <item android:id="@+id/action_search"
-        app:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:title="Search"
         android:icon="@drawable/ic_baseline_search_24px_white"
         app:showAsAction="ifRoom|collapseActionView"/>
