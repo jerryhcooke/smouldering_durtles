@@ -924,6 +924,50 @@ public final class Subject implements PronunciationAudioOwner {
         return entity.jlptLevel;
     }
 
+    /**
+     * The JPDB frequency rank. 0 = not resolved yet, -1 = not found in JPDB, otherwise 1 = most common.
+     * @return the value
+     */
+    public int getJpdbRank() {
+        return entity.jpdbRank;
+    }
+
+    /**
+     * The number of Nadeshiko sentence matches. -1 = not fetched yet.
+     * @return the value
+     */
+    public int getNadeshikoCount() {
+        return entity.nadeshikoCount;
+    }
+
+    /**
+     * Can this subject have frequency data (JPDB / Nadeshiko)? Only vocabulary qualifies.
+     * @return true if it can
+     */
+    public boolean canHaveFrequencyData() {
+        return (getType().isVocabulary() || getType().isKanaVocabulary()) && !isEmpty(entity.characters);
+    }
+
+    /**
+     * Get all distinct readings for this subject, primary readings first.
+     * @return the list, possibly empty
+     */
+    public List<String> getFrequencyLookupReadings() {
+        final List<String> result = new ArrayList<>();
+        for (final boolean primaryPass: new boolean[] {true, false}) {
+            for (final Reading reading: getReadings()) {
+                if (reading.isPrimary() != primaryPass) {
+                    continue;
+                }
+                final @Nullable String value = reading.getReading();
+                if (!isEmpty(value) && !result.contains(value)) {
+                    result.add(value);
+                }
+            }
+        }
+        return result;
+    }
+
     private List<PitchInfo> getPitchInfo() {
         if (entity.parsedPitchInfo == null) {
             if (isEmpty(entity.pitchInfo)) {

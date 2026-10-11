@@ -51,6 +51,7 @@ import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.model.Session;
 import com.smouldering_durtles.wk.proxy.ViewProxy;
 import com.smouldering_durtles.wk.services.JobRunnerService;
+import com.smouldering_durtles.wk.util.FrequencyUtil;
 import com.smouldering_durtles.wk.util.ThemeUtil;
 import com.smouldering_durtles.wk.util.WeakLcoRef;
 
@@ -115,6 +116,9 @@ public final class SubjectInfoView extends LinearLayout implements SubjectChange
     private final ViewProxy tableFrequency = new ViewProxy();
     private final ViewProxy tableJoyoGrade = new ViewProxy();
     private final ViewProxy tableJlptLevel = new ViewProxy();
+    private final ViewProxy tableJpdbRank = new ViewProxy();
+    private final ViewProxy tableNadeshikoCount = new ViewProxy();
+    private final ViewProxy frequencyBadge = new ViewProxy();
     private final ViewProxy detailsDivider = new ViewProxy();
     private final ViewProxy detailsTable = new ViewProxy();
 
@@ -307,6 +311,9 @@ public final class SubjectInfoView extends LinearLayout implements SubjectChange
         tableFrequency.setDelegate(this, R.id.tableFrequency);
         tableJoyoGrade.setDelegate(this, R.id.tableJoyoGrade);
         tableJlptLevel.setDelegate(this, R.id.tableJlptLevel);
+        tableJpdbRank.setDelegate(this, R.id.tableJpdbRank);
+        tableNadeshikoCount.setDelegate(this, R.id.tableNadeshikoCount);
+        frequencyBadge.setDelegate(this, R.id.frequencyBadge);
         detailsDivider.setDelegate(this, R.id.detailsDivider);
         detailsTable.setDelegate(this, R.id.detailsTable);
 
@@ -536,6 +543,11 @@ public final class SubjectInfoView extends LinearLayout implements SubjectChange
 
         headline.setSubject(subject);
 
+        // JPDB rank / Nadeshiko count badge. In the answered-question screen the quiz header already shows it.
+        final @Nullable View badgeView = frequencyBadge.getDelegate();
+        FrequencyUtil.bindBadge(badgeView instanceof TextView ? (TextView) badgeView : null, subject,
+                containerType != ContainerType.ANSWERED_QUESTION);
+
         // Kanji on'yomi, kun'yomi, nanori
         onYomi.setText(subject.getOnYomiRichText());
         onYomi.setJapaneseLocale();
@@ -663,6 +675,18 @@ public final class SubjectInfoView extends LinearLayout implements SubjectChange
             tableJlptLevel.setText(subject.getJlptLevelAsString());
         }
         tableJlptLevel.setParentVisibility(subject.getJlptLevel() > 0);
+
+        final @Nullable String jpdbText = FrequencyUtil.formatJpdb(subject);
+        if (jpdbText != null) {
+            tableJpdbRank.setText(jpdbText);
+        }
+        tableJpdbRank.setParentVisibility(jpdbText != null);
+
+        final @Nullable String nadeshikoText = FrequencyUtil.formatNadeshiko(subject);
+        if (nadeshikoText != null) {
+            tableNadeshikoCount.setText(nadeshikoText);
+        }
+        tableNadeshikoCount.setParentVisibility(nadeshikoText != null);
 
         detailsDivider.setVisibility(showMeaningAnswers || showReadingAnswers);
         detailsTable.setVisibility(showMeaningAnswers || showReadingAnswers);

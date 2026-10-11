@@ -97,4 +97,8 @@ public final class SubjectEntityDefinition {
     public int jlptLevel = 0;
     public @Nullable String pitchInfo;
     public @Nullable String strokeData;
+    @ColumnInfo(defaultValue = "0")
+    public int jpdbRank = 0;
+    @ColumnInfo(defaultValue = "-1")
+    public int nadeshikoCount = -1;
 }

@@ -409,6 +409,60 @@ public abstract class PropertiesDao {
     }
 
     /**
+     * The revision of the JPDB frequency dictionary that has been imported into the local cache.
+     *
+     * @return the revision or null if none imported yet
+     */
+    public final @Nullable String getJpdbRevision() {
+        return getProperty("jpdb_revision");
+    }
+
+    /**
+     * The revision of the JPDB frequency dictionary that has been imported into the local cache.
+     *
+     * @param value the revision
+     */
+    public final void setJpdbRevision(final String value) {
+        setProperty("jpdb_revision", value);
+    }
+
+    /**
+     * Timestamp of the last failed attempt to download the JPDB dictionary.
+     *
+     * @return the timestamp, or 0 if none
+     */
+    public final long getLastJpdbDownloadFailure() {
+        return getLongProperty("last_jpdb_download_failure", 0);
+    }
+
+    /**
+     * Timestamp of the last failed attempt to download the JPDB dictionary.
+     *
+     * @param value the timestamp, or 0 if none
+     */
+    public final void setLastJpdbDownloadFailure(final long value) {
+        setLongProperty("last_jpdb_download_failure", value);
+    }
+
+    /**
+     * The Nadeshiko API key that was rejected with HTTP 401, so it's not retried until it changes.
+     *
+     * @return the rejected key, or null if none
+     */
+    public final @Nullable String getRejectedNadeshikoKey() {
+        return getProperty("rejected_nadeshiko_key");
+    }
+
+    /**
+     * The Nadeshiko API key that was rejected with HTTP 401, so it's not retried until it changes.
+     *
+     * @param value the rejected key
+     */
+    public final void setRejectedNadeshikoKey(final String value) {
+        setProperty("rejected_nadeshiko_key", value);
+    }
+
+    /**
      * When was the last time a notification was posted? This is the top of the hour of the last update.
      *
      * @return the timestamp, or 0 if not known

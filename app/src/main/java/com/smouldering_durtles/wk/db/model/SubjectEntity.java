@@ -371,6 +371,16 @@ public final class SubjectEntity {
     public @Nullable String strokeData;
 
     /**
+     * The JPDB frequency rank. 0 = not resolved yet, -1 = not found in JPDB, otherwise 1 = most common.
+     */
+    public int jpdbRank = 0;
+
+    /**
+     * The number of Nadeshiko sentence matches. -1 = not fetched yet.
+     */
+    public int nadeshikoCount = -1;
+
+    /**
      * Parsed version of meanings, inflated on demand.
      */
     @Ignore public @Nullable List<Meaning> parsedMeanings;

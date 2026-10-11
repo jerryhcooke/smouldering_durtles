@@ -58,7 +58,9 @@ public abstract class TaskDefinitionDao {
      * @return the number
      */
     @Query("SELECT COUNT(*) FROM task_definition WHERE taskClass!='com.smouldering_durtles.wk.tasks.DownloadAudioTask' "
-            + "AND taskClass!='com.smouldering_durtles.wk.tasks.DownloadPitchInfoTask'")
+            + "AND taskClass!='com.smouldering_durtles.wk.tasks.DownloadPitchInfoTask' "
+            + "AND taskClass!='com.smouldering_durtles.wk.tasks.DownloadJpdbFrequencyTask' "
+            + "AND taskClass!='com.smouldering_durtles.wk.tasks.FetchNadeshikoCountsTask'")
     public abstract int getApiCount();
 
     /**
@@ -68,7 +70,9 @@ public abstract class TaskDefinitionDao {
      */
     @Query("SELECT apiCount, audioCount, pitchInfoCount FROM "
             + "(SELECT COUNT(*) AS apiCount FROM task_definition "
-            + "WHERE taskClass!='com.smouldering_durtles.wk.tasks.DownloadAudioTask' AND taskClass!='com.smouldering_durtles.wk.tasks.DownloadPitchInfoTask'), "
+            + "WHERE taskClass!='com.smouldering_durtles.wk.tasks.DownloadAudioTask' AND taskClass!='com.smouldering_durtles.wk.tasks.DownloadPitchInfoTask' "
+            + "AND taskClass!='com.smouldering_durtles.wk.tasks.DownloadJpdbFrequencyTask' "
+            + "AND taskClass!='com.smouldering_durtles.wk.tasks.FetchNadeshikoCountsTask'), "
             + "(SELECT count(*) AS audioCount FROM task_definition "
             + "WHERE taskClass='com.smouldering_durtles.wk.tasks.DownloadAudioTask'), "
             + "(SELECT count(*) AS pitchInfoCount FROM task_definition "

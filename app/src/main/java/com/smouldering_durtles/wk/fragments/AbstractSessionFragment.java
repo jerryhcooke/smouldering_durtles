@@ -19,6 +19,7 @@ package com.smouldering_durtles.wk.fragments;
 import android.animation.Animator;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.TextView;
 
 import com.smouldering_durtles.wk.GlobalSettings;
 import com.smouldering_durtles.wk.R;
@@ -31,6 +32,7 @@ import com.smouldering_durtles.wk.model.Question;
 import com.smouldering_durtles.wk.model.Session;
 import com.smouldering_durtles.wk.model.TypefaceConfiguration;
 import com.smouldering_durtles.wk.proxy.ViewProxy;
+import com.smouldering_durtles.wk.util.FrequencyUtil;
 
 import javax.annotation.Nullable;
 
@@ -50,6 +52,7 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
     private final ViewProxy questionType = new ViewProxy();
     private final ViewProxy questionText = new ViewProxy();
     private final ViewProxy starRating = new ViewProxy();
+    private final ViewProxy frequencyBadge = new ViewProxy();
 
     /**
      * The singleton session for convenience.
@@ -98,6 +101,7 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
         questionType.setDelegate(view, R.id.questionType);
         questionText.setDelegate(view, R.id.questionText);
         starRating.setDelegate(view, R.id.starRating);
+        frequencyBadge.setDelegate(view, R.id.frequencyBadge);
 
         // Set the background color to match the type of subject (radical, kanji, vocab, kana_vocab)
         questionView.setBackgroundColor(subject.getBackgroundColor());
@@ -113,6 +117,9 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
         // Show the current item's SRS stage in the top center
         srsIndicator.setText(subject.getSrsStage().getName());
         srsIndicator.setVisibility(GlobalSettings.Review.getEnableSrsIndicator() && !subject.getSrsStage().isInitial());
+
+        // Show the JPDB rank / Nadeshiko count badge below the SRS indicator
+        updateFrequencyBadge(subject);
 
         // Show the special button 1 if allowed and relevant
         specialButton1.setVisibility(GlobalSettings.AdvancedOther.getSpecialButton1Behavior().canShow());
@@ -197,7 +204,23 @@ public abstract class AbstractSessionFragment extends AbstractFragment implement
                 srsIndicator.setVisibility(false);
             }
             currentSubject.setSrsStage(subject.getSrsStage());
+            updateFrequencyBadge(subject);
         }
+    }
+
+    /**
+     * Update the frequency badge in the question header. On the unanswered and Anki question screens
+     * this respects the 'show before answering' setting.
+     *
+     * @param subject the subject, with up-to-date frequency data
+     */
+    private void updateFrequencyBadge(final Subject subject) {
+        safe(() -> {
+            final boolean beforeAnswer = this instanceof UnansweredSessionFragment || this instanceof AnkiSessionFragment;
+            final boolean allowed = !beforeAnswer || GlobalSettings.SubjectInfo.getShowFrequencyBeforeAnswering();
+            final @Nullable View delegate = frequencyBadge.getDelegate();
+            FrequencyUtil.bindBadge(delegate instanceof TextView ? (TextView) delegate : null, subject, allowed);
+        });
     }
 
     @Override

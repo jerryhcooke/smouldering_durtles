@@ -26,6 +26,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.smouldering_durtles.wk.GlobalSettings;
 import com.smouldering_durtles.wk.WkApplication;
 import com.smouldering_durtles.wk.db.dao.AudioDownloadStatusDao;
+import com.smouldering_durtles.wk.db.dao.FrequencyDao;
 import com.smouldering_durtles.wk.db.dao.LevelProgressionDao;
 import com.smouldering_durtles.wk.db.dao.LogRecordDao;
 import com.smouldering_durtles.wk.db.dao.PropertiesDao;
@@ -39,8 +40,10 @@ import com.smouldering_durtles.wk.db.dao.SubjectSyncDao;
 import com.smouldering_durtles.wk.db.dao.SubjectViewsDao;
 import com.smouldering_durtles.wk.db.dao.TaskDefinitionDao;
 import com.smouldering_durtles.wk.db.model.AudioDownloadStatus;
+import com.smouldering_durtles.wk.db.model.JpdbFrequency;
 import com.smouldering_durtles.wk.db.model.LevelProgressionEntityDefinition;
 import com.smouldering_durtles.wk.db.model.LogRecordEntityDefinition;
+import com.smouldering_durtles.wk.db.model.NadeshikoCount;
 import com.smouldering_durtles.wk.db.model.PronunciationAudioOwner;
 import com.smouldering_durtles.wk.db.model.Property;
 import com.smouldering_durtles.wk.db.model.SearchPreset;
@@ -53,7 +56,9 @@ import com.smouldering_durtles.wk.jobs.TickJob;
 import com.smouldering_durtles.wk.model.Session;
 import com.smouldering_durtles.wk.services.JobRunnerService;
 import com.smouldering_durtles.wk.tasks.DownloadAudioTask;
+import com.smouldering_durtles.wk.tasks.DownloadJpdbFrequencyTask;
 import com.smouldering_durtles.wk.tasks.DownloadPitchInfoTask;
+import com.smouldering_durtles.wk.tasks.FetchNadeshikoCountsTask;
 import com.smouldering_durtles.wk.tasks.GetAssignmentsTask;
 import com.smouldering_durtles.wk.tasks.GetLevelProgressionTask;
 import com.smouldering_durtles.wk.tasks.GetPatchedAssignmentsTask;
@@ -91,8 +96,10 @@ import static com.smouldering_durtles.wk.util.ObjectSupport.join;
         SessionItem.class,
         LogRecordEntityDefinition.class,
         AudioDownloadStatus.class,
-        SearchPreset.class
-}, version = 68)
+        SearchPreset.class,
+        JpdbFrequency.class,
+        NadeshikoCount.class
+}, version = 69)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
     /**
@@ -336,6 +343,22 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     /**
+     * Migration from 68 to 69: add the JPDB frequency and Nadeshiko count caches, plus
+     * denormalized columns on the subject table.
+     */
+    public static final Migration MIGRATION_68_69 = new Migration(68, 69) {
+        @Override
+        public void migrate(final SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `jpdb_frequency` (`term` TEXT NOT NULL, `reading` TEXT NOT NULL, "
+                    + "`freqRank` INTEGER NOT NULL, PRIMARY KEY(`term`, `reading`))");
+            database.execSQL("CREATE TABLE IF NOT EXISTS `nadeshiko_count` (`term` TEXT NOT NULL, `matchCount` INTEGER NOT NULL, "
+                    + "`fetchedAt` INTEGER NOT NULL, PRIMARY KEY(`term`))");
+            database.execSQL("ALTER TABLE subject ADD COLUMN jpdbRank INTEGER NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE subject ADD COLUMN nadeshikoCount INTEGER NOT NULL DEFAULT -1");
+        }
+    };
+
+    /**
      * Get the singleton instance.
      *
      * @return the instance
@@ -364,7 +387,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             MIGRATION_64_65,
                             MIGRATION_65_66,
                             MIGRATION_66_67,
-                            MIGRATION_67_68)
+                            MIGRATION_67_68,
+                            MIGRATION_68_69)
                     .fallbackToDestructiveMigration()
                     .build();
         }
@@ -602,6 +626,33 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     /**
+     * Add a task for downloading (once) and applying the JPDB frequency dictionary, if it doesn't exist already.
+     */
+    public final void assertDownloadJpdbFrequencyTask() {
+        final int count = taskDefinitionDao().getCountByType(DownloadJpdbFrequencyTask.class);
+        if (count == 0) {
+            final TaskDefinition taskDefinition = new TaskDefinition();
+            taskDefinition.setTaskClass(DownloadJpdbFrequencyTask.class);
+            taskDefinition.setPriority(DownloadJpdbFrequencyTask.PRIORITY);
+            taskDefinition.setData("");
+            taskDefinitionDao().insertTaskDefinition(taskDefinition);
+        }
+    }
+
+    /**
+     * Add a task for fetching Nadeshiko counts for a batch of subjects.
+     *
+     * @param subjectIds the subject IDs to fetch for
+     */
+    public final void assertFetchNadeshikoCountsTask(final Iterable<Long> subjectIds) {
+        final TaskDefinition taskDefinition = new TaskDefinition();
+        taskDefinition.setTaskClass(FetchNadeshikoCountsTask.class);
+        taskDefinition.setPriority(FetchNadeshikoCountsTask.PRIORITY);
+        taskDefinition.setData(join(",", "", "", subjectIds));
+        taskDefinitionDao().insertTaskDefinition(taskDefinition);
+    }
+
+    /**
      * Add a task for saving/updating study materials.
      *
      * @param data the prepared data string for the task
@@ -782,4 +833,11 @@ public abstract class AppDatabase extends RoomDatabase {
      * @return the DAO
      */
     public abstract SearchPresetDao searchPresetDao();
+
+    /**
+     * Get the DAO instance for frequency data (JPDB / Nadeshiko).
+     *
+     * @return the DAO
+     */
+    public abstract FrequencyDao frequencyDao();
 }

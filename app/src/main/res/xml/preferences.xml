@@ -324,6 +324,33 @@
             app:defaultValue="false"/>
 
         <SwitchPreferenceCompat
+            app:key="show_jpdb_frequency"
+            app:title="Show JPDB frequency rank on vocabulary"
+            app:singleLineTitle="false"
+            app:defaultValue="false"
+            android:summary="Downloads the JPDB frequency dictionary (about 5 MB) once and keeps it on the device"/>
+
+        <SwitchPreferenceCompat
+            app:key="show_nadeshiko_count"
+            app:title="Show Nadeshiko sentence count on vocabulary"
+            app:singleLineTitle="false"
+            app:defaultValue="false"
+            android:summary="Requires a Nadeshiko API key. Each word is only looked up once."/>
+
+        <com.smouldering_durtles.wk.components.EncryptedEditTextPreference
+            app:key="nadeshiko_api_key"
+            app:title="Nadeshiko API key"
+            app:singleLineTitle="false"
+            app:dependency="show_nadeshiko_count"
+            app:summary="Get your key from https://nadeshiko.co/user/developer"/>
+
+        <SwitchPreferenceCompat
+            app:key="show_frequency_before_answering"
+            app:title="Show frequency on the question screen before answering"
+            app:singleLineTitle="false"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
             app:key="swap_similar_amalgamations"
             app:title="Swap 'visually similar' and 'used in' in subject info dump"
             app:singleLineTitle="false"

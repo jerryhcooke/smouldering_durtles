@@ -1175,6 +1175,43 @@ public final class GlobalSettings {
         }
 
         /**
+         * Show the JPDB frequency rank on vocabulary.
+         *
+         * @return the value
+         */
+        public static boolean getShowJpdbFrequency() {
+            return prefs().getBoolean("show_jpdb_frequency", false);
+        }
+
+        /**
+         * Show the Nadeshiko sentence count on vocabulary.
+         *
+         * @return the value
+         */
+        public static boolean getShowNadeshikoCount() {
+            return prefs().getBoolean("show_nadeshiko_count", false);
+        }
+
+        /**
+         * Show the frequency badge on the question screen, before the question is answered.
+         *
+         * @return the value
+         */
+        public static boolean getShowFrequencyBeforeAnswering() {
+            return prefs().getBoolean("show_frequency_before_answering", true);
+        }
+
+        /**
+         * The Nadeshiko API key, stored encrypted.
+         *
+         * @return the value, or null if not set
+         */
+        public static @Nullable String getNadeshikoApiKey() {
+            final @Nullable String value = WkApplication.getEncryptedPreferenceDataStore().getString("nadeshiko_api_key", null);
+            return value == null ? null : value.trim();
+        }
+
+        /**
          * Swap the 'visually similar' and 'used in' tables in the subject info dump.
          *
          * @return the value

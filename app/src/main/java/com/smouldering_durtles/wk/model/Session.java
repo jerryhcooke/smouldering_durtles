@@ -49,6 +49,7 @@ import com.smouldering_durtles.wk.services.JobRunnerService;
 import com.smouldering_durtles.wk.util.AudioUtil;
 import com.smouldering_durtles.wk.util.KanaUtil;
 import com.smouldering_durtles.wk.util.Logger;
+import com.smouldering_durtles.wk.util.FrequencyUtil;
 import com.smouldering_durtles.wk.util.PitchInfoUtil;
 
 import java.util.ArrayDeque;
@@ -1247,6 +1248,10 @@ s     *
             }
             if (!items.isEmpty()) {
                 createQuestions();
+                FrequencyUtil.scheduleForSession(items.stream()
+                        .map(SessionItem::getSubject)
+                        .filter(java.util.Objects::nonNull)
+                        .collect(Collectors.toList()));
                 state = type == LESSON && getNumStartedItems() == 0 ? IN_LESSON_PRESENTATION : ACTIVE;
                 adapter.clear();
                 adapter.addEventLoadSession(type);
@@ -1411,6 +1416,8 @@ s     *
         if (GlobalSettings.SubjectInfo.getShowPitchInfo()) {
             PitchInfoUtil.scheduleDownloadTasks(list, 100);
         }
+
+        FrequencyUtil.scheduleForSession(list);
 
         final AppDatabase db = WkApplication.getDatabase();
         db.sessionItemDao().deleteAll();
