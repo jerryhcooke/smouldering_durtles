@@ -74,10 +74,6 @@ public final class Logger {
      * @param throwable the exception to show the stacktrace for
      */
     public void uerr(final Throwable throwable) {
-        if (throwable instanceof WeakLcoRef.ReferentGoneException) {
-            DbLogger.logDebug(clas, "ReferentGoneException");
-            return;
-        }
         DbLogger.logUnexpectedError(clas, throwable);
     }
 }

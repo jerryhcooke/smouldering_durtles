@@ -18,11 +18,6 @@ package com.smouldering_durtles.wk.enums;
 
 import android.annotation.SuppressLint;
 
-import com.smouldering_durtles.wk.adapter.search.AvailableAtHeaderItem;
-import com.smouldering_durtles.wk.adapter.search.HeaderItem;
-import com.smouldering_durtles.wk.adapter.search.ItemTypeHeaderItem;
-import com.smouldering_durtles.wk.adapter.search.LevelHeaderItem;
-import com.smouldering_durtles.wk.adapter.search.SrsStageHeaderItem;
 import com.smouldering_durtles.wk.db.model.Subject;
 
 import java.util.ArrayList;
@@ -46,11 +41,6 @@ public enum SearchSortOrder {
         public String getTopLevelTag(final Subject subject, final long searchTime) {
             return subject.getType().name();
         }
-
-        @Override
-        public HeaderItem createTopLevelHeaderItem(final Subject subject, final long searchTime) {
-            return createSubLevelHeaderItem(null, subject);
-        }
     },
 
     LEVEL_TYPE("Level, Type", false) {
@@ -62,11 +52,6 @@ public enum SearchSortOrder {
         @Override
         public String getTopLevelTag(final Subject subject, final long searchTime) {
             return Integer.toString(subject.getLevel());
-        }
-
-        @Override
-        public HeaderItem createTopLevelHeaderItem(final Subject subject, final long searchTime) {
-            return new LevelHeaderItem(subject.getLevel());
         }
     },
 
@@ -90,18 +75,6 @@ public enum SearchSortOrder {
             }
             return Long.toString(date);
         }
-
-        @Override
-        public HeaderItem createTopLevelHeaderItem(final Subject subject, final long searchTime) {
-            final long date = subject.getAvailableAt();
-            if (date == 0) {
-                return new AvailableAtHeaderItem(0);
-            }
-            else if (date <= searchTime) {
-                return new AvailableAtHeaderItem(searchTime);
-            }
-            return new AvailableAtHeaderItem(date);
-        }
     },
 
     STAGE_TYPE("SRS Stage, Type", false) {
@@ -113,11 +86,6 @@ public enum SearchSortOrder {
         @Override
         public String getTopLevelTag(final Subject subject, final long searchTime) {
             return subject.getSrsStage().getAdvancedSearchTag();
-        }
-
-        @Override
-        public HeaderItem createTopLevelHeaderItem(final Subject subject, final long searchTime) {
-            return new SrsStageHeaderItem(subject.getSrsStage());
         }
     };
 
@@ -168,17 +136,6 @@ public enum SearchSortOrder {
     }
 
     /**
-     * Create a sub-level header item for this order.
-     *
-     * @param parentTag tag of the parent header, or null if this is a single level order
-     * @param subject the subject
-     * @return the item
-     */
-    public static HeaderItem createSubLevelHeaderItem(final @Nullable String parentTag, final Subject subject) {
-        return new ItemTypeHeaderItem(parentTag, subject.getType());
-    }
-
-    /**
      * The comparator that implements this sort order.
      *
      * @param searchTime the timestamp the search was started
@@ -193,13 +150,4 @@ public enum SearchSortOrder {
      * @return the tag
      */
     public abstract String getTopLevelTag(Subject subject, long searchTime);
-
-    /**
-     * Create a top-level header item for this order.
-     *
-     * @param subject the subject
-     * @param searchTime the timestamp the search was started
-     * @return the item
-     */
-    public abstract HeaderItem createTopLevelHeaderItem(Subject subject, long searchTime);
 }

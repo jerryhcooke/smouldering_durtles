@@ -1229,9 +1229,6 @@ public final class Subject implements PronunciationAudioOwner {
      * @return true if it is
      */
     public boolean isResurrectable() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return false;
-        }
         if (isEmpty(GlobalSettings.Api.getWebPassword())) {
             return false;
         }
@@ -1244,9 +1241,6 @@ public final class Subject implements PronunciationAudioOwner {
      * @return true if it is
      */
     public boolean isBurnable() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return false;
-        }
         if (isEmpty(GlobalSettings.Api.getWebPassword())) {
             return false;
         }

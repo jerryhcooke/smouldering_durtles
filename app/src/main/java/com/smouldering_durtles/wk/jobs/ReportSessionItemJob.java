@@ -31,6 +31,7 @@ import com.smouldering_durtles.wk.livedata.LiveAlertContext;
 import com.smouldering_durtles.wk.livedata.LiveBurnedItems;
 import com.smouldering_durtles.wk.livedata.LiveCriticalCondition;
 import com.smouldering_durtles.wk.livedata.LiveLevelProgress;
+import com.smouldering_durtles.wk.livedata.LiveReviewTotals;
 import com.smouldering_durtles.wk.livedata.LiveSrsBreakDown;
 import com.smouldering_durtles.wk.livedata.LiveTimeLine;
 import com.smouldering_durtles.wk.model.SrsSystem;
@@ -222,6 +223,7 @@ public final class ReportSessionItemJob extends Job {
                 LiveTimeLine.getInstance().update();
                 LiveSrsBreakDown.getInstance().update();
                 LiveLevelProgress.getInstance().update();
+                LiveReviewTotals.getInstance().update();
                 LiveAlertContext.getInstance().update();
             }
         }
@@ -235,6 +237,7 @@ public final class ReportSessionItemJob extends Job {
                 LiveLevelProgress.getInstance().update();
                 LiveCriticalCondition.getInstance().update();
                 LiveBurnedItems.getInstance().update();
+                LiveReviewTotals.getInstance().update();
                 LiveAlertContext.getInstance().update();
             }
         }

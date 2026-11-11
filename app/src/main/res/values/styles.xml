@@ -242,29 +242,10 @@
         <item name="WK_Button_Borderless">@style/WK.Button.Borderless</item>
     </style>
 
-    <style name="WKToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-    </style>
-
-    <style name="WK.TextView.XSmall" parent="WK.TextView.Normal">
-        <item name="android:textSize">11sp</item>
-    </style>
-
-    <style name="WK.TextView.Small" parent="WK.TextView.Normal">
-        <item name="android:textSize">12sp</item>
-    </style>
-
     <style name="WK.TextView.Normal" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:background">@color/transparent</item>
-    </style>
-
-    <style name="WK.TextView.Normal.Bold" parent="WK.TextView.Normal">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="WK.TextView.Normal.Light" parent="WK.TextView.Normal">
-        <item name="android:textColor">?attr/colorPrimaryLight</item>
     </style>
 
     <style name="WK.TextView.BrowseLevelButton" parent="WK.TextView.Normal">
@@ -272,54 +253,11 @@
         <item name="android:background">?attr/browseLevelButtonColorBackground</item>
     </style>
 
-    <style name="WK.TextView.CustomToast" parent="WK.TextView.Normal">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?attr/customToastColorPrimary</item>
-        <item name="android:background">@drawable/rounded_corners</item>
-    </style>
-
-    <style name="WK.TextView.AlternativeToast" parent="WK.TextView.Normal">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?attr/alternativeToastColorPrimary</item>
-        <item name="android:background">@drawable/alternative_toast</item>
-    </style>
-
-    <style name="WK.TextView.InlineButton" parent="WK.TextView.Normal.Bold">
-        <item name="android:background">?attr/tileColorBackground</item>
-    </style>
-
     <style name="WK.TextView.Large" parent="WK.TextView.Normal">
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="WK.TextView.Large.Bold" parent="WK.TextView.Large">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="WK.TextView.XLarge" parent="WK.TextView.Normal">
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="WK.TextView.XXLarge" parent="WK.TextView.Normal">
-        <item name="android:textSize">32sp</item>
-    </style>
-
-    <style name="WK.Button.Normal" parent="Widget.AppCompat.Button">
-    </style>
-
     <style name="WK.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
-    </style>
-
-    <style name="WK.Button.Borderless.Light" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">?attr/colorPrimaryLight</item>
-    </style>
-
-    <style name="WK.Button.Borderless.CustomToast" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">?attr/colorPrimaryDark</item>
-    </style>
-
-    <style name="WK.Switch.Normal" parent="Preference.SwitchPreferenceCompat">
-        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>
