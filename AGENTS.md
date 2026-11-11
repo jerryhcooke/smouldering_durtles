@@ -9,6 +9,9 @@ Guidance for AI agents and contributors working on Lazy Durtles, an Android clie
 - Compose code lives under `app/src/main/java/com/lazy_durtles/wk/ui/`. Legacy code lives under `activities/`, `fragments/`, `views/`, and `adapter/`.
 - The legacy UI is the **behavioral reference**. When rewriting a legacy screen in Compose, its behavior, text, and validation rules are the spec.
 - Data is stored with Room (`db/`). API access lives in `api/`. Session logic lives in `model/Session.java`.
+- **Data pipeline**: Jobs (WorkManager) → `ApiTaskService` → `Task`s → `Live...` holders → Room database → Compose UI.
+- **Lifecycle integration**: `JobIntentService` and `BackgroundAlarmReceiver` for legacy alarm scheduling; `UpdateSessionItemJob`, `TickJob`, `SyncNowJob`, `FinishSessionJob` for background sync and item persistence.
+- **Enum ecosystem (~40 classes)**: `enums/` contains `QuestionType`, `SubjectType`, `SessionState`, `DontKnowButtonBehavior`, `NetworkRule`, `TimeLineBarChartStyle`, and many others — organized by domain for readability.
 
 ## Building and running
 
@@ -55,6 +58,7 @@ JAVA_HOME=/usr/lib/jvm/temurin-21-jdk ./gradlew :app:lintDebug --offline
 - Drive the review/lesson flow only through the `Session` API: `chooseQuestion()`, `submit(matchingKanji)`, `submitDontKnow()`, `advance()`, and `getCurrentQuestion()`.
 - `Session.advance()` returns early unless the current item has been answered. Calling `Session` methods out of order, or bypassing `submit` with direct `question.checkAnswer` calls, leaves the session stuck. Don't bypass it.
 - Respect the `GlobalSettings` flags that the legacy UI respects: `AdvancedOther.getDontKnowButtonBehavior()`, `AdvancedOther.getShakeOnMatchingKanji()`, `Review.getCloseEnoughAction()`, `Review.getEnableAlternativesToast()`, and `getAutoPlay(sessionType)`.
+- **`Question` objects**: Each review item wraps a `Question` (not just a DTO). The `Question` object contains the full state machine for a WaniKani review: the character, the answer, the user's response, the `AnswerVerdict` (correct/incorrect/rejected), and the custom SRS timing fields from the database. Don't assume `Question` is just a carrier; it drives the session.
 
 ### Text input
 - Reading questions require kana. Romaji typed on the keyboard is converted by `util/PseudoIme`.
@@ -69,6 +73,33 @@ JAVA_HOME=/usr/lib/jvm/temurin-21-jdk ./gradlew :app:lintDebug --offline
 ### Database and API
 - Use DAOs (`db/dao/`) for database access. Don't add raw SQL in UI code.
 - Keep API models in `api/model/`. Don't leak them into UI state; map to `db/model` types where the rest of the app does.
+- **API streaming architecture**: `ApiTaskService` wraps a `Task<? extends ApiTask>` and processes responses into reactive `Live...` holders (`LiveSrsSystems`, `LiveReviewTotals`, etc.). The `Task`s are the canonical way to fetch data (e.g., `GetSubjectsTask`, `DownloadAudioTask`).
+
+### Jobs and Work Management
+- **`jobs/`**: The app uses WorkManager (`UpdateSessionItemJob`, `TickJob`, `SyncNowJob`, `AutoSyncNowJob`, `ScanAudioDownloadStatusJob`) and legacy `JobIntentService`/`BackgroundAlarmReceiver` for background processing. Jobs can't be called directly; they are executed by WorkManager.
+- **`jobs/Job.java`**: The base class; don't need to write custom logic unless you add a completely new background work type.
+- **`jobs/FinishSessionJob` / `AbandonSessionItemJob`**: Handle session lifecycle at the background level — ensure your UI code is consistent with what the session actually ended with.
+
+### LiveData and reactive data
+- **`livedata/`**: A large number of reactive data holders (`LiveSrsSystems`, `LiveReviewTotals`, `LiveJlptProgress`, `LiveJoyoProgress`, `LiveLevelProgress`, `LiveTaskCounts`, etc.). They wrap database/model responses and drive the UI via Compose state. When modifying data, always emit updates via these holders.
+- **`livedata/ConservativeLiveData`**: Use for critical data to prevent unnecessary updates.
+- **`livedata/SubjectChangeListener`**: Specialized listener for subject changes; use where appropriate.
+
+### APIs and Enum ecosystem
+- **API models**: `api/model/` contains canonical DTOs: `ApiSubject`, `ApiSummary`, `ApiAssignment`, `ApiLevelProgression`, `ApiSrsSystem`, etc.
+- **Enums**: **~40 classes under `enums/`** organized by domain. The most critical include:
+ - `QuestionType` (3 types: reading, meaning, compound) — the core question kind.
+ - `SubjectType` (various subject categories) plus `SubjectSource`.
+ - `SessionState`: the canonical state of an active review.
+ - `DontKnowButtonBehavior`, `CloseEnoughAction`, `SpecialButtonBehavior`: control surface behavior and accessibility.
+ - `NetworkRule`: controls connection behavior during sync.
+ - `TimeLineBarChartStyle` / `TimeLineBarChartGridStyle`: controls for the progress charts.
+ - **`SessionType`**: distinguishes "lesson" (new material) from "review" — critical for API calls and SRS.
+
+### Tools and utilities
+- `util/FuzzyMatching.java`: Special OSA-distance fuzzing that handles Unicode mistypes. The canonical `cleanReplace(cp)` logic; **don't change its special cases** without verifying legacy behavior.
+- `util/PseudoIme.java`: Converts raw romaji input into kana for reading question answers.
+- `util/AudioUtil`: Handles audio playback with built-in mute checking.
 
 ## Design principles
 
@@ -76,9 +107,9 @@ JAVA_HOME=/usr/lib/jvm/temurin-21-jdk ./gradlew :app:lintDebug --offline
 2. **Clarity during review.** The subject character is the focal point. Progress, the question type, and the next action are visible at all times.
 3. **Don't hide primary actions.** The Next action sits in a pinned bottom bar that is visible while the content scrolls.
 4. **Question type by color.** Meaning and reading use the legacy hint colors so users recognize them:
-   - Meaning chip: background `#C0C0C0` with light text (`wkDarkMeaningHintColor`).
-   - Reading chip: background `#000000` with light text (`wkDarkReadingHintColor`).
-   These colors come from `res/values/colors.xml` and `styles.xml`.
+ - Meaning chip: background `#C0C0C0` with light text (`wkDarkMeaningHintColor`).
+ - Reading chip: background `#000000` with light text (`wkDarkReadingHintColor`).
+ These colors come from `res/values/colors.xml` and `styles.xml`.
 5. **Feedback is brief and non-blocking.** Correct answers get a short full-screen checkmark with a few green specks (about 0.6 s), without the primary color. Incorrect answers show the reason in a card. Feedback overlays must not intercept taps.
 6. **Subtle motion.** Animations are short (roughly 50 to 800 ms), and every animation must have an end state that matches the static UI.
 7. **Accessibility.** Give icon buttons a `contentDescription`. Keep touch targets at least 48 dp. Don't rely on color alone for correct and incorrect states; pair the color with an icon or text.
@@ -96,3 +127,4 @@ JAVA_HOME=/usr/lib/jvm/temurin-21-jdk ./gradlew :app:lintDebug --offline
 - Don't commit `local.properties`, `.cache/`, `excalidraw.log`, or `Identification.java` with real values.
 - Don't remove the legacy UI while migrating a screen until the Compose version has been verified against it.
 - Don't change `FuzzyMatching` answer rules ("Woman", "tree", "say" special cases) without checking the legacy behavior first.
+- Don't leak API model types into UI state; prefer the `db/model` abstractions that the rest of the Compose code uses.
