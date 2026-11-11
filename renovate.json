@@ -68,7 +68,7 @@
       "description": "Detect Compose BOM version from app/build.gradle",
       "customType": "regex",
       "fileMatch": ["^app/build\\.gradle$"],
-      "matchStrings": ["compose-bom:(?<currentValue>[^"]+)"],
+      "matchStrings": ["compose-bom:(?<currentValue>[^\"]+)"],
       "depNameTemplate": "androidx.compose:compose-bom",
       "datasourceTemplate": "maven"
     }
