@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write # semantic-release pushes the version tag and creates the GitHub release
+  issues: write # semantic-release opens/closes an issue when a release run fails
 
 concurrency:
   group: release-${{ github.ref }}
