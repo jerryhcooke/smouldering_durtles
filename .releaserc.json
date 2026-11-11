@@ -1,0 +1,19 @@
+{
+  "branches": ["main"],
+  "tagFormat": "v${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    ["@semantic-release/exec", {
+      "prepareCmd": "./scripts/build-release.sh ${nextRelease.version}"
+    }],
+    ["@semantic-release/github", {
+      "assets": [
+        {
+          "path": "dist/*.apk",
+          "label": "Android APK"
+        }
+      ]
+    }]
+  ]
+}

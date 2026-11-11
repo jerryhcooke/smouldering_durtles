@@ -1,0 +1,10 @@
+{
+  "name": "lazy-durtles-ci",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Release tooling for Lazy Durtles (semantic-release)",
+  "devDependencies": {
+    "@semantic-release/exec": "7.1.0",
+    "semantic-release": "25.0.9"
+  }
+}

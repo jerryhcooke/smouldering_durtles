@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 9.2.1" type="baseline" client="gradle" dependencies="false" name="AGP (9.2.1)" variant="all" version="9.2.1">
+
+    <issue
+        id="MissingPermission"
+        message="Call requires permission which may be rejected by user: code should explicitly check to see if permission is available (with `checkPermission`) or explicitly handle a potential `SecurityException`"
+        errorLine1="        notificationManager.notify(1, builder.build());"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/services/NotificationWorker.java"
+            line="103"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                text = String.format(&quot;%s: %d subject(s) found&quot;, searchDescription, subjects.size),"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/screens/browse/SearchResultsScreen.kt"
+            line="224"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="OldTargetApi"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
+        errorLine1="        targetSdkVersion 36"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle"
+            line="9"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="AndroidGradlePluginVersion"
+        message="A newer version of Gradle than 9.4.1 is available: 9.9.1"
+        errorLine1="distributionUrl=https\://services.gradle.org/distributions/gradle-9.4.1-all.zip"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="$HOME/StudioProjects/smouldering_durtles/gradle/wrapper/gradle-wrapper.properties"
+            line="5"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(26) instead of `@TargetApi` to propagate the requirement to callers of `playAudioPost26`"
+        errorLine1="    @TargetApi(26)"
+        errorLine2="    ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/util/AudioUtil.java"
+            line="618"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(23) instead of `@TargetApi` to propagate the requirement to callers of `renderPost23`"
+        errorLine1="    @TargetApi(23)"
+        errorLine2="    ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/util/TextUtil.java"
+            line="166"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(24) instead of `@TargetApi` to propagate the requirement to callers of `registerNetworkStateChangeListenerPost24`"
+        errorLine1="    @TargetApi(24)"
+        errorLine2="    ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/WkApplication.java"
+            line="168"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                        prefs.edit().putInt(minKey, -1).apply()"
+        errorLine2="                        ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/SettingsScreen.kt"
+            line="641"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                        minText.toIntOrNull()?.let { prefs.edit().putInt(minKey, it).apply() }"
+        errorLine2="                                                     ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/SettingsScreen.kt"
+            line="644"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                        prefs.edit().putInt(&quot;${key}_max&quot;, -1).apply()"
+        errorLine2="                        ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/SettingsScreen.kt"
+            line="647"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                        maxText.toIntOrNull()?.let { prefs.edit().putInt(&quot;${key}_max&quot;, it).apply() }"
+        errorLine2="                                                     ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/SettingsScreen.kt"
+            line="650"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                    prefs.edit().putString(key, urlText).apply()"
+        errorLine2="                    ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/SettingsScreen.kt"
+            line="723"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="    prefs.edit().putBoolean(key, value).apply()"
+        errorLine2="    ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/SettingsScreen.kt"
+            line="2046"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="    prefs.edit().putString(key, value).apply()"
+        errorLine2="    ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/SettingsScreen.kt"
+            line="2050"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="    prefs.edit().putInt(key, value).apply()"
+        errorLine2="    ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/SettingsScreen.kt"
+            line="2054"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))"
+        errorLine2="                                                                             ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/lazy_durtles/wk/ui/screens/browse/SubjectInfoDumpContent.kt"
+            line="484"
+            column="78"/>
+    </issue>
+
+</issues>

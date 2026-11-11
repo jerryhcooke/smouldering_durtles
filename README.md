@@ -13,6 +13,44 @@ Download the latest APK from the [Releases Section](https://github.com/manuel-rw
 
 The original apps are still available: Smouldering Durtles on [F-Droid](https://f-droid.org/packages/com.smouldering_durtles.wk/) and [Google Play](https://play.google.com/store/apps/details?id=com.smouldering_durtles.wk).
 
+## Releases
+
+Releases are fully automated with [semantic-release](https://semantic-release.gitbook.io/). Every push to `main` triggers analysis of the commits since the last release:
+
+| Commit message | Version bump |
+| --- | --- |
+| `fix: ...` | patch (1.2.8 → 1.2.9) |
+| `feat: ...` | minor (1.2.8 → 1.3.0) |
+| `feat!: ...` or `BREAKING CHANGE:` footer | major (1.2.8 → 2.0.0) |
+| anything else | no release |
+
+When a release-worthy commit is found, the pipeline builds a signed universal APK, tags the commit `vX.Y.Z`, and publishes a GitHub release with the APK and auto-generated notes. Release notes come from the commit messages; there is no changelog file.
+
+`versionCode` is derived from the version as `major * 10000 + minor * 100 + patch` (e.g. 1.3.0 → 10300), so it stays monotonically increasing. This caps minor and patch below 100.
+
+### Commit messages
+
+PR titles must follow the [Conventional Commits](https://www.conventionalcommits.org/) format (`type: subject`); a CI check enforces this. Since PRs are squash-merged, the PR title becomes the commit message that drives the next version.
+
+### Signing
+
+Release APKs are signed in CI with a keystore supplied through GitHub secrets:
+
+- `RELEASE_KEYSTORE_BASE64` — the keystore file, base64-encoded
+- `KEYSTORE_PASSWORD` — keystore and key password
+- `KEY_ALIAS` — `lazy-durtles`
+- `KEY_PASSWORD` — key password
+
+The keystore itself is **not** in the repository (gitignored as `release.keystore`). Keep a backup of `release.keystore` and `keystore.properties` — losing them means users cannot upgrade in place ever again.
+
+### Building a release locally
+
+```sh
+./scripts/build-release.sh 1.3.0
+```
+
+This requires `keystore.properties` in the repository root (see `keystore.properties` layout: `storeFile`, `storePassword`, `keyAlias`, `keyPassword`) and writes the APK to `dist/`. Without signing material, Gradle falls back to the debug key.
+
 ## Preparing to build the code
 
 This repository ships the fork's identification files (`Identification.java` and `strings.xml`) with real values, so a fresh checkout builds as Lazy Durtles out of the box.
