@@ -1,4 +1,11 @@
 
+## Lazy Durtles changelog
+
+### Unreleased
+
+- Forked from Smouldering Durtles and renamed to "Lazy Durtles" — the upstream license does not cover the original app names, so forks must pick their own name. Credits for all authors of the base repositories are in the README.
+- Adopted the Jetpack Compose UI migration into main; the legacy View/Fragment UI has been removed.
+
 ## Smouldering Durtles changelog
 
 ### Version 1.2.1 2025-01-29

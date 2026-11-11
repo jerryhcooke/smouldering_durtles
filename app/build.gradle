@@ -4,7 +4,7 @@ apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
     defaultConfig {
-        applicationId "com.smouldering_durtles.wk"
+        applicationId "com.lazy_durtles.wk"
         minSdkVersion 21
         targetSdkVersion 36
         compileSdk = 36
@@ -15,7 +15,7 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testApplicationId "com.smouldering_durtles.wk.test"
+        testApplicationId "com.lazy_durtles.wk.test"
         testHandleProfiling true
         testFunctionalTest true
 
@@ -33,18 +33,18 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            resValue 'string', 'fileprovider_authority', 'com.smouldering_durtles.wk.fileprovider'
-            resValue 'string', 'searchprovider_authority', 'com.smouldering_durtles.wk.db.SubjectContentProvider'
+            resValue 'string', 'fileprovider_authority', 'com.lazy_durtles.wk.fileprovider'
+            resValue 'string', 'searchprovider_authority', 'com.lazy_durtles.wk.db.SubjectContentProvider'
             resValue 'string', 'applabel', '@string/label'
-            buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.smouldering_durtles.wk.fileprovider"'
+            buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.lazy_durtles.wk.fileprovider"'
             signingConfig signingConfigs.debug
         }
         debug {
             applicationIdSuffix '.debug'
-            resValue 'string', 'fileprovider_authority', 'com.smouldering_durtles.wk.debug.fileprovider'
-            resValue 'string', 'searchprovider_authority', 'com.smouldering_durtles.wk.debug.db.SubjectContentProvider'
+            resValue 'string', 'fileprovider_authority', 'com.lazy_durtles.wk.debug.fileprovider'
+            resValue 'string', 'searchprovider_authority', 'com.lazy_durtles.wk.debug.db.SubjectContentProvider'
             resValue 'string', 'applabel', '@string/labelDebug'
-            buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.smouldering_durtles.wk.debug.fileprovider"'
+            buildConfigField 'String', 'FILEPROVIDER_AUTHORITY', '"com.lazy_durtles.wk.debug.fileprovider"'
         }
     }
     sourceSets {
@@ -62,7 +62,7 @@ android {
     kotlin {
         jvmToolchain(17)
     }
-    namespace 'com.smouldering_durtles.wk'
+    namespace 'com.lazy_durtles.wk'
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
         includeInApk = false

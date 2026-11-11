@@ -11,5 +11,5 @@
 /test-results
 app/google-services.json
 /app/src/main/res/values/refs.xml
-/app/src/androidTest/java/com/smouldering_durtles/wk/test/UnitTestSuite.java
-/fastlane/smoulderingdurtles.json
+/app/src/androidTest/java/com/lazy_durtles/wk/test/UnitTestSuite.java
+/fastlane/lazydurtles.json

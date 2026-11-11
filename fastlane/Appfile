@@ -1,2 +1,2 @@
-json_key_file("./smoulderingdurtles.json") 
-package_name("com.smouldering_durtles.wk")
+json_key_file("./lazydurtles.json") 
+package_name("com.lazy_durtles.wk")

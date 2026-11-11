@@ -1,12 +1,12 @@
 # AGENTS.md
 
-Guidance for AI agents and contributors working on Smouldering Durtles, an Android client for WaniKani.
+Guidance for AI agents and contributors working on Lazy Durtles, an Android client for WaniKani.
 
 ## Project overview
 
-- Android app, package `com.smouldering_durtles.wk`, Kotlin and Java mixed.
+- Android app, package `com.lazy_durtles.wk`, Kotlin and Java mixed.
 - The app is migrating from the legacy View/Fragment/Activity UI to Jetpack Compose. Both coexist; the migration is in progress (see the git history: "Migrate to Jetpack Compose and Material Expressive 3 (WIP)").
-- Compose code lives under `app/src/main/java/com/smouldering_durtles/wk/ui/`. Legacy code lives under `activities/`, `fragments/`, `views/`, and `adapter/`.
+- Compose code lives under `app/src/main/java/com/lazy_durtles/wk/ui/`. Legacy code lives under `activities/`, `fragments/`, `views/`, and `adapter/`.
 - The legacy UI is the **behavioral reference**. When rewriting a legacy screen in Compose, its behavior, text, and validation rules are the spec.
 - Data is stored with Room (`db/`). API access lives in `api/`. Session logic lives in `model/Session.java`.
 
@@ -18,7 +18,7 @@ Guidance for AI agents and contributors working on Smouldering Durtles, an Andro
   ```
   Gradle runs on JDK 21, while the app compiles to Java/Kotlin target 17.
 - The line `e: Daemon compilation failed: null` is a Kotlin daemon fallback warning, not a build failure. Check for `BUILD SUCCESSFUL` and for lines starting with `e: ` that are real compile errors.
-- The debug build uses application ID `com.smouldering_durtles.wk.debug` (the `.debug` suffix).
+- The debug build uses application ID `com.lazy_durtles.wk.debug` (the `.debug` suffix).
 - Before building from a fresh checkout, follow the "Preparing to build the code" section in `README.md` to supply `Identification.java` and `strings.xml`. Do not commit those files with real values.
 - Tooling: compileSdk 34, minSdk 21, Compose BOM 2024.02.00, Material 3, Room 2.6.1, Lottie, Glide, coroutines.
 
@@ -82,7 +82,7 @@ JAVA_HOME=/usr/lib/jvm/temurin-21-jdk ./gradlew :app:lintDebug --offline
 5. **Feedback is brief and non-blocking.** Correct answers get a short full-screen checkmark with a few green specks (about 0.6 s), without the primary color. Incorrect answers show the reason in a card. Feedback overlays must not intercept taps.
 6. **Subtle motion.** Animations are short (roughly 50 to 800 ms), and every animation must have an end state that matches the static UI.
 7. **Accessibility.** Give icon buttons a `contentDescription`. Keep touch targets at least 48 dp. Don't rely on color alone for correct and incorrect states; pair the color with an icon or text.
-8. **Respect the theme.** Support light and dark themes through `SmoulderingDurtlesTheme`.
+8. **Respect the theme.** Support light and dark themes through `LazyDurtlesTheme`.
 
 ## Testing and verification
 

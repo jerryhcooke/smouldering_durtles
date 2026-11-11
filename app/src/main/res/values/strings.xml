@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="label" tools:ignore="UnusedResources">Smouldering Durtles</string>
-    <string name="labelDebug" tools:ignore="UnusedResources">Smoulder Durtles - Debug</string>
-    <string name="uri_scheme">smouldering-durtles</string>
-    <string name="subject_info_uri">smouldering-durtles://subject-info</string>
+    <string name="label" tools:ignore="UnusedResources">Lazy Durtles</string>
+    <string name="labelDebug" tools:ignore="UnusedResources">Lazy Durtles - Debug</string>
+    <string name="uri_scheme">lazy-durtles</string>
+    <string name="subject_info_uri">lazy-durtles://subject-info</string>
 </resources>

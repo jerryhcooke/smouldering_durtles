@@ -1,4 +1,4 @@
-package com.smouldering_durtles.wk;
+package com.lazy_durtles.wk;
 
 /**
  * A class with static fields that provide identification of the app.
