@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 
 import com.smouldering_durtles.wk.GlobalSettings;
 import com.smouldering_durtles.wk.WkApplication;
-import com.smouldering_durtles.wk.adapter.sessionlog.SessionLogAdapter;
 import com.smouldering_durtles.wk.api.model.Meaning;
 import com.smouldering_durtles.wk.api.model.Reading;
 import com.smouldering_durtles.wk.db.AppDatabase;
@@ -33,12 +32,6 @@ import com.smouldering_durtles.wk.enums.ReviewOrder;
 import com.smouldering_durtles.wk.enums.SessionItemState;
 import com.smouldering_durtles.wk.enums.SessionState;
 import com.smouldering_durtles.wk.enums.SessionType;
-import com.smouldering_durtles.wk.fragments.AbstractSessionFragment;
-import com.smouldering_durtles.wk.fragments.AnkiSessionFragment;
-import com.smouldering_durtles.wk.fragments.AnsweredSessionFragment;
-import com.smouldering_durtles.wk.fragments.LessonSessionFragment;
-import com.smouldering_durtles.wk.fragments.SummarySessionFragment;
-import com.smouldering_durtles.wk.fragments.UnansweredSessionFragment;
 import com.smouldering_durtles.wk.jobs.AbandonSessionItemJob;
 import com.smouldering_durtles.wk.jobs.FinishSessionJob;
 import com.smouldering_durtles.wk.livedata.LiveSessionProgress;
@@ -89,7 +82,7 @@ public final class Session implements SubjectChangeListener {
     private static final Logger LOGGER = Logger.get(Session.class);
     private static final Session instance = new Session();
 
-    private final SessionLogAdapter adapter = new SessionLogAdapter();
+    private final SessionLog sessionLog = new SessionLog();
     private boolean loaded = false;
     private SessionType type = NONE;
     private boolean onkun = false;
@@ -97,6 +90,7 @@ public final class Session implements SubjectChangeListener {
     private boolean readingFirst = false;
     private boolean meaningFirst = false;
     private boolean delayed = false;
+    private boolean lightningModeTemporarilyDisabled = false;
     private SessionState state = INACTIVE;
     private @Nullable SessionItem currentItem = null;
     private @Nullable Question currentQuestion = null;
@@ -109,7 +103,6 @@ public final class Session implements SubjectChangeListener {
     private Comparator<Subject> comparator = ReviewOrder.SHUFFLE.getComparator();
     private final Deque<Question> history = new ArrayDeque<>();
     private long lastTypedIncorrectAnswer = 0;
-    private boolean forceNewFragment = false;
 
 
     /**
@@ -138,12 +131,28 @@ public final class Session implements SubjectChangeListener {
     }
 
     /**
-     * Get the recycler view adapter for the session.
-     *
-     * @return the adapter
+     * The full list of questions in this session.
+     * @return the value
      */
-    public SessionLogAdapter getAdapter() {
-        return adapter;
+    public List<Question> getQuestions() {
+        return Collections.unmodifiableList(questions);
+    }
+
+    /**
+     * Remove a question from the session.
+     * @param question the question to remove
+     */
+    public void removeQuestion(Question question) {
+        questions.remove(question);
+    }
+
+    /**
+     * Get the event log for this session.
+     *
+     * @return the session log
+     */
+    public SessionLog getSessionLog() {
+        return sessionLog;
     }
 
     /**
@@ -429,13 +438,16 @@ s     *
      */
     @SuppressLint("NewApi")
     public void chooseQuestion() {
+        LOGGER.info("ChooseQuestion: Starting chooseQuestion. Current question: " + currentQuestion);
         if (currentQuestion != null || isFinishing() || isInactive()) {
+            LOGGER.info("ChooseQuestion: Skipping chooseQuestion. Finishing: " + isFinishing() + ", Inactive: " + isInactive());
             return;
         }
 
         answered = false;
         FloatingUiState.setCurrentAnswer("");
         if (state == IN_LESSON_PRESENTATION) {
+            LOGGER.info("ChooseQuestion: In lesson presentation. Questions size: " + questions.size());
             setCurrentQuestion(questions.get(0), QuestionChoiceReason.STARTING_LESSON_SESSION);
             currentItem = requireNonNull(items.get(0));
             WkApplication.getDatabase().propertiesDao().setCurrentItemId(currentItem.getId());
@@ -447,6 +459,7 @@ s     *
             return;
         }
 
+        LOGGER.info("ChooseQuestion: Questions size: " + questions.size());
         if (questions.isEmpty()) {
             setCurrentQuestion(null, QuestionChoiceReason.FINISHING_SESSION);
             currentItem = null;
@@ -525,6 +538,7 @@ s     *
         while (i < candidateQuestions.size() && candidateQuestions.get(i).getItem().getBucket() == bucket) {
             i++;
         }
+        LOGGER.info("ChooseQuestion: Candidate questions size: " + candidateQuestions.size() + ", bucket: " + bucket + ", index range: 0-" + (i-1));
         final int index = nextRandomInt(i);
         setCurrentQuestion(candidateQuestions.get(index), questionChoiceReason);
         currentItem = currentQuestion.getItem();
@@ -603,6 +617,7 @@ s     *
      * Advance the session to the next question.
      */
     public void advance() {
+        LOGGER.info("Advance: Starting advance. Current question: " + currentQuestion + ", answered: " + answered);
         if (!answered) {
             LOGGER.info("Advance: current question not answered yet");
             return;
@@ -611,12 +626,15 @@ s     *
             lastFinishedSubjectId = currentItem.getId();
         }
         if (currentQuestion != null) {
+            LOGGER.info("Advance: Current question is not null. Finished: " + currentQuestion.isFinished());
             if (!correct) {
                 currentQuestion.getItem().setChoiceDelay(3);
             }
             history.push(currentQuestion);
             if (currentQuestion.isFinished()) {
+                LOGGER.info("Advance: Removing current question from questions list. Questions size before: " + questions.size());
                 questions.remove(currentQuestion);
+                LOGGER.info("Advance: Questions size after: " + questions.size());
                 if (questions.isEmpty()) {
                     state = FINISHING;
                     LiveSessionState.getInstance().post(state);
@@ -627,7 +645,7 @@ s     *
         FloatingUiState.setCurrentAnswer("");
         setCurrentQuestion(null, QuestionChoiceReason.NEXT_NATURAL);
         currentItem = null;
-        LOGGER.info("Advance: current question and item cleared");
+        LOGGER.info("Advance: current question and item cleared. Questions size: " + questions.size());
         LiveSessionProgress.getInstance().ping();
     }
 
@@ -657,7 +675,7 @@ s     *
         setCurrentQuestion(null, QuestionChoiceReason.STARTING_QUIZ);
         lastFinishedSubjectId = -1;
         LiveSessionProgress.getInstance().ping();
-        adapter.addEventStartQuiz();
+        sessionLog.addEventStartQuiz();
     }
 
     /**
@@ -670,7 +688,7 @@ s     *
         }
 
         state = IN_LESSON_PRESENTATION;
-        adapter.addEventBackToLessonPresentation();
+        sessionLog.addEventBackToLessonPresentation();
         currentItem = items.get(items.size()-1);
         setCurrentQuestion(questions.get(0), QuestionChoiceReason.BACK_TO_PRESENTATION);
         LiveSessionState.getInstance().post(state);
@@ -756,11 +774,11 @@ s     *
             if (alternatives != null) {
                 List<String> filteredAlternatives = new ArrayList<>();
                 Set<String> uniqueAlternativesWithoutThe = new HashSet<>();
-                String lowerCaseCurrentAnswer = currentAnswer.toLowerCase().replaceFirst("^the ", "");
-                String closeEnoughAnswer = FloatingUiState.lastVerdict != null ? FloatingUiState.lastVerdict.getMatchedAnswer().toLowerCase().replaceFirst("^the ", "") : null;
+                String lowerCaseCurrentAnswer = currentAnswer.toLowerCase(Locale.ROOT).replaceFirst("^the ", "");
+                String closeEnoughAnswer = FloatingUiState.lastVerdict != null ? FloatingUiState.lastVerdict.getMatchedAnswer().toLowerCase(Locale.ROOT).replaceFirst("^the ", "") : null;
 
                 for (String alternative : alternatives) {
-                    String lowerCaseAlternative = alternative.toLowerCase();
+                    String lowerCaseAlternative = alternative.toLowerCase(Locale.ROOT);
                     String alternativeWithoutThe = lowerCaseAlternative.replaceFirst("^the ", "");
 
                     if (alternativeWithoutThe.equals(lowerCaseCurrentAnswer) || alternativeWithoutThe.equals(closeEnoughAnswer)) {
@@ -813,7 +831,7 @@ s     *
      */
     public AnswerVerdict submit(final @Nullable Subject matchingKanji) {
         final AnswerVerdict verdict = submitHelper(matchingKanji);
-        adapter.addEventSubmitTypedAnswer(currentQuestion, FloatingUiState.getCurrentAnswer(), verdict);
+        sessionLog.addEventSubmitTypedAnswer(currentQuestion, FloatingUiState.getCurrentAnswer(), verdict);
         return verdict;
     }
 
@@ -838,7 +856,7 @@ s     *
         FloatingUiState.showCloseToast = false;
         LOGGER.info("Submit Anki correct: %s processed", currentQuestion);
         LiveSessionProgress.getInstance().ping();
-        adapter.addEventSubmitAnkiCorrect(currentQuestion);
+        sessionLog.addEventSubmitAnkiCorrect(currentQuestion);
     }
 
     /**
@@ -857,7 +875,7 @@ s     *
         FloatingUiState.showCloseToast = false;
         LOGGER.info("Submit Anki incorrect: %s processed", currentQuestion);
         LiveSessionProgress.getInstance().ping();
-        adapter.addEventSubmitAnkiIncorrect(currentQuestion);
+        sessionLog.addEventSubmitAnkiIncorrect(currentQuestion);
     }
 
     /**
@@ -878,7 +896,7 @@ s     *
         FloatingUiState.toastPlayed = false;
         LOGGER.info("Submit Don't Know: %s processed", currentQuestion);
         LiveSessionProgress.getInstance().ping();
-        adapter.addEventSubmitDontKnow(currentQuestion);
+        sessionLog.addEventSubmitDontKnow(currentQuestion);
     }
 
     /**
@@ -908,7 +926,6 @@ s     *
             return;
         }
 
-        forceNewFragment = true;
         if (currentQuestion != null && answered && currentQuestion.canUndo()) {
             LOGGER.info("Undo and retry: %s undid current question in-place", currentQuestion);
             setCurrentQuestion(currentQuestion, QuestionChoiceReason.UNDO_AND_RETRY);
@@ -933,7 +950,7 @@ s     *
             LiveSessionState.getInstance().post(state);
         }
         LiveSessionProgress.getInstance().ping();
-        adapter.addEventUndoAndRetry(currentQuestion);
+        sessionLog.addEventUndoAndRetry(currentQuestion);
     }
 
     /**
@@ -945,19 +962,18 @@ s     *
             return;
         }
 
-        forceNewFragment = true;
         if (currentQuestion != null && answered && currentQuestion.canUndo()) {
             currentQuestion.undo();
             putBack(currentQuestion);
             LOGGER.info("Undo and put back: %s undid current question in-place", currentQuestion);
-            adapter.addEventUndoAndPutBack(currentQuestion);
+            sessionLog.addEventUndoAndPutBack(currentQuestion);
         }
         else {
             final Question question = history.pop();
             question.undo();
             putBack(question);
             LOGGER.info("Undo and put back: %s popped question from history stack", question);
-            adapter.addEventUndoAndPutBack(question);
+            sessionLog.addEventUndoAndPutBack(question);
         }
         answered = false;
         correct = false;
@@ -986,9 +1002,8 @@ s     *
             currentItem.setChoiceDelay(3);
         }
 
-        adapter.addEventSkip(currentQuestion);
+        sessionLog.addEventSkip(currentQuestion);
 
-        forceNewFragment = true;
         setCurrentQuestion(null, QuestionChoiceReason.SKIP);
         currentItem = null;
         FloatingUiState.setCurrentAnswer("");
@@ -1005,7 +1020,6 @@ s     *
             return;
         }
 
-        forceNewFragment = true;
         if (currentQuestion != null && answered && currentQuestion.canUndo()) {
             LOGGER.info("Ignore: %s undid current question in-place", currentQuestion);
             setCurrentQuestion(currentQuestion, QuestionChoiceReason.UNDO_AND_RETRY);
@@ -1040,7 +1054,26 @@ s     *
         FloatingUiState.showCloseToast = false;
         LOGGER.info("Ignore: %s processed", currentQuestion);
         LiveSessionProgress.getInstance().ping();
-        adapter.addEventIgnore(currentQuestion);
+        sessionLog.addEventIgnore(currentQuestion);
+    }
+
+    /**
+     * Toggle lightning mode on/off temporarily for this session.
+     */
+    public void toggleLightningMode() {
+        lightningModeTemporarilyDisabled = !lightningModeTemporarilyDisabled;
+        LOGGER.info("Lightning mode temporarily %s", lightningModeTemporarilyDisabled ? "disabled" : "enabled");
+        LiveSessionProgress.getInstance().ping();
+        LiveSessionState.getInstance().post(state);
+    }
+
+    /**
+     * Check if lightning mode should be active, considering both global setting and temporary override.
+     *
+     * @return true if lightning mode should be active
+     */
+    public boolean isLightningModeActive() {
+        return GlobalSettings.Review.getEnableLightningMode() && !lightningModeTemporarilyDisabled;
     }
 
     /**
@@ -1055,73 +1088,6 @@ s     *
         }
 
         return currentItem.getTypefaceConfiguration(text);
-    }
-
-    /**
-     * Determine the fragment to show for the current session state.
-     * The session is known to be not inactive, that case is handled earlier.
-     *
-     * @param currentFragment The current fragment, or null if the activity is starting fresh
-     * @param ankiMode True if Anki mode is enabled for this question
-     * @return the fragment, possible the same instance as currentFragment
-     */
-    @SuppressWarnings("IfMayBeConditional")
-    public AbstractSessionFragment getNewFragment(final @Nullable AbstractSessionFragment currentFragment,
-                                                  final boolean ankiMode) {
-        final @Nullable Question question = currentQuestion;
-        final @Nullable SessionItem item = currentItem;
-
-        final boolean oldForceNewFragment = forceNewFragment;
-        forceNewFragment = false;
-
-        if (isInLessonPresentation()) {
-            requireNonNull(item);
-            if (!oldForceNewFragment && currentFragment instanceof LessonSessionFragment && currentFragment.getItem() == item) {
-                return currentFragment;
-            }
-            else {
-                return LessonSessionFragment.newInstance(item.getId());
-            }
-        }
-
-        if (isFinishing()) {
-            if (!oldForceNewFragment && currentFragment instanceof SummarySessionFragment) {
-                return currentFragment;
-            }
-            else {
-                return new SummarySessionFragment();
-            }
-        }
-
-        if (ankiMode) {
-            requireNonNull(item);
-            requireNonNull(question);
-            if (!oldForceNewFragment && currentFragment instanceof AnkiSessionFragment && currentFragment.getQuestion() == question) {
-                return currentFragment;
-            }
-            else {
-                return AnkiSessionFragment.newInstance(item.getId(), question.getType());
-            }
-        }
-
-        if (answered) {
-            requireNonNull(item);
-            requireNonNull(question);
-            if (!oldForceNewFragment && currentFragment instanceof AnsweredSessionFragment && currentFragment.getQuestion() == question) {
-                return currentFragment;
-            }
-            else {
-                return AnsweredSessionFragment.newInstance(item.getId(), question.getType());
-            }
-        }
-
-        if (!oldForceNewFragment && currentFragment instanceof UnansweredSessionFragment && currentFragment.getQuestion() == question) {
-            return currentFragment;
-        }
-
-        requireNonNull(item);
-        requireNonNull(question);
-        return UnansweredSessionFragment.newInstance(item.getId(), question.getType());
     }
 
     /**
@@ -1228,8 +1194,8 @@ s     *
             if (!items.isEmpty()) {
                 createQuestions();
                 state = type == LESSON && getNumStartedItems() == 0 ? IN_LESSON_PRESENTATION : ACTIVE;
-                adapter.clear();
-                adapter.addEventLoadSession(type);
+                sessionLog.clear();
+                sessionLog.addEventLoadSession(type);
                 LiveSessionState.getInstance().post(state);
                 checkQuestions();
                 lastFinishedSubjectId = -1;
@@ -1278,7 +1244,7 @@ s     *
         items.clear();
         questions.clear();
         history.clear();
-        adapter.clear();
+        sessionLog.clear();
         state = INACTIVE;
         FloatingUiState.setCurrentAnswer("");
         setCurrentQuestion(null, QuestionChoiceReason.FINISHED);
@@ -1295,7 +1261,7 @@ s     *
         items.clear();
         questions.clear();
         history.clear();
-        adapter.clear();
+        sessionLog.clear();
         state = INACTIVE;
         LiveSessionState.getInstance().post(state);
         LiveSessionProgress.getInstance().ping();
@@ -1451,6 +1417,7 @@ s     *
         backToBack = GlobalSettings.AdvancedLesson.getBackToBack();
         readingFirst = GlobalSettings.AdvancedLesson.getReadingFirst();
         meaningFirst = GlobalSettings.AdvancedLesson.getMeaningFirst();
+        lightningModeTemporarilyDisabled = false;
         final AppDatabase db = WkApplication.getDatabase();
         db.propertiesDao().setSessionType(type);
         db.propertiesDao().setSessionOnkun(onkun);
@@ -1472,8 +1439,8 @@ s     *
         populateItems(subjects, maxSize, GlobalSettings.AdvancedLesson.getOrder().isShuffle());
         createQuestions();
         state = IN_LESSON_PRESENTATION;
-        adapter.clear();
-        adapter.addEventStartSession(type);
+        sessionLog.clear();
+        sessionLog.addEventStartSession(type);
         currentItem = null;
         setCurrentQuestion(null, QuestionChoiceReason.STARTING_LESSON_SESSION);
         lastFinishedSubjectId = -1;
@@ -1498,6 +1465,7 @@ s     *
         backToBack = GlobalSettings.AdvancedReview.getBackToBack();
         readingFirst = GlobalSettings.AdvancedReview.getReadingFirst();
         meaningFirst = GlobalSettings.AdvancedReview.getMeaningFirst();
+        lightningModeTemporarilyDisabled = false;
         final AppDatabase db = WkApplication.getDatabase();
         db.propertiesDao().setSessionType(type);
         db.propertiesDao().setSessionOnkun(onkun);
@@ -1523,8 +1491,8 @@ s     *
         populateItems(subjects, maxSize, true);
         createQuestions();
         state = ACTIVE;
-        adapter.clear();
-        adapter.addEventStartSession(type);
+        sessionLog.clear();
+        sessionLog.addEventStartSession(type);
         currentItem = null;
         setCurrentQuestion(null, QuestionChoiceReason.STARTING_REVIEW_SESSION);
         lastFinishedSubjectId = -1;
@@ -1549,6 +1517,7 @@ s     *
         backToBack = GlobalSettings.AdvancedSelfStudy.getBackToBack();
         readingFirst = GlobalSettings.AdvancedSelfStudy.getReadingFirst();
         meaningFirst = GlobalSettings.AdvancedSelfStudy.getMeaningFirst();
+        lightningModeTemporarilyDisabled = false;
         final AppDatabase db = WkApplication.getDatabase();
         db.propertiesDao().setSessionType(type);
         db.propertiesDao().setSessionOnkun(onkun);
@@ -1574,8 +1543,8 @@ s     *
         populateItems(subjects, maxSize, true);
         createQuestions();
         state = ACTIVE;
-        adapter.clear();
-        adapter.addEventStartSession(type);
+        sessionLog.clear();
+        sessionLog.addEventStartSession(type);
         currentItem = null;
         setCurrentQuestion(null, QuestionChoiceReason.STARTING_SELF_STUDY_SESSION);
         lastFinishedSubjectId = -1;

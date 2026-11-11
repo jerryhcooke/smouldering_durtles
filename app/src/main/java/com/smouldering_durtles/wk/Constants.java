@@ -157,7 +157,13 @@ public final class Constants {
             + " - <tt>reviews:create</tt><br/>"
             + " - <tt>study_materials:create</tt><br/>"
             + " - <tt>study_materials:update</tt><br/><br/>"
-            + " Then, copy the token and paste it into the input field above.";
+            + " Then, copy the token and paste it into the input field above.<br/><br/>"
+            + " <h3>If you are restoring from an older device:</h3><br/><br/>"
+            + " If your API key is not accepted, you may need to.. <br/><br/>"
+            + " - Long press on the app icon<br/>"
+            + " - Select 'App Info', then 'Storage and Cache'<br/>"
+            + " - Select 'Clear storage'";
+
 
     /**
      * Document to show on the about screen.

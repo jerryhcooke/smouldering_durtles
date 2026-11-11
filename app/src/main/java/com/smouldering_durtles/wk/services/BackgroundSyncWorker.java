@@ -19,6 +19,7 @@ package com.smouldering_durtles.wk.services;
 import android.content.Context;
 
 import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkInfo;
@@ -127,7 +128,8 @@ public final class BackgroundSyncWorker extends Worker {
                 .setInitialDelay(ObjectSupport.nextRandomInt(3600), TimeUnit.SECONDS)
                 .build();
 
-        WorkManager.getInstance(WkApplication.getInstance()).enqueue(request);
+        WorkManager.getInstance(WkApplication.getInstance()).enqueueUniquePeriodicWork(
+                JOB_TAG_NEW, ExistingPeriodicWorkPolicy.KEEP, request);
         WorkManager.getInstance(WkApplication.getInstance()).cancelAllWorkByTag(JOB_TAG_OLD);
     }
 

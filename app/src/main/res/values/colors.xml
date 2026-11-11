@@ -16,11 +16,7 @@
   -->
 
 <resources>
-    <color name="black">#FF000000</color>
     <color name="transparent">#00000000</color>
-    <color name="customToastColorBackground">#FFFF80</color>
-    <color name="alternativeToastColorBackground">#00000000</color>
-
 
     <color name="wkLightColorPrimary">#000000</color>
     <color name="wkLightColorPrimaryDark">#000000</color>
@@ -103,7 +99,6 @@
     <color name="wkNordReadingHintColor">#434C5E</color>
     <color name="wkNordEditTextHintColor">#434C5E</color>
     <color name="wkNordEditTextHintColorInverse">#ECEFF4</color>
-    <color name="wkNordWindowBackground">#2E3440</color>
     <color name="wkNordPitchInfoHeibanColor">#5E81AC</color>
     <color name="wkNordPitchInfoOdakaColor">#81A1C1</color>
     <color name="wkNordPitchInfoNakadakaColor">#88C0D0</color>

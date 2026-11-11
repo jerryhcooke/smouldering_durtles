@@ -22,6 +22,7 @@ import androidx.room.Query;
 import com.smouldering_durtles.wk.model.AlertContext;
 import com.smouldering_durtles.wk.model.JlptProgressItem;
 import com.smouldering_durtles.wk.model.JoyoProgressItem;
+import com.smouldering_durtles.wk.model.ReviewTotals;
 
 import java.util.List;
 
@@ -118,4 +119,18 @@ public abstract class SubjectAggregatesDao {
     @Query("SELECT srsSystemId, srsStage, joyoGrade, COUNT(id) AS count FROM subject WHERE (object = 'kanji') "
             + "AND joyoGrade > 0 GROUP BY srsSystemId, srsStage, joyoGrade")
     public abstract List<JoyoProgressItem> getJoyoProgress();
+
+    /**
+     * Room-generated method: get the aggregate lesson and answer totals over all
+     * visible subjects, for the profile statistics.
+     *
+     * @return the totals
+     */
+    @Query("SELECT COUNT(CASE WHEN startedAt != 0 THEN 1 END) AS lessonsCompleted,"
+            + " COALESCE(SUM(meaningCorrect), 0) AS meaningCorrect,"
+            + " COALESCE(SUM(meaningIncorrect), 0) AS meaningIncorrect,"
+            + " COALESCE(SUM(readingCorrect), 0) AS readingCorrect,"
+            + " COALESCE(SUM(readingIncorrect), 0) AS readingIncorrect"
+            + " FROM subject WHERE hiddenAt = 0 AND object IS NOT NULL")
+    public abstract ReviewTotals getReviewTotals();
 }

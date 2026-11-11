@@ -19,6 +19,8 @@ package com.smouldering_durtles.wk.components;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -37,7 +39,6 @@ import android.text.style.UpdateAppearance;
 
 import androidx.core.content.ContextCompat;
 
-import com.airbnb.lottie.SimpleColorFilter;
 import com.smouldering_durtles.wk.GlobalSettings;
 import com.smouldering_durtles.wk.R;
 import com.smouldering_durtles.wk.WkApplication;
@@ -69,7 +70,7 @@ public final class WaniKaniTagHandler implements Html.TagHandler {
                 end(output, Ja.class, new LocaleSpan(new LocaleList(Locale.JAPAN, Locale.ROOT)));
             }
         }
-        else if (tag.equalsIgnoreCase("ja") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        else if (tag.equalsIgnoreCase("ja")) {
             if (opening) {
                 start(output, new Ja());
             }
@@ -140,7 +141,7 @@ public final class WaniKaniTagHandler implements Html.TagHandler {
             else {
                 if (GlobalSettings.SubjectInfo.getHighlightSubjectTags()) {
                     end(output, Reading.class,
-                            new ButtonStyleSpan(ThemeUtil.getColor(R.attr.colorPrimaryLight), ThemeUtil.getColor(R.attr.colorPrimaryDark)));
+                            new ButtonStyleSpan(ThemeUtil.getColor(R.attr.colorPrimaryLight), ThemeUtil.getColor(androidx.appcompat.R.attr.colorPrimaryDark)));
                 }
                 else {
                     end(output, Reading.class, new StyleSpan(Typeface.BOLD));
@@ -261,21 +262,21 @@ public final class WaniKaniTagHandler implements Html.TagHandler {
             final int size = (int) paint.getTextSize();
 
             drawable.setBounds(-1, -1, size - 1, size - 1);
-            drawable.setColorFilter(new SimpleColorFilter(Color.BLACK));
+            drawable.setColorFilter(new PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP));
             canvas.save();
             canvas.translate(x, bottom - drawable.getBounds().bottom - paint.getFontMetricsInt().descent / 2.0f);
             drawable.draw(canvas);
             canvas.restore();
 
             drawable.setBounds(2, 2, size + 2, size + 2);
-            drawable.setColorFilter(new SimpleColorFilter(Color.BLACK));
+            drawable.setColorFilter(new PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP));
             canvas.save();
             canvas.translate(x, bottom - drawable.getBounds().bottom - paint.getFontMetricsInt().descent / 2.0f);
             drawable.draw(canvas);
             canvas.restore();
 
             drawable.setBounds(0, 0, size, size);
-            drawable.setColorFilter(new SimpleColorFilter(paint.getColor()));
+            drawable.setColorFilter(new PorterDuffColorFilter(paint.getColor(), PorterDuff.Mode.SRC_ATOP));
             canvas.save();
             canvas.translate(x, bottom - drawable.getBounds().bottom - paint.getFontMetricsInt().descent / 2.0f);
             drawable.draw(canvas);

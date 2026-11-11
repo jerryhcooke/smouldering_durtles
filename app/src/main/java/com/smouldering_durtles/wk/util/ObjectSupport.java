@@ -17,7 +17,6 @@
 package com.smouldering_durtles.wk.util;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -477,25 +476,6 @@ public final class ObjectSupport {
         result.add(e2);
         result.addAll(Arrays.asList(rest));
         return Collections.unmodifiableList(result);
-    }
-
-    /**
-     * Extract a Map from bundle with the same key-value pairs for easier inspection,
-     * for example to get a more useful .toString().
-     *
-     * @param bundle The bundle to extract
-     * @return The extracted Map, null if the bundle was null
-     */
-    @SuppressWarnings("unused")
-    public static @Nullable Map<String, Object> extractBundle(final @Nullable Bundle bundle) {
-        if (bundle == null) {
-            return null;
-        }
-        final Map<String, Object> result = new HashMap<>();
-        for (final String key: bundle.keySet()) {
-            result.put(key, bundle.get(key));
-        }
-        return result;
     }
 
     /**

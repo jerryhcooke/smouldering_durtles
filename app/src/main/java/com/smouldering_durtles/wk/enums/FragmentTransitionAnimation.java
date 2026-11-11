@@ -16,48 +16,23 @@
 
 package com.smouldering_durtles.wk.enums;
 
-import androidx.fragment.app.FragmentTransaction;
-
-import com.smouldering_durtles.wk.R;
-
 /**
- * The type of fragment transition animation to use in the SessionActivity.
+ * The direction of the slide animation between questions, as it used to be
+ * used for fragment transitions in the legacy session UI.
  */
 public enum FragmentTransitionAnimation {
     /**
      * No animation, just a static replace.
      */
-    NONE {
-        @Override
-        public void apply(final FragmentTransaction transaction) {
-            //
-        }
-    },
+    NONE,
 
     /**
      * Slide in from left to right.
      */
-    LTR {
-        @Override
-        public void apply(final FragmentTransaction transaction) {
-            transaction.setCustomAnimations(R.anim.ltr_enter, R.anim.ltr_exit);
-        }
-    },
+    LTR,
 
     /**
      * Slide in from right to left.
      */
-    RTL {
-        @Override
-        public void apply(final FragmentTransaction transaction) {
-            transaction.setCustomAnimations(R.anim.rtl_enter, R.anim.rtl_exit);
-        }
-    };
-
-    /**
-     * Apply the chosen animation to a fragment transation.
-     *
-     * @param transaction the transaction to modify
-     */
-    public abstract void apply(FragmentTransaction transaction);
+    RTL,
 }

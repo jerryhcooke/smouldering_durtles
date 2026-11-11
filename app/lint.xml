@@ -7,4 +7,22 @@
         <ignore path="src/main/res/mipmap-xxhdpi/ic_launcher.png" />
         <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
     </issue>
+    <!-- Dependency upgrades are applied deliberately; the project pins
+         tested versions (see AGENTS.md) and builds run offline. -->
+    <issue id="GradleDependency" severity="ignore" />
+    <!-- Known limitation: the Compose lint jars use a newer Kotlin Analysis
+         API than the lint embedded in the Android Gradle plugin (AGENTS.md). -->
+    <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+    <!-- The animated welcome banner is an intentional GIF, loaded through
+         Glide because Compose cannot render animated GIFs natively. -->
+    <issue id="GifUsage">
+        <ignore path="src/main/res/drawable/welcome.gif" />
+    </issue>
+    <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/welcome.gif" />
+    </issue>
+    <!-- Pre-existing launcher asset; simplifying the path would alter the icon. -->
+    <issue id="VectorPath">
+        <ignore path="src/main/res/drawable/ic_launcher_monochrome.xml" />
+    </issue>
 </lint>

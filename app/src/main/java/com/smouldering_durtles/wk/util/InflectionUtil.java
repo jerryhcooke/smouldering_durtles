@@ -56,7 +56,7 @@ public class InflectionUtil {
             }
 
             String prefix = verb.substring(0, verb.length() - 1);
-            String lastChar = verb.substring(verb.length() - 1, verb.length());
+            String lastChar = verb.substring(verb.length() - 1);
 
             if (verbType == VerbType.ICHIDAN) {
                 if (!lastChar.equals("る")) return null;
@@ -212,7 +212,7 @@ public class InflectionUtil {
         addTe("resulting", "ある");
         addTe("\"try\"", "みる");
         addTe("\"please\"", "ください");
-    };
+    }
 
     public static String getConjugatedVerb(String verb, VerbType verbType, String endingName) {
         return verbEndings.get(endingName).conjugate(verb, verbType);

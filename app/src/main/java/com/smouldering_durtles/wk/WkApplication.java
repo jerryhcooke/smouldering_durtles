@@ -47,6 +47,7 @@ import com.smouldering_durtles.wk.livedata.LiveJoyoProgress;
 import com.smouldering_durtles.wk.livedata.LiveLevelDuration;
 import com.smouldering_durtles.wk.livedata.LiveLevelProgress;
 import com.smouldering_durtles.wk.livedata.LiveRecentUnlocks;
+import com.smouldering_durtles.wk.livedata.LiveReviewTotals;
 import com.smouldering_durtles.wk.livedata.LiveSearchPresets;
 import com.smouldering_durtles.wk.livedata.LiveSessionProgress;
 import com.smouldering_durtles.wk.livedata.LiveSessionState;
@@ -338,6 +339,9 @@ public final class WkApplication extends MultiDexApplication {
                 }
                 if (LiveBurnedItems.getInstance().hasNullValue()) {
                     LiveBurnedItems.getInstance().update();
+                }
+                if (LiveReviewTotals.getInstance().hasNullValue()) {
+                    LiveReviewTotals.getInstance().update();
                 }
                 if (LiveFirstTimeSetup.getInstance().hasNullValue()) {
                     LiveFirstTimeSetup.getInstance().update();

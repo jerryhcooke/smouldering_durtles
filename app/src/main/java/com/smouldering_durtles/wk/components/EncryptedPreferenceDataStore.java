@@ -17,7 +17,6 @@
 package com.smouldering_durtles.wk.components;
 
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.util.Base64;
 
 import androidx.preference.PreferenceDataStore;
@@ -28,6 +27,7 @@ import androidx.security.crypto.MasterKey;
 import com.smouldering_durtles.wk.WkApplication;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.spec.AlgorithmParameterSpec;
 
@@ -77,44 +77,29 @@ public final class EncryptedPreferenceDataStore extends PreferenceDataStore {
             final AlgorithmParameterSpec ivspec = new IvParameterSpec(iv);
             final Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
             aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(KEY, "AES"), ivspec);
-            return new String(aes.doFinal(Base64.decode(encrypted, Base64.DEFAULT)), "UTF-8");
+            return new String(aes.doFinal(Base64.decode(encrypted, Base64.DEFAULT)), StandardCharsets.UTF_8);
         });
     }
 
     private @Nullable String getStringImpl(final String key, final @Nullable String defValue) throws Exception {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final @Nullable String newStoredValue = encryptedPrefs().getString(key, null);
-            if (newStoredValue != null) {
-                return newStoredValue;
-            }
-
-            @Nullable String storedValue = prefs().getString(key, null);
-            if (storedValue == null) {
-                return defValue;
-            }
-            if (storedValue.startsWith("enc:")) {
-                storedValue = decrypt(storedValue.substring(4));
-            }
-
-            final SharedPreferences.Editor editor = encryptedPrefs().edit();
-            editor.putString(key, storedValue);
-            editor.apply();
-
-            return storedValue;
+        final @Nullable String newStoredValue = encryptedPrefs().getString(key, null);
+        if (newStoredValue != null) {
+            return newStoredValue;
         }
-        else {
-            @Nullable String storedValue = prefs().getString(key, null);
-            if (storedValue == null) {
-                return defValue;
-            }
-            if (storedValue.startsWith("enc:")) {
-                storedValue = decrypt(storedValue.substring(4));
-                final SharedPreferences.Editor editor = prefs().edit();
-                editor.putString(key, storedValue);
-                editor.apply();
-            }
-            return storedValue;
+
+        @Nullable String storedValue = prefs().getString(key, null);
+        if (storedValue == null) {
+            return defValue;
         }
+        if (storedValue.startsWith("enc:")) {
+            storedValue = decrypt(storedValue.substring(4));
+        }
+
+        final SharedPreferences.Editor editor = encryptedPrefs().edit();
+        editor.putString(key, storedValue);
+        editor.apply();
+
+        return storedValue;
     }
 
     @Override
@@ -125,16 +110,9 @@ public final class EncryptedPreferenceDataStore extends PreferenceDataStore {
     @Override
     public void putString(final String key, final @Nullable String value) {
         safe(() -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                final SharedPreferences.Editor editor = encryptedPrefs().edit();
-                editor.putString(key, value);
-                editor.apply();
-            }
-            else {
-                final SharedPreferences.Editor editor = prefs().edit();
-                editor.putString(key, value);
-                editor.apply();
-            }
+            final SharedPreferences.Editor editor = encryptedPrefs().edit();
+            editor.putString(key, value);
+            editor.apply();
         });
     }
 }
