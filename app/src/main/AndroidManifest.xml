@@ -43,6 +43,7 @@
         <activity android:name=".activities.MainActivity"
             android:label="@string/applabel"
             android:exported="true"
+            android:theme="@style/WKSplash"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="RedundantLabel">
             <intent-filter>
