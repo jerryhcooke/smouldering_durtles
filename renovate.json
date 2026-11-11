@@ -2,5 +2,75 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "schedule": [
+    "on Monday"
+  ],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 20,
+  "labels": ["dependencies"],
+
+  "packageRules": [
+    {
+      "description": "Group Compose dependencies together",
+      "matchManagers": ["gradle"],
+      "matchPackagePatterns": ["androidx\\.compose.*", "androidx\\.activity:activity-compose", "androidx\\.lifecycle:lifecycle-.*-compose", "androidx\\.navigation:navigation-compose"],
+      "groupName": "Jetpack Compose dependencies",
+      "group": {
+        "branchTopic": "compose-update"
+      }
+    },
+    {
+      "description": "Group Room dependencies together",
+      "matchManagers": ["gradle"],
+      "matchPackagePatterns": ["androidx\\.room.*"],
+      "groupName": "Room dependencies",
+      "group": {
+        "branchTopic": "room-update"
+      }
+    },
+    {
+      "description": "Group Kotlin & Gradle plugin updates separately",
+      "matchManagers": ["gradle"],
+      "matchPackagePatterns": [
+        "org\\.jetbrains\\.kotlin.*",
+        "com\\.android\\.(application|library)"
+      ],
+      "groupName": "Kotlin & Android Gradle plugins",
+      "group": {
+        "branchTopic": "kotlin-agp-plugins"
+      }
+    },
+    {
+      "description": "Semantic-release and its plugins as a group",
+      "matchManagers": ["npm"],
+      "groupName": "semantic-release tooling",
+      "group": {
+        "branchTopic": "semantic-release"
+      }
+    },
+    {
+      "description": "GitHub Actions workflows",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "group": {
+        "branchTopic": "gha-actions"
+      }
+    }
+  ],
+
+  "ignoreDeps": [
+    "androidx.security:security-crypto"
+  ],
+
+  "customManagers": [
+    {
+      "description": "Detect Compose BOM version from app/build.gradle",
+      "customType": "regex",
+      "fileMatch": ["^app/build\\.gradle$"],
+      "matchStrings": ["compose-bom:(?<currentValue>[^"]+)"],
+      "depNameTemplate": "androidx.compose:compose-bom",
+      "datasourceTemplate": "maven"
+    }
   ]
 }
