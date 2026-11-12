@@ -52,6 +52,7 @@ import com.lazy_durtles.wk.util.AudioUtil
 internal fun LessonPresentationScreen(
     subject: Subject?,
     onFinishSession: () -> Unit,
+    onBackPressed: () -> Unit = { },
     onSessionTick: () -> Unit,
     modifier: Modifier = Modifier,
     onViewSubject: (subjectId: Long, subjectIds: List<Long>) -> Unit = { _, _ -> },

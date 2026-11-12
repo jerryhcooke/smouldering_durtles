@@ -109,6 +109,7 @@ fun NoApiKeyScreen(
                 text = "Enter V2 API token",
                 style = MaterialTheme.typography.headlineSmall,
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 24.dp),
             )
 

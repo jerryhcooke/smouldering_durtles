@@ -448,6 +448,14 @@ private fun MainApplicationContent(
         stack.add(Screen.Main)
     }
 
+    val onBackPressed: () -> Unit = {
+        if (stack.size > 1) {
+            pop()
+        } else {
+            goHome()
+        }
+    }
+
     LaunchedEffect(pendingDeepLinkSubjectId.value) {
         pendingDeepLinkSubjectId.value?.let { subjectId ->
             stack.add(Screen.SubjectDetails(subjectId, emptyList()))

@@ -67,6 +67,7 @@ internal fun SessionSummaryScreen(
     onResurrectSubjects: (LongArray) -> Unit,
     modifier: Modifier = Modifier,
     onSessionTick: () -> Unit = {},
+    onBackPressed: () -> Unit = { },
 ) {
     val session = remember { Session.getInstance() }
     val context = LocalContext.current

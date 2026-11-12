@@ -131,6 +131,7 @@ fun SessionScreen(
     onFinishSession: () -> Unit,
     modifier: Modifier = Modifier,
     onViewSubject: (subjectId: Long, subjectIds: List<Long>) -> Unit = { _, _ -> },
+    onBackPressed: () -> Unit = { },
 ) {
     val session = remember { Session.getInstance() }
     val haptics = rememberSessionHaptics()

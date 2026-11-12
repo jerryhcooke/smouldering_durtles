@@ -56,6 +56,7 @@ fun MainScreen(
     onSrsBucketClick: (bucket: Int) -> Unit,
     onSubjectClick: (subjectId: Long, subjectIds: List<Long>) -> Unit,
     onSearchResults: (searchParametersJson: String, searchType: Int, presetName: String?) -> Unit,
+    onBackPressed: () -> Unit = { },
     modifier: Modifier = Modifier,
     initialSearchParametersJson: String? = null,
 ) {
@@ -155,17 +156,20 @@ fun MainScreen(
                     onSubjectClick = { subjectId, allIds ->
                         onSubjectClick(subjectId, allIds.toList())
                     },
+                    onBackPressed = onBackPressed,
                     modifier = Modifier.padding(paddingValues),
                 )
                 1 -> SearchScreen(
                     onSubjectClick = onSubjectClick,
                     onSearchResults = onSearchResults,
                     initialParametersJson = initialSearchParametersJson,
+                    onBackPressed = onBackPressed,
                     modifier = Modifier.padding(paddingValues),
                 )
                 2 -> ProfileScreen(
                     onGoToSettings = onGoToSettings,
                     onViewSessionLog = onViewSessionLog,
+                    onBackPressed = onBackPressed,
                     modifier = Modifier.padding(paddingValues),
                 )
             }

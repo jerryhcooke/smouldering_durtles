@@ -58,7 +58,8 @@ private const val DEFAULT_AVATAR_URL =
 @Composable
 fun ProfileScreen(
     onGoToSettings: () -> Unit,
-    onViewSessionLog: () -> Unit,
+    onViewSessionLog: () -> Unit = {},
+    onBackPressed: () -> Unit = { },
     modifier: Modifier = Modifier,
 ) {
     val levelDuration = LiveLevelDuration.getInstance().observeAsState()
