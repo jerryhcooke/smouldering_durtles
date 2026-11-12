@@ -137,7 +137,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.2.0'
     implementation 'androidx.room:room-runtime:2.6.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.23.0'
     implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
