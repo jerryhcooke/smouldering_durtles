@@ -25,10 +25,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.lazy_durtles.wk.GlobalSettings;
 import com.lazy_durtles.wk.R;
@@ -100,7 +102,13 @@ public final class NotificationWorker {
         builder.setAutoCancel(true);
 
         final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(WkApplication.getInstance());
-        notificationManager.notify(1, builder.build());
+        // Without POST_NOTIFICATIONS (Android 13+, requested by MainActivity), notify()
+        // would throw a SecurityException; skip posting instead.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                || ContextCompat.checkSelfPermission(WkApplication.getInstance(), android.Manifest.permission.POST_NOTIFICATIONS)
+                        == PackageManager.PERMISSION_GRANTED) {
+            notificationManager.notify(1, builder.build());
+        }
 
         final AppDatabase db = WkApplication.getDatabase();
         db.propertiesDao().setNotificationSet(true);
