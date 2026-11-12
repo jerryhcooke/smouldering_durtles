@@ -17,7 +17,7 @@
 package com.lazy_durtles.wk;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,8 +27,8 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.net.ConnectivityManagerCompat;
-import androidx.multidex.MultiDexApplication;
 
 import com.lazy_durtles.wk.components.EncryptedPreferenceDataStore;
 import com.lazy_durtles.wk.db.AppDatabase;
@@ -75,7 +75,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Global application object to handle some global concerns.
  */
-public final class WkApplication extends MultiDexApplication {
+public final class WkApplication extends Application {
     private static @Nullable WkApplication instance = null;
     private static @Nullable AppDatabase database = null;
     private static @Nullable EncryptedPreferenceDataStore encryptedPreferenceDataStore = null;
@@ -166,8 +166,7 @@ public final class WkApplication extends MultiDexApplication {
         }, filter);
     }
 
-    @SuppressLint("NewApi")
-    @TargetApi(24)
+    @RequiresApi(24)
     private void registerNetworkStateChangeListenerPost24() {
         final @Nullable ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) {

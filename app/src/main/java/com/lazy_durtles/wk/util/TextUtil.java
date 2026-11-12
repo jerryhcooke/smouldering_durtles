@@ -17,7 +17,6 @@
 package com.lazy_durtles.wk.util;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -30,6 +29,7 @@ import android.text.TextPaint;
 import android.text.format.DateFormat;
 
 import androidx.core.text.HtmlCompat;
+import androidx.annotation.RequiresApi;
 
 import com.lazy_durtles.wk.Constants;
 import com.lazy_durtles.wk.WkApplication;
@@ -163,8 +163,7 @@ public final class TextUtil {
         return pixels;
     }
 
-    @SuppressLint("NewApi")
-    @TargetApi(23)
+    @RequiresApi(23)
     private static int[] renderPost23(final Typeface typeface, final CharSequence c) {
         final TextPaint textPaint = new TextPaint();
         textPaint.setTypeface(typeface);

@@ -31,6 +31,7 @@ import android.os.Looper;
 import androidx.arch.core.util.Function;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.EnvironmentCompat;
+import androidx.annotation.RequiresApi;
 
 import com.lazy_durtles.wk.BuildConfig;
 import com.lazy_durtles.wk.GlobalSettings;
@@ -616,8 +617,7 @@ public final class AudioUtil {
         }
     }
 
-    @SuppressLint("NewApi")
-    @TargetApi(26)
+    @RequiresApi(26)
     private static void playAudioPost26(final AudioManager audioManager, final MediaPlayer player, final GenderedFile audioFile,
                                         final boolean useAudioFocus) throws Exception {
         final AudioAttributes attributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build();

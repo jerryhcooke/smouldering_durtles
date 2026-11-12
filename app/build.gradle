@@ -15,9 +15,8 @@ android {
         def (dvMajor, dvMinor, dvPatch) = defaultVersionName.tokenize('.').collect { it as Integer }
         versionCode ((System.getenv("VERSION_CODE") ?: (dvMajor * 10000 + dvMinor * 100 + dvPatch) as String) as Integer)
         versionName (System.getenv("VERSION_NAME") ?: defaultVersionName)
-        multiDexEnabled true
-
         vectorDrawables.useSupportLibrary = true
+        vectorDrawables.generatedDensities = []
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId "com.lazy_durtles.wk.test"
@@ -103,12 +102,6 @@ android {
         // Disables dependency metadata when building Android App Bundles.
         includeInBundle = false
     }
-
-    defaultConfig {
-        vectorDrawables.generatedDensities = []
-    }
-
-
 }
 
 dependencies {
@@ -141,7 +134,6 @@ dependencies {
     debugImplementation 'androidx.annotation:annotation:1.7.1'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -160,7 +152,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.code.gson:gson:2.10.1'
 
     testImplementation 'junit:junit:4.13.2'

@@ -13,17 +13,6 @@
     </issue>
 
     <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="                text = String.format(&quot;%s: %d subject(s) found&quot;, searchDescription, subjects.size),"
-        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/com/lazy_durtles/wk/ui/screens/browse/SearchResultsScreen.kt"
-            line="224"
-            column="24"/>
-    </issue>
-
-    <issue
         id="OldTargetApi"
         message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
         errorLine1="        targetSdkVersion 36"
@@ -32,50 +21,6 @@
             file="build.gradle"
             line="9"
             column="9"/>
-    </issue>
-
-    <issue
-        id="AndroidGradlePluginVersion"
-        message="A newer version of Gradle than 9.4.1 is available: 9.9.1"
-        errorLine1="distributionUrl=https\://services.gradle.org/distributions/gradle-9.4.1-all.zip"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="$HOME/StudioProjects/smouldering_durtles/gradle/wrapper/gradle-wrapper.properties"
-            line="5"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="UseRequiresApi"
-        message="Use `@RequiresApi(26) instead of `@TargetApi` to propagate the requirement to callers of `playAudioPost26`"
-        errorLine1="    @TargetApi(26)"
-        errorLine2="    ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/com/lazy_durtles/wk/util/AudioUtil.java"
-            line="618"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UseRequiresApi"
-        message="Use `@RequiresApi(23) instead of `@TargetApi` to propagate the requirement to callers of `renderPost23`"
-        errorLine1="    @TargetApi(23)"
-        errorLine2="    ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/com/lazy_durtles/wk/util/TextUtil.java"
-            line="166"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UseRequiresApi"
-        message="Use `@RequiresApi(24) instead of `@TargetApi` to propagate the requirement to callers of `registerNetworkStateChangeListenerPost24`"
-        errorLine1="    @TargetApi(24)"
-        errorLine2="    ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/com/lazy_durtles/wk/WkApplication.java"
-            line="168"
-            column="5"/>
     </issue>
 
     <issue
