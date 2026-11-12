@@ -28,4 +28,8 @@ jobs:
             ci
             chore
             revert
-          requireBody: false
+          # Renovate tags its PRs with the `dependencies` label (see renovate.json);
+          # its titles ("Update dependency ...") aren't conventional-commit prefixed,
+          # so skip validation for them.
+          ignoreLabels: |
+            dependencies

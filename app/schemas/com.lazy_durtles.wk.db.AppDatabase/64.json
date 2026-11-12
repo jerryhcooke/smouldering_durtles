@@ -1,0 +1,893 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 64,
+    "identityHash": "b080f8e5ee7f2cbb1cda4fcbfaf32a53",
+    "entities": [
+      {
+        "tableName": "task_definition",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `taskClass` TEXT, `priority` INTEGER NOT NULL, `data` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taskClass",
+            "columnName": "taskClass",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "priority",
+            "columnName": "priority",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "properties",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "subject",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `object` TEXT, `typeCode` INTEGER NOT NULL, `hiddenAt` INTEGER, `lessonPosition` INTEGER NOT NULL, `srsSystemId` INTEGER NOT NULL, `level` INTEGER NOT NULL, `characters` TEXT, `slug` TEXT, `documentUrl` TEXT, `meanings` TEXT, `meaningMnemonic` TEXT, `meaningHint` TEXT, `auxiliaryMeanings` TEXT, `readings` TEXT, `readingMnemonic` TEXT, `readingHint` TEXT, `componentSubjectIds` TEXT, `amalgamationSubjectIds` TEXT, `visuallySimilarSubjectIds` TEXT, `partsOfSpeech` TEXT, `contextSentences` TEXT, `pronunciationAudios` TEXT, `audioDownloadStatus` INTEGER NOT NULL, `searchTarget` TEXT, `smallSearchTarget` TEXT, `assignmentId` INTEGER NOT NULL, `availableAt` INTEGER, `burnedAt` INTEGER, `passedAt` INTEGER, `resurrectedAt` INTEGER, `startedAt` INTEGER, `unlockedAt` INTEGER, `passed` INTEGER NOT NULL, `resurrected` INTEGER NOT NULL, `srsStage` INTEGER NOT NULL, `levelProgressScore` INTEGER NOT NULL, `lastIncorrectAnswer` INTEGER, `assignmentPatched` INTEGER NOT NULL, `studyMaterialId` INTEGER NOT NULL, `meaningNote` TEXT, `meaningSynonyms` TEXT, `readingNote` TEXT, `studyMaterialPatched` INTEGER NOT NULL, `reviewStatisticId` INTEGER NOT NULL, `meaningCorrect` INTEGER NOT NULL, `meaningIncorrect` INTEGER NOT NULL, `meaningMaxStreak` INTEGER NOT NULL, `meaningCurrentStreak` INTEGER NOT NULL, `readingCorrect` INTEGER NOT NULL, `readingIncorrect` INTEGER NOT NULL, `readingMaxStreak` INTEGER NOT NULL, `readingCurrentStreak` INTEGER NOT NULL, `percentageCorrect` INTEGER NOT NULL, `leechScore` INTEGER NOT NULL, `statisticPatched` INTEGER NOT NULL, `frequency` INTEGER NOT NULL, `joyoGrade` INTEGER NOT NULL, `jlptLevel` INTEGER NOT NULL, `pitchInfo` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "object",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unused",
+            "columnName": "typeCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hiddenAt",
+            "columnName": "hiddenAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lessonPosition",
+            "columnName": "lessonPosition",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "srsSystemId",
+            "columnName": "srsSystemId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "characters",
+            "columnName": "characters",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "slug",
+            "columnName": "slug",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "documentUrl",
+            "columnName": "documentUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "meanings",
+            "columnName": "meanings",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "meaningMnemonic",
+            "columnName": "meaningMnemonic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "meaningHint",
+            "columnName": "meaningHint",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "auxiliaryMeanings",
+            "columnName": "auxiliaryMeanings",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "readings",
+            "columnName": "readings",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "readingMnemonic",
+            "columnName": "readingMnemonic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "readingHint",
+            "columnName": "readingHint",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "componentSubjectIds",
+            "columnName": "componentSubjectIds",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amalgamationSubjectIds",
+            "columnName": "amalgamationSubjectIds",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "visuallySimilarSubjectIds",
+            "columnName": "visuallySimilarSubjectIds",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "partsOfSpeech",
+            "columnName": "partsOfSpeech",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "contextSentences",
+            "columnName": "contextSentences",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pronunciationAudios",
+            "columnName": "pronunciationAudios",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unused3",
+            "columnName": "audioDownloadStatus",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "searchTarget",
+            "columnName": "searchTarget",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "smallSearchTarget",
+            "columnName": "smallSearchTarget",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "assignmentId",
+            "columnName": "assignmentId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "availableAt",
+            "columnName": "availableAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "burnedAt",
+            "columnName": "burnedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passedAt",
+            "columnName": "passedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "resurrectedAt",
+            "columnName": "resurrectedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startedAt",
+            "columnName": "startedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unlockedAt",
+            "columnName": "unlockedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unused5",
+            "columnName": "passed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unused2",
+            "columnName": "resurrected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "srsStageId",
+            "columnName": "srsStage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unused4",
+            "columnName": "levelProgressScore",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastIncorrectAnswer",
+            "columnName": "lastIncorrectAnswer",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "assignmentPatched",
+            "columnName": "assignmentPatched",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "studyMaterialId",
+            "columnName": "studyMaterialId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "meaningNote",
+            "columnName": "meaningNote",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "meaningSynonyms",
+            "columnName": "meaningSynonyms",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "readingNote",
+            "columnName": "readingNote",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "studyMaterialPatched",
+            "columnName": "studyMaterialPatched",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reviewStatisticId",
+            "columnName": "reviewStatisticId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "meaningCorrect",
+            "columnName": "meaningCorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "meaningIncorrect",
+            "columnName": "meaningIncorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "meaningMaxStreak",
+            "columnName": "meaningMaxStreak",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "meaningCurrentStreak",
+            "columnName": "meaningCurrentStreak",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "readingCorrect",
+            "columnName": "readingCorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "readingIncorrect",
+            "columnName": "readingIncorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "readingMaxStreak",
+            "columnName": "readingMaxStreak",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "readingCurrentStreak",
+            "columnName": "readingCurrentStreak",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "percentageCorrect",
+            "columnName": "percentageCorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leechScore",
+            "columnName": "leechScore",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statisticPatched",
+            "columnName": "statisticPatched",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "frequency",
+            "columnName": "frequency",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "joyoGrade",
+            "columnName": "joyoGrade",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "jlptLevel",
+            "columnName": "jlptLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pitchInfo",
+            "columnName": "pitchInfo",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_subject_level",
+            "unique": false,
+            "columnNames": [
+              "level"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_subject_level` ON `${TABLE_NAME}` (`level`)"
+          },
+          {
+            "name": "index_subject_characters",
+            "unique": false,
+            "columnNames": [
+              "characters"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_subject_characters` ON `${TABLE_NAME}` (`characters`)"
+          },
+          {
+            "name": "index_subject_availableAt",
+            "unique": false,
+            "columnNames": [
+              "availableAt"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_subject_availableAt` ON `${TABLE_NAME}` (`availableAt`)"
+          },
+          {
+            "name": "index_subject_burnedAt",
+            "unique": false,
+            "columnNames": [
+              "burnedAt"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_subject_burnedAt` ON `${TABLE_NAME}` (`burnedAt`)"
+          },
+          {
+            "name": "index_subject_startedAt",
+            "unique": false,
+            "columnNames": [
+              "startedAt"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_subject_startedAt` ON `${TABLE_NAME}` (`startedAt`)"
+          },
+          {
+            "name": "index_subject_unlockedAt",
+            "unique": false,
+            "columnNames": [
+              "unlockedAt"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_subject_unlockedAt` ON `${TABLE_NAME}` (`unlockedAt`)"
+          },
+          {
+            "name": "index_subject_srsStage",
+            "unique": false,
+            "columnNames": [
+              "srsStage"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_subject_srsStage` ON `${TABLE_NAME}` (`srsStage`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "srs_system",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `stages` TEXT, `unlockingStagePosition` INTEGER NOT NULL, `startingStagePosition` INTEGER NOT NULL, `passingStagePosition` INTEGER NOT NULL, `burningStagePosition` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stages",
+            "columnName": "stages",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unlockingStagePosition",
+            "columnName": "unlockingStagePosition",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startingStagePosition",
+            "columnName": "startingStagePosition",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "passingStagePosition",
+            "columnName": "passingStagePosition",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "burningStagePosition",
+            "columnName": "burningStagePosition",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "level_progression",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `abandonedAt` INTEGER, `completedAt` INTEGER, `createdAt` INTEGER, `passedAt` INTEGER, `startedAt` INTEGER, `unlockedAt` INTEGER, `level` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "abandonedAt",
+            "columnName": "abandonedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "completedAt",
+            "columnName": "completedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passedAt",
+            "columnName": "passedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startedAt",
+            "columnName": "startedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unlockedAt",
+            "columnName": "unlockedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "session_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `assignmentId` INTEGER NOT NULL, `state` TEXT, `srsSystemId` INTEGER NOT NULL, `srsStage` INTEGER NOT NULL, `level` INTEGER NOT NULL, `typeCode` INTEGER NOT NULL, `bucket` INTEGER NOT NULL, `order` INTEGER NOT NULL, `meaningDone` INTEGER NOT NULL, `meaningIncorrect` INTEGER NOT NULL, `readingDone` INTEGER NOT NULL, `readingIncorrect` INTEGER NOT NULL, `onyomiDone` INTEGER NOT NULL, `onyomiIncorrect` INTEGER NOT NULL, `kunyomiDone` INTEGER NOT NULL, `kunyomiIncorrect` INTEGER NOT NULL, `numAnswers` INTEGER NOT NULL, `lastAnswer` INTEGER NOT NULL, `kanjiAcceptedReadingType` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "assignmentId",
+            "columnName": "assignmentId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "srsSystemId",
+            "columnName": "srsSystemId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "srsStageId",
+            "columnName": "srsStage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unused",
+            "columnName": "typeCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bucket",
+            "columnName": "bucket",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question1Done",
+            "columnName": "meaningDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question1Incorrect",
+            "columnName": "meaningIncorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question2Done",
+            "columnName": "readingDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question2Incorrect",
+            "columnName": "readingIncorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question3Done",
+            "columnName": "onyomiDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question3Incorrect",
+            "columnName": "onyomiIncorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question4Done",
+            "columnName": "kunyomiDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question4Incorrect",
+            "columnName": "kunyomiIncorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numAnswers",
+            "columnName": "numAnswers",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastAnswer",
+            "columnName": "lastAnswer",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kanjiAcceptedReadingType",
+            "columnName": "kanjiAcceptedReadingType",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "log_record",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `tag` TEXT, `length` INTEGER NOT NULL, `message` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "length",
+            "columnName": "length",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "message",
+            "columnName": "message",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "audio_download_status",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`level` INTEGER NOT NULL, `numTotal` INTEGER NOT NULL, `numNoAudio` INTEGER NOT NULL, `numMissingAudio` INTEGER NOT NULL, `numPartialAudio` INTEGER NOT NULL, `numFullAudio` INTEGER NOT NULL, PRIMARY KEY(`level`))",
+        "fields": [
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numTotal",
+            "columnName": "numTotal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numNoAudio",
+            "columnName": "numNoAudio",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numMissingAudio",
+            "columnName": "numMissingAudio",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numPartialAudio",
+            "columnName": "numPartialAudio",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numFullAudio",
+            "columnName": "numFullAudio",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "level"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "search_preset",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `type` INTEGER NOT NULL, `data` TEXT NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b080f8e5ee7f2cbb1cda4fcbfaf32a53')"
+    ]
+  }
+}
