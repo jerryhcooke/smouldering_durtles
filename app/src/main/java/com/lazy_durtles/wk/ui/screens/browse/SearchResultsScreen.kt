@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lazy_durtles.wk.GlobalSettings
 import com.lazy_durtles.wk.WkApplication
+import java.util.Locale
 import com.lazy_durtles.wk.db.Converters
 import com.lazy_durtles.wk.db.model.Subject
 import com.lazy_durtles.wk.enums.SearchSortOrder
@@ -221,7 +222,7 @@ fun SearchResultsScreen(
                 SearchResultsTutorialCard()
             }
             Text(
-                text = String.format("%s: %d subject(s) found", searchDescription, subjects.size),
+                text = String.format(Locale.ROOT, "%s: %d subject(s) found", searchDescription, subjects.size),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()

@@ -163,6 +163,7 @@ public final class TextUtil {
         return pixels;
     }
 
+    @SuppressLint("NewApi")
     @TargetApi(23)
     private static int[] renderPost23(final Typeface typeface, final CharSequence c) {
         final TextPaint textPaint = new TextPaint();

@@ -381,7 +381,7 @@ fun SessionScreen(
                     onViewSubject = onViewSubject,
                 )
             }
-            ankiMode && question != null -> {
+            ankiMode -> {
                 AnkiQuestionScreen(
                     question = question,
                     subject = currentSubject,

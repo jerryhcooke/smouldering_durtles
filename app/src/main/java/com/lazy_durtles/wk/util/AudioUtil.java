@@ -16,6 +16,7 @@
 
 package com.lazy_durtles.wk.util;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
@@ -615,6 +616,7 @@ public final class AudioUtil {
         }
     }
 
+    @SuppressLint("NewApi")
     @TargetApi(26)
     private static void playAudioPost26(final AudioManager audioManager, final MediaPlayer player, final GenderedFile audioFile,
                                         final boolean useAudioFocus) throws Exception {

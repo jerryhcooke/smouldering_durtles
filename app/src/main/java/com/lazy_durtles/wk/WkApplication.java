@@ -16,6 +16,7 @@
 
 package com.lazy_durtles.wk;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -165,6 +166,7 @@ public final class WkApplication extends MultiDexApplication {
         }, filter);
     }
 
+    @SuppressLint("NewApi")
     @TargetApi(24)
     private void registerNetworkStateChangeListenerPost24() {
         final @Nullable ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
