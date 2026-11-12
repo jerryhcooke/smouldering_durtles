@@ -70,6 +70,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -639,16 +640,16 @@ private fun NumberRangeRow(
                     // Empty means unconstrained; unparseable input keeps the
                     // old value, like the legacy safe() wrapper does.
                     if (minText.isEmpty()) {
-                        prefs.edit().putInt(minKey, -1).apply()
+                        prefs.edit { putInt(minKey, -1) }
                     }
                     else {
-                        minText.toIntOrNull()?.let { prefs.edit().putInt(minKey, it).apply() }
+                        minText.toIntOrNull()?.let { prefs.edit { putInt(minKey, it) } }
                     }
                     if (maxText.isEmpty()) {
-                        prefs.edit().putInt("${key}_max", -1).apply()
+                        prefs.edit { putInt("${key}_max", -1) }
                     }
                     else {
-                        maxText.toIntOrNull()?.let { prefs.edit().putInt("${key}_max", it).apply() }
+                        maxText.toIntOrNull()?.let { prefs.edit { putInt("${key}_max", it) } }
                     }
                     editing = false
                 }) { Text(text = "OK") }
@@ -720,8 +721,10 @@ private fun SearchEngineRow(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    prefs.edit().putString("${key}_tag", tagText).apply()
-                    prefs.edit().putString(key, urlText).apply()
+                    prefs.edit {
+                        putString("${key}_tag", tagText)
+                        putString(key, urlText)
+                    }
                     editing = false
                 }) { Text(text = "OK") }
             },
@@ -2044,15 +2047,15 @@ private fun prefs(): SharedPreferences {
 }
 
 private fun setPrefBoolean(value: Boolean, key: String, prefs: SharedPreferences) {
-    prefs.edit().putBoolean(key, value).apply()
+    prefs.edit { putBoolean(key, value) }
 }
 
 private fun setPrefString(value: String, key: String, prefs: SharedPreferences) {
-    prefs.edit().putString(key, value).apply()
+    prefs.edit { putString(key, value) }
 }
 
 private fun setPrefInt(value: Int, key: String, prefs: SharedPreferences) {
-    prefs.edit().putInt(key, value).apply()
+    prefs.edit { putInt(key, value) }
 }
 
 //

@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -52,6 +51,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import com.lazy_durtles.wk.db.Converters
@@ -481,7 +481,7 @@ private fun SubjectTitleButton(subject: Subject, modifier: Modifier = Modifier) 
                             menuExpanded = false
                             val query = URLEncoder.encode(subject.getCharacters() ?: "", "UTF-8")
                             val url = GlobalSettings.Other.getSearchEngineUrl(i).replace("%s", query)
-                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                            context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
                         },
                     )
                 }
