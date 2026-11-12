@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "baseBranches": ["dev"],
   "schedule": [
     "on Monday"
   ],
