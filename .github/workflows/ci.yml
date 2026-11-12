@@ -12,7 +12,10 @@ permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  # Use PR number so each PR has its own concurrency group.
+  # This prevents one PR's CI run from cancelling another PR's run;
+  # only multiple commits on the same PR compete for the group.
+  group: ci-${{ github.event.pull_request.number || 'push' }}
   cancel-in-progress: true
 
 jobs:
