@@ -53,6 +53,7 @@ internal fun AnkiQuestionScreen(
     question: Question,
     subject: Subject?,
     onFinishSession: () -> Unit,
+    onBackPressed: () -> Unit = { },
     onSessionTick: () -> Unit,
     modifier: Modifier = Modifier,
     onViewSubject: (subjectId: Long, subjectIds: List<Long>) -> Unit = { _, _ -> },
